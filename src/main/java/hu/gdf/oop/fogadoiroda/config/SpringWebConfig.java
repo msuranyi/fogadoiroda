@@ -11,6 +11,9 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+/**
+ * Spring-MVC framework felépítése az alkalmazás indulásakor.
+ */
 @EnableWebMvc
 @Configuration
 @ComponentScan("hu.gdf.oop.fogadoiroda.web")
