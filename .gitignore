@@ -1,0 +1,10 @@
+# Gradle build files
+.gradle
+build
+classes
+target
+
+# IDEA project files
+.idea
+**/*.iml
+

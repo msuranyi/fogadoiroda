@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:include="layout :: page">
+<body>
+
+<th:block th:fragment="content">
+
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+        Érvénytelen felhasználónév/jelszó!
+    </div>
+
+    <form autocomplete="off" action="/authenticate" method="post" class="form-horizontal" th:action="@{/authenticate}">
+
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="username">Felhasználónév:</label>
+            <div class="col-sm-3">
+                <input class="form-control" type="text" id="username" name="username" value="" autofocus="" tabindex="1" autocomplete="off" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="password">Jelszó:</label>
+            <div class="col-sm-3">
+                <input class="form-control" type="password" id="password" name="password" tabindex="2" autocomplete="off" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-3">
+                <div class="btn-group">
+                    <button type="submit" class="'btn btn-sm btn-primary">
+                        <span class="'glyphicon glyphicon-log-in"></span>
+                        Belépés
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</th:block>
+
+</body>
+</html>
