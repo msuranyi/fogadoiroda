@@ -26,7 +26,7 @@ public class PeldaController {
 
 	/**
 	 * HTTP kéréseket kiszolgáló metódus.
-	 * <br/>
+	 * <br>
 	 * A kérés akkor fog ebbe a metódusba érkezni, ha az URL ".../osszead"
 	 * formában van megadva (pl. "http://localhost:8080/fogadoiroda/osszead")
 	 * 
@@ -37,10 +37,10 @@ public class PeldaController {
 	 *            HTTP paraméter, tehát az URL-nek ".../osszead?a=integer"
 	 *            formájúnak kell lennie. A típuskonverziót elvégzi a Spring-MVC
 	 * @param b
-	 *            HTTP paraméter, tehát az URL-nek ".../osszead?a=integer"
+	 *            HTTP paraméter, tehát az URL-nek ".../osszead?b=integer"
 	 *            formájúnak kell lennie. A típuskonverziót elvégzi a Spring-MVC
 	 * @return annak a view-nak a neve, amely a kérésre adott választ generálni
-	 *         fogja.<br/>
+	 *         fogja.<br>
 	 *         A jelenlegi konfiguráció szerint ez a
 	 *         webapp/WEB-INF/templates/eredmeny.html fájl lesz
 	 */

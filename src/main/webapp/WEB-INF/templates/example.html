@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:include="layout :: page">
+<body>
+<th:block th:fragment="content">
+
+    <div>
+        <h1 th:text="${example.nev}" />
+        <h2 th:text="${example.kod}" />
+    </div>
+
+</th:block>
+</body>
+</html>

@@ -5,6 +5,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * Spring-Security framework (jogosultság kezeléshez) felépítése az alkalmazás
@@ -23,7 +24,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.csrf().disable();
+		http.csrf();
 
 		http.authorizeRequests().antMatchers("/css/**", "/fonts/**", "/js/**").permitAll();
 		http.authorizeRequests().antMatchers("/admin/**").hasRole("OPERATOR");
@@ -34,7 +35,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.formLogin().defaultSuccessUrl("/welcome", true);
 		http.formLogin().failureUrl("/login?error=1").permitAll();
 
-		http.logout().logoutUrl("/logout");
+//		http.logout().logoutUrl("/logout");
+		http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 
 		http.exceptionHandling().accessDeniedPage("/access-denied");
 	}
