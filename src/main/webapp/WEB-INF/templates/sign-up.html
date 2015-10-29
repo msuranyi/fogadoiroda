@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:include="layout :: page">
+<body>
+<th:block th:fragment="content">
+
+    <div class="page-header">
+        <h1>Regisztráció</h1>
+    </div>
+
+    <form th:object="${registration}" th:action="@{/register}" method="post">
+        <div class="form-group">
+            <label for="username">Loginnév</label>
+            <input type="text" class="form-control" th:field="*{username}" id="username" placeholder="Loginnév" />
+        </div>
+        <div class="form-group">
+            <label for="password">Jelszó</label>
+            <input type="password" class="form-control" th:field="*{password}" id="password" placeholder="Jelszó" />
+        </div>
+        <div class="form-group">
+            <label for="passwordCheck">Jelszó ellenőrző</label>
+            <input type="password" class="form-control" th:field="*{passwordCheck}" id="passwordCheck" placeholder="Jelszó ellenőrző" />
+        </div>
+        <button type="submit" class="btn btn-sm btn-primary">Mentés</button>
+    </form>
+
+
+</th:block>
+</body>
+</html>
