@@ -1,6 +1,7 @@
 package hu.gdf.oop.fogadoiroda.web.controller;
 
 import hu.gdf.oop.fogadoiroda.service.UserService;
+import hu.gdf.oop.fogadoiroda.web.validator.RegistrationValidator;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,6 +63,8 @@ public class SecurityController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String register(Model model, @Valid Registration registration, BindingResult result) {
+        RegistrationValidator validator = new RegistrationValidator();
+        validator.validate(registration, result);
         if (result.hasErrors()) {
             return "sign-up";
         }
