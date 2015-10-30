@@ -2,6 +2,7 @@ package hu.gdf.oop.fogadoiroda.config;
 
 import javax.servlet.Filter;
 
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -24,7 +25,15 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
 	@Override
 	protected Filter[] getServletFilters() {
-		return new Filter[] { new DelegatingFilterProxy("springSecurityFilterChain") };
+
+		CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
+		encodingFilter.setEncoding("UTF-8");
+		encodingFilter.setForceEncoding(true);
+
+		return new Filter[] {
+				encodingFilter,
+				new DelegatingFilterProxy("springSecurityFilterChain")
+		};
 	}
 
 
