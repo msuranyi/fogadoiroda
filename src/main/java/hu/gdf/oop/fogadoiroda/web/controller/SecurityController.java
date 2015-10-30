@@ -1,7 +1,6 @@
 package hu.gdf.oop.fogadoiroda.web.controller;
 
-import hu.gdf.oop.fogadoiroda.model.User;
-import hu.gdf.oop.fogadoiroda.repository.UserRepository;
+import hu.gdf.oop.fogadoiroda.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +13,7 @@ import javax.annotation.Resource;
 public class SecurityController {
 
     @Resource
-    private UserRepository userRepository;
+    private UserService userService;
 
     @RequestMapping("/login")
     public String login(Model model, @RequestParam(value = "error", required = false) String error) {
@@ -36,7 +35,8 @@ public class SecurityController {
     }
 
     @RequestMapping("/admin/welcome")
-    public String secured() {
+    public String secured(Model model) {
+        model.addAttribute("example", new Example());
         return "welcome";
     }
 
@@ -54,7 +54,7 @@ public class SecurityController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String register(Registration registration) {
-        userRepository.create(new User(registration.getUsername(), registration.getPassword(), "USER"));
+        userService.register(registration.getUsername(), registration.getPassword());
         return "redirect:/welcome";
     }
 }
