@@ -10,20 +10,41 @@
     </div>
 
     <form class="form-horizontal" th:object="${registration}" th:action="@{/register}" method="post">
-        <div class="form-group">
+        <div th:class="${#fields.hasErrors('username')}? 'form-group has-error' : 'form-group'">
             <div class="col-sm-4">
-                <input type="text" class="form-control" th:field="*{username}" id="username" placeholder="Loginnév" />
+                <input type="text" class="form-control" th:field="*{username}" placeholder="Loginnév" />
             </div>
+            <th:div th:if="${#fields.hasErrors('username')}" th:each="err : ${#fields.errors('username')}" >
+                <th:span th:text="${err}" class="label label-danger" />
+                <br />
+            </th:div>
         </div>
-        <div class="form-group">
+        <div th:class="${#fields.hasErrors('password')}? 'form-group has-error' : 'form-group'">
             <div class="col-sm-4">
-                <input type="password" class="form-control" th:field="*{password}" id="password" placeholder="Jelszó" />
+                <input type="password" class="form-control" th:field="*{password}" placeholder="Jelszó" />
             </div>
+            <th:div th:if="${#fields.hasErrors('password')}" th:each="err : ${#fields.errors('password')}" >
+                <th:span th:text="${err}" class="label label-danger" />
+                <br />
+            </th:div>
         </div>
-        <div class="form-group">
+        <div th:class="${#fields.hasErrors('passwordCheck')}? 'form-group has-error' : 'form-group'">
             <div class="col-sm-4">
-                <input type="password" class="form-control" th:field="*{passwordCheck}" id="passwordCheck" placeholder="Jelszó ellenőrző" />
+                <input type="password" class="form-control" th:field="*{passwordCheck}" placeholder="Jelszó ellenőrző" />
             </div>
+            <th:div th:if="${#fields.hasErrors('passwordCheck')}" th:each="err : ${#fields.errors('passwordCheck')}" >
+                <th:span th:text="${err}" class="label label-danger" />
+                <br />
+            </th:div>
+        </div>
+        <div th:class="${#fields.hasErrors('email')}? 'form-group has-error' : 'form-group'">
+            <div class="col-sm-4">
+                <input type="text" class="form-control" th:field="*{email}" placeholder="Email" />
+            </div>
+            <th:div th:if="${#fields.hasErrors('email')}" th:each="err : ${#fields.errors('email')}" >
+                <th:span th:text="${err}" class="label label-danger" />
+                <br />
+            </th:div>
         </div>
         <button type="submit" class="btn btn-sm btn-primary">Mentés</button>
     </form>

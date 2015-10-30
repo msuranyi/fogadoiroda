@@ -1,6 +1,8 @@
 package hu.gdf.oop.fogadoiroda.service;
 
+import hu.gdf.oop.fogadoiroda.web.controller.Registration;
+
 public interface UserService {
 
-    void register(String username, String password);
+    void register(Registration registration);
 }

@@ -2,6 +2,7 @@ package hu.gdf.oop.fogadoiroda.service;
 
 import hu.gdf.oop.fogadoiroda.model.User;
 import hu.gdf.oop.fogadoiroda.repository.UserRepository;
+import hu.gdf.oop.fogadoiroda.web.controller.Registration;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -13,7 +14,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public void register(String username, String password) {
-        userRepository.create(new User(username, password, "USER"));
+    public void register(Registration registration) {
+        userRepository.create(new User(registration, "USER"));
     }
 }
