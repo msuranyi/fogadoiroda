@@ -1,6 +1,6 @@
 package hu.gdf.oop.fogadoiroda.web.validator;
 
-import hu.gdf.oop.fogadoiroda.web.controller.Registration;
+import hu.gdf.oop.fogadoiroda.web.model.Registration;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 

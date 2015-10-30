@@ -71,13 +71,13 @@
 
 				<ul class="nav navbar-nav navbar-right">
 					<li>
-						<a href="#">
-						<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-						<span th:text="${#authentication.name}"/>
+						<a th:href="@{/profile}">
+							<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+							<span th:text="${#authentication.name}"/>
 						</a>
 					</li>
 					<li>
-						<a href="#" th:href="@{/logout}">
+						<a th:href="@{/logout}">
 							<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
 							<span>Kilépés</span>
 						</a>

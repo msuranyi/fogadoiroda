@@ -1,4 +1,4 @@
-package hu.gdf.oop.fogadoiroda.web.controller;
+package hu.gdf.oop.fogadoiroda.web.model;
 
 import org.hibernate.validator.constraints.Email;
 

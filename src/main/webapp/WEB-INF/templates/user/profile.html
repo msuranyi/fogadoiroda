@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:include="layout :: page">
+<body>
+<th:block th:fragment="content">
+
+    <div class="page-header">
+        <h1>Profil módosítás</h1>
+    </div>
+
+    <div th:if="${message}" class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <th:block th:text="${message}" />
+    </div>
+
+    <form class="form-horizontal" th:object="${profile}" th:action="@{/profile/update}" method="post">
+        <div th:class="${#fields.hasErrors('username')}? 'form-group has-error' : 'form-group'">
+            <div class="col-sm-4">
+                <input type="text" class="form-control" th:field="*{username}" placeholder="Loginnév" readonly="readonly" />
+            </div>
+            <th:div th:if="${#fields.hasErrors('username')}" th:each="err : ${#fields.errors('username')}" >
+                <th:span th:text="${err}" class="label label-danger" />
+                <br />
+            </th:div>
+        </div>
+        <div th:class="${#fields.hasErrors('oldPassword')}? 'form-group has-error' : 'form-group'">
+            <div class="col-sm-4">
+                <input type="password" class="form-control" th:field="*{oldPassword}" placeholder="Régi jelszó" />
+            </div>
+            <th:div th:if="${#fields.hasErrors('oldPassword')}" th:each="err : ${#fields.errors('oldPassword')}" >
+                <th:span th:text="${err}" class="label label-danger" />
+                <br />
+            </th:div>
+        </div>
+        <div th:class="${#fields.hasErrors('newPassword')}? 'form-group has-error' : 'form-group'">
+            <div class="col-sm-4">
+                <input type="password" class="form-control" th:field="*{newPassword}" placeholder="Új jelszó" />
+            </div>
+            <th:div th:if="${#fields.hasErrors('newPassword')}" th:each="err : ${#fields.errors('newPassword')}" >
+                <th:span th:text="${err}" class="label label-danger" />
+                <br />
+            </th:div>
+        </div>
+        <div th:class="${#fields.hasErrors('newPasswordCheck')}? 'form-group has-error' : 'form-group'">
+            <div class="col-sm-4">
+                <input type="password" class="form-control" th:field="*{newPasswordCheck}" placeholder="Új jelszó ellenőrző" />
+            </div>
+            <th:div th:if="${#fields.hasErrors('newPasswordCheck')}" th:each="err : ${#fields.errors('newPasswordCheck')}" >
+                <th:span th:text="${err}" class="label label-danger" />
+                <br />
+            </th:div>
+        </div>
+        <div th:class="${#fields.hasErrors('email')}? 'form-group has-error' : 'form-group'">
+            <div class="col-sm-4">
+                <input type="text" class="form-control" th:field="*{email}" placeholder="Email" />
+            </div>
+            <th:div th:if="${#fields.hasErrors('email')}" th:each="err : ${#fields.errors('email')}" >
+                <th:span th:text="${err}" class="label label-danger" />
+                <br />
+            </th:div>
+        </div>
+        <button type="submit" class="btn btn-sm btn-primary">Mentés</button>
+    </form>
+
+
+</th:block>
+</body>
+</html>

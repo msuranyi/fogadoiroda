@@ -1,6 +1,6 @@
 package hu.gdf.oop.fogadoiroda.model;
 
-import hu.gdf.oop.fogadoiroda.web.controller.Registration;
+import hu.gdf.oop.fogadoiroda.web.model.Registration;
 
 import java.util.Arrays;
 import java.util.List;
