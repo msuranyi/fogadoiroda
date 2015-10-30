@@ -12,7 +12,7 @@
     <form class="form-horizontal" th:object="${registration}" th:action="@{/register}" method="post">
         <div th:class="${#fields.hasErrors('username')}? 'form-group has-error' : 'form-group'">
             <div class="col-sm-4">
-                <input type="text" class="form-control" th:field="*{username}" placeholder="Loginnév" />
+                <input type="text" class="form-control" th:field="*{username}" placeholder="Loginnév" autofocus="autofocus" />
             </div>
             <th:div th:if="${#fields.hasErrors('username')}" th:each="err : ${#fields.errors('username')}" >
                 <th:span th:text="${err}" class="label label-danger" />
