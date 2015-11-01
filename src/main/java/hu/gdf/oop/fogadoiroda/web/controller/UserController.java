@@ -68,4 +68,10 @@ public class UserController {
 
         return "user/profile";
     }
+
+    @RequestMapping("users")
+    public String list(Model model) {
+        model.addAttribute("list", userService.findAll());
+        return "user/list";
+    }
 }

@@ -20,7 +20,7 @@ public class MyUserDetails implements UserDetails {
         this.password = user.getPassword();
         if (user.getRoles() != null) {
             for (String role : user.getRoles()) {
-                authorities.add(new SimpleGrantedAuthority(role));
+                authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
             }
         }
     }

@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -23,6 +24,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByName(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public Collection<User> findAll() {
+        return userRepository.findAll();
     }
 
     @Override
