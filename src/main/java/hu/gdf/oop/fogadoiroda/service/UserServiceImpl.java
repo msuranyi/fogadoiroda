@@ -44,4 +44,24 @@ public class UserServiceImpl implements UserService {
 
         userRepository.update(user);
     }
+
+    @Override
+    public void lock(String username) {
+        User user = userRepository.findByUsername(username);
+        user.setLocked(true);
+        userRepository.update(user);
+    }
+
+    @Override
+    public void unlock(String username) {
+        User user = userRepository.findByUsername(username);
+        user.setLocked(false);
+        userRepository.update(user);
+    }
+
+    @Override
+    public void delete(String username) {
+        User user = userRepository.findByUsername(username);
+        userRepository.delete(user);
+    }
 }

@@ -13,11 +13,13 @@ public class MyUserDetails implements UserDetails {
 
     private String username;
     private String password;
+    private boolean locked;
     private List<GrantedAuthority> authorities = new ArrayList<>();
 
     public MyUserDetails(User user) {
         this.username = user.getUsername();
         this.password = user.getPassword();
+        this.locked = user.isLocked();
         if (user.getRoles() != null) {
             for (String role : user.getRoles()) {
                 authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
@@ -47,7 +49,7 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !locked;
     }
 
     @Override

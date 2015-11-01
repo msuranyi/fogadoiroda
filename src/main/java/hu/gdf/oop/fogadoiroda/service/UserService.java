@@ -15,4 +15,10 @@ public interface UserService {
     Collection<User> findAll();
 
     void update(Profile profile);
+
+    void lock(String username);
+
+    void unlock(String username);
+
+    void delete(String username);
 }

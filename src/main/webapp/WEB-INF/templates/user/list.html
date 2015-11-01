@@ -14,18 +14,23 @@
             <th>#</th>
             <th>Loginnév</th>
             <th>Email</th>
+            <th>Operátor</th>
             <th>Műveletek</th>
         </tr>
-        <tr th:each="user,stat : ${list}">
+        <tr th:each="user,stat : ${list}" th:class="${user.locked} ? 'danger'">
             <td th:text="${stat.count}"/>
             <td th:text="${user.username}"/>
             <td th:text="${user.email}"/>
+            <td th:text="${user.roles.contains('OPERATOR') ? 'Igen' : 'Nem'}"/>
             <td>
-                <a href="#">
-                    <span class="glyphicon glyphicon-edit"/>
+                <a th:unless="${user.locked}" th:href="@{/users/__${user.username}__/lock}">
+                    <span class="glyphicon glyphicon-ban-circle" title="Zárolás"/>
                 </a>
-                <a href="#">
-                    <span class="glyphicon glyphicon-ban-circle"/>
+                <a th:if="${user.locked}" th:href="@{/users/__${user.username}__/unlock}">
+                    <span class="glyphicon glyphicon-ok-circle" title="Zárolás"/>
+                </a>
+                <a th:href="@{/users/__${user.username}__/delete}">
+                    <span class="glyphicon glyphicon-remove-circle" title="Törlés"/>
                 </a>
             </td>
         </tr>

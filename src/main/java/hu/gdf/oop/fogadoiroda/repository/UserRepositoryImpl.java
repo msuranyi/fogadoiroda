@@ -60,7 +60,7 @@ public class UserRepositoryImpl implements UserRepository {
         String username = user.getUsername();
         checkExists(username);
 
-        users.put(username, user);
+        users.remove(username);
     }
 
     private void checkNotNull(User user) {

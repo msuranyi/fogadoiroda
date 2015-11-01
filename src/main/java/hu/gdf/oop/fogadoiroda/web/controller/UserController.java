@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -73,5 +74,26 @@ public class UserController {
     public String list(Model model) {
         model.addAttribute("list", userService.findAll());
         return "user/list";
+    }
+
+    @RequestMapping("users/{username}/lock")
+    public String lock(Model model, @PathVariable String username) {
+        userService.lock(username);
+        model.addAttribute("list", userService.findAll());
+        return "redirect:/users";
+    }
+
+    @RequestMapping("users/{username}/unlock")
+    public String unlock(Model model, @PathVariable String username) {
+        userService.unlock(username);
+        model.addAttribute("list", userService.findAll());
+        return "redirect:/users";
+    }
+
+    @RequestMapping("users/{username}/delete")
+    public String delete(Model model, @PathVariable String username) {
+        userService.delete(username);
+        model.addAttribute("list", userService.findAll());
+        return "redirect:/users";
     }
 }

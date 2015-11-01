@@ -13,6 +13,8 @@ public class User {
 
     private String email;
 
+    private boolean locked;
+
     private List<String> roles;
 
     public User(String username, String password) {
@@ -70,5 +72,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 }
