@@ -1,0 +1,5 @@
+# Fogadóiroda alkalmazás
+
+## Bevezetés
+
+## Szoftverarchitektúra
