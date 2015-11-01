@@ -31,7 +31,9 @@ public class UserServiceImpl implements UserService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(username);
 
-        user.setPassword(profile.getNewPassword());
+        if (profile.getNewPassword() != null) {
+            user.setPassword(profile.getNewPassword());
+        }
         user.setEmail(profile.getEmail());
 
         userRepository.update(user);
