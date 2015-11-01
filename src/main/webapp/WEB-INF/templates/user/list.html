@@ -17,21 +17,28 @@
             <th>Operátor</th>
             <th>Műveletek</th>
         </tr>
-        <tr th:each="user,stat : ${list}" th:class="${user.locked} ? 'danger'">
+        <tr th:each="item,stat : ${list}" th:class="${item.locked} ? 'danger'">
             <td th:text="${stat.count}"/>
-            <td th:text="${user.username}"/>
-            <td th:text="${user.email}"/>
-            <td th:text="${user.roles.contains('OPERATOR') ? 'Igen' : 'Nem'}"/>
+            <td th:unless="${user == item.username}" th:text="${item.username}" />
+            <td th:if="${user == item.username}">
+                <strong th:text="${user}" />
+            </td>
+            <td th:text="${item.email}"/>
+            <td th:text="${item.operator ? 'Igen' : 'Nem'}"/>
             <td>
-                <a th:unless="${user.locked}" th:href="@{/users/__${user.username}__/lock}">
-                    <span class="glyphicon glyphicon-ban-circle" title="Zárolás"/>
-                </a>
-                <a th:if="${user.locked}" th:href="@{/users/__${user.username}__/unlock}">
-                    <span class="glyphicon glyphicon-ok-circle" title="Zárolás"/>
-                </a>
-                <a th:href="@{/users/__${user.username}__/delete}">
-                    <span class="glyphicon glyphicon-remove-circle" title="Törlés"/>
-                </a>
+                <th:block th:unless="${user == item.username}">
+                    <a th:href="@{/users/__${item.username}__/delete}">
+                        <span class="glyphicon glyphicon-remove-circle" title="Törlés"/>
+                    </a>
+                    <th:block th:unless="${item.operator}">
+                        <a th:unless="${item.locked}" th:href="@{/users/__${item.username}__/lock}">
+                            <span class="glyphicon glyphicon-ban-circle" title="Zárolás"/>
+                        </a>
+                        <a th:if="${item.locked}" th:href="@{/users/__${item.username}__/unlock}">
+                            <span class="glyphicon glyphicon-ok-circle" title="Feloldás"/>
+                        </a>
+                    </th:block>
+                </th:block>
             </td>
         </tr>
     </table>

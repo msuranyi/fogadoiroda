@@ -17,7 +17,7 @@ public class UserRepositoryImpl implements UserRepository {
     public void init() {
         create(new User("user", "a", "USER"));
         create(new User("operator", "a", "USER", "OPERATOR"));
-
+        create(new User("admin", "a", "USER", "OPERATOR"));
     }
 
     @Override

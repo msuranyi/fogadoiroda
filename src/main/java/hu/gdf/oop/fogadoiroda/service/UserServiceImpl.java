@@ -48,20 +48,35 @@ public class UserServiceImpl implements UserService {
     @Override
     public void lock(String username) {
         User user = userRepository.findByUsername(username);
-        user.setLocked(true);
-        userRepository.update(user);
+        if (!user.isOperator()) {
+            user.setLocked(true);
+            userRepository.update(user);
+        }
     }
 
     @Override
     public void unlock(String username) {
         User user = userRepository.findByUsername(username);
-        user.setLocked(false);
-        userRepository.update(user);
+        if (!user.isOperator()) {
+            user.setLocked(false);
+            userRepository.update(user);
+        }
     }
 
     @Override
     public void delete(String username) {
         User user = userRepository.findByUsername(username);
+        if (user.isOperator()) {
+            int operatorCount = 0;
+            for (User u : userRepository.findAll()) {
+                if (u.isOperator()) {
+                    operatorCount++;
+                }
+            }
+            if (operatorCount < 2) {
+                throw new RuntimeException("Utolsó operátor törlése nem lehetséges!");
+            }
+        }
         userRepository.delete(user);
     }
 }

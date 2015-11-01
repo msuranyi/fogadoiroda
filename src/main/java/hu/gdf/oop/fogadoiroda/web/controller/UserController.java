@@ -72,6 +72,7 @@ public class UserController {
 
     @RequestMapping("users")
     public String list(Model model) {
+        model.addAttribute("user", SecurityContextHolder.getContext().getAuthentication().getName());
         model.addAttribute("list", userService.findAll());
         return "user/list";
     }

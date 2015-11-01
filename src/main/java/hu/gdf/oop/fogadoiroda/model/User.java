@@ -81,4 +81,8 @@ public class User {
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
+
+    public boolean isOperator() {
+        return roles.contains("OPERATOR");
+    }
 }
