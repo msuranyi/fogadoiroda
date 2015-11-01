@@ -5,6 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @ControllerAdvice
@@ -45,4 +48,18 @@ public class SecurityController {
         model.addAttribute(example);
         return "example";
     }
+
+    @ExceptionHandler(Throwable.class)
+    public ModelAndView handleError(HttpServletRequest req, Throwable exception) {
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.addObject("exception", exception);
+        modelAndView.addObject("url", req.getRequestURL());
+        modelAndView.addObject("statusCode", 500);
+        modelAndView.setViewName("error/short");
+
+        return modelAndView;
+    }
+
 }

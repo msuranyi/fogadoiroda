@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:include="layout :: page">
+<body>
+<th:block th:fragment="content">
+
+    <div class="well">
+        <h1>Alkalmazás hiba</h1>
+    </div>
+
+    <div class="alert alert-danger" role="alert" th:text="${exception.message}"/>
+
+</th:block>
+</body>
+</html>
