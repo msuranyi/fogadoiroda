@@ -1,6 +1,7 @@
 package hu.gdf.oop.fogadoiroda.repository;
 
 import hu.gdf.oop.fogadoiroda.model.Event;
+import hu.gdf.oop.fogadoiroda.model.Outcome;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +20,15 @@ public class EventReporitoryImpl implements EventRepository {
     @PostConstruct
     public void init() {
         create(new Event("Teszt", "Desc", new Date(),new Date(2016,01,01)));
+
+        Date start = new Date();
+        Date end = new Date(start.getTime() + 1000*60*120);
+        Event event = new Event("FTC - Vasas", "FTC - Vasas, NB1-es labdarúgó mérkőzés", start, end);
+        event.getOutcomes().add(new Outcome(event, "FTC nyer"));
+        event.getOutcomes().add(new Outcome(event, "Vasas nyer"));
+        event.getOutcomes().add(new Outcome(event, "Döntetlen"));
+        create(event);
+
     }
 
     @Override
