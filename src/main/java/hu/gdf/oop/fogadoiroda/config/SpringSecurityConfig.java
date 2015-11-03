@@ -33,6 +33,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/admin/**").hasRole("OPERATOR");
         http.authorizeRequests().antMatchers("/users").hasRole("OPERATOR");
         http.authorizeRequests().antMatchers("/users/**").hasRole("OPERATOR");
+        http.authorizeRequests().antMatchers("/event/**").hasRole("OPERATOR");
         http.authorizeRequests().anyRequest().authenticated();
 
         http.formLogin().loginPage("/login");

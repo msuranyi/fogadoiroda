@@ -6,9 +6,7 @@ import org.hibernate.validator.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-/**
- * Created by Dio on 2015.11.02..
- */
+
 public class EventReg {
 
     private String title;

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 
-
 @Controller
 public class EventController {
 

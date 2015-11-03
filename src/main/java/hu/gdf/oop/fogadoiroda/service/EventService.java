@@ -4,7 +4,6 @@ import hu.gdf.oop.fogadoiroda.model.Event;
 
 import java.util.Collection;
 
-
 public interface EventService {
 
     Event findbyId(int id);

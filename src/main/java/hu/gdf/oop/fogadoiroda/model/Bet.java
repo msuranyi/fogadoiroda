@@ -50,4 +50,5 @@ public class Bet {
     public void setBetTime(Date betTime) {
         this.betTime = betTime;
     }
+
 }

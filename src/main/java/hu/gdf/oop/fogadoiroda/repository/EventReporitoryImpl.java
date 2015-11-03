@@ -41,4 +41,5 @@ public class EventReporitoryImpl implements EventRepository {
     public Collection<Event> findAll() {
         return events.values();
     }
+
 }
