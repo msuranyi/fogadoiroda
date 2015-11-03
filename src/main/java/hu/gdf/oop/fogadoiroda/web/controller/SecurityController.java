@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.beans.PropertyEditorSupport;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Controller
 @ControllerAdvice
@@ -16,6 +20,25 @@ public class SecurityController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+        binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                try {
+                    setValue(new SimpleDateFormat("yyyy.MM.dd HH:mm").parse(text));
+                } catch(ParseException e) {
+                    setValue(null);
+                }
+            }
+
+            @Override
+            public String getAsText() {
+                String result = null;
+                if (getValue() != null) {
+                    result = new SimpleDateFormat("yyyy.MM.dd HH:mm").format((Date) getValue());
+                }
+                return result;
+            }
+        });
     }
 
     @RequestMapping("/login")

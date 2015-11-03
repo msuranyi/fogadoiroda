@@ -29,7 +29,7 @@ public class EventController {
     }
     @RequestMapping("event/editor")
     public String editEvent(Model model) {
-        model.addAttribute("eventreg", new EventReg());
+        model.addAttribute("eventReg", new EventReg());
         return "event/editor";
     }
     @RequestMapping(value = "event/new-event", method = RequestMethod.POST)
@@ -40,6 +40,6 @@ public class EventController {
             return "event/editor";
         }
         eventService.create(eventReg.getInstance());
-        return "events";
+        return "event/list";
     }
 }
