@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:include="layout :: page">
+<body>
+<th:block th:fragment="content">
+
+    <div class="page-header">
+        <h1>Események listája</h1>
+    </div>
+
+    <table class="table table-striped table-hover">
+        <tr>
+            <th>#</th>
+            <th>Cím</th>
+            <th>Leírás</th>
+            <th>Rögzítve</th>
+            <th>Lezárás</th>
+            <th th:unless="${operator}">Fogadás</th>
+            <th th:if="${operator}">Tételek</th>
+            <th th:if="${operator}">Műveletek</th>
+        </tr>
+        <tr th:each="item,stat : ${list}">
+            <td th:text="${stat.count}"/>
+            <td th:text="${item.title}" />
+            <td th:text="${item.description}"/>
+            <td th:text="${item.start}"/>
+            <td th:text="${item.end}"/>
+            <th th:unless="${operator}">Fogadás</th>
+            <th th:if="${operator}">Tételek</th>
+            <th th:if="${operator}">Műveletek</th>
+        </tr>
+    </table>
+
+</th:block>
+</body>
+</html>
