@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:include="layout :: page">
+<body>
+<th:block th:fragment="content">
+
+    <div class="page-header">
+        <h1 th:text="${event.description}"></h1>
+    </div>
+
+    <form class="form-horizontal" th:object="${event}">
+
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="start">Kezdés:</label>
+            <div class="col-sm-3">
+                <span id="start" class="form-control"
+                      th:text="${#dates.format(event.start, 'yyyy. MMMM d,  HH:mm')}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="end">Befejezés:</label>
+            <div class="col-sm-3">
+                <span id="end" class="form-control"
+                      th:text="${#dates.format(event.end, 'yyyy. MMMM d,  HH:mm')}" />
+            </div>
+        </div>
+
+        <div th:each="outcome,stat : ${event.outcomes}" class="radio col-sm-offset-2">
+            <label>
+                <input type="radio" name="optionsRadios" th:value="${outcome.id}" />
+                <th:block th:text="${outcome.name}" />
+            </label>
+        </div>
+    </form>
+
+</th:block>
+</body>
+</html>
