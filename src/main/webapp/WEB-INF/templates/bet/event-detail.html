@@ -9,7 +9,9 @@
         <h1 th:text="${event.description}"></h1>
     </div>
 
-    <form class="form-horizontal" th:object="${event}">
+    <form class="form-horizontal" th:object="${bet}" th:action="@{/bets/create}" method="post">
+
+        <input type="hidden" th:field="*{eventId}" />
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="start">Kezdés:</label>
@@ -26,12 +28,20 @@
             </div>
         </div>
 
-        <div th:each="outcome,stat : ${event.outcomes}" class="radio col-sm-offset-2">
-            <label>
-                <input type="radio" name="optionsRadios" th:value="${outcome.id}" />
-                <th:block th:text="${outcome.name}" />
-            </label>
+        <div th:class="${#fields.hasErrors('outcomeId')}? 'form-group has-error' : 'form-group'">
+            <div th:each="outcome,stat : ${event.outcomes}" class="radio col-sm-offset-2">
+                <label>
+                    <input type="radio" th:field="*{outcomeId}" th:value="${outcome.id}" />
+                    <th:block th:text="${outcome.name}" />
+                </label>
+            </div>
+            <div th:if="${#fields.hasErrors('outcomeId')}" th:each="err : ${#fields.errors('outcomeId')}" >
+                <span th:text="${err}" class="label label-danger" />
+                <br />
+            </div>
         </div>
+
+        <button type="submit" class="btn btn-sm btn-primary">Mentés</button>
     </form>
 
 </th:block>

@@ -3,7 +3,9 @@ package hu.gdf.oop.fogadoiroda.model;
 import hu.gdf.oop.fogadoiroda.web.model.Registration;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class User {
 
@@ -16,6 +18,8 @@ public class User {
     private boolean locked;
 
     private List<String> roles;
+
+    private Map<Integer, Outcome> bets = new HashMap<>();
 
     public User(String username, String password) {
         this.username = username;
@@ -80,6 +84,14 @@ public class User {
 
     public void setLocked(boolean locked) {
         this.locked = locked;
+    }
+
+    public Map<Integer, Outcome> getBets() {
+        return bets;
+    }
+
+    public void setBets(Map<Integer, Outcome> bets) {
+        this.bets = bets;
     }
 
     public boolean isOperator() {

@@ -79,4 +79,10 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.delete(user);
     }
+
+    @Override
+    public User actualUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return findByName(username);
+    }
 }

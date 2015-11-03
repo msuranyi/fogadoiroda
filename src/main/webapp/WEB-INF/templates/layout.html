@@ -33,7 +33,7 @@
 				</a>
 			</div>
 
-			<div sec:authorize="isAnonymous()" id="navbar" class="collapse navbar-collapse">
+			<div sec:authorize="isAnonymous()" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav navbar-right">
 					<li>
 						<a href="#" th:href="@{/sign-up}">
@@ -50,11 +50,11 @@
 				</ul>
 			</div>
 
-			<div sec:authorize="isAuthenticated()" id="navbar" class="collapse navbar-collapse">
+			<div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
 
 				<ul class="nav navbar-nav">
 					<li><a th:href="@{/events}">Események <span class="sr-only">(current)</span></a></li>
-					<li><a href="#">Fogadás</a></li>
+					<li><a th:href="@{/bets/events}">Fogadás</a></li>
 					<li class="dropdown" sec:authorize="hasRole('ROLE_OPERATOR')">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Adminisztráció <span class="caret"></span></a>
 						<ul class="dropdown-menu">

@@ -21,4 +21,6 @@ public interface UserService {
     void unlock(String username);
 
     void delete(String username);
+
+    User actualUser();
 }

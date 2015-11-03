@@ -25,8 +25,11 @@
             <td th:text="${#dates.format(event.start, 'yyyy. MMMM d,  HH:mm')}"/>
             <td th:text="${#dates.format(event.end, 'yyyy. MMMM d,  HH:mm')}"/>
             <td>
-                <a th:href="@{/bets/events/__${event.id}__}">
-                    <span class="glyphicon glyphicon-remove-circle" title="Törlés"/>
+                <a th:unless="${user.bets.containsKey(event.id)}" th:href="@{/bets/events/__${event.id}__}">
+                    <span class="glyphicon glyphicon-euro" title="Fogadás"/>
+                </a>
+                <a th:if="${user.bets.containsKey(event.id)}" th:href="@{/bets/delete/__${event.id}__}">
+                    <span class="glyphicon glyphicon-erase" title="Fogadás törlése"/>
                 </a>
             </td>
         </tr>
