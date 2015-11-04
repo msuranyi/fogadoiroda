@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Collection;
+import java.util.Date;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -24,12 +25,26 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void deleteEvent(int id) {
-        eventRepository.deleteEvent(id);
+    public void delete(int id) {
+        Event event = eventRepository.findById(id);
+        if(event.getEnd().after(new Date())){
+            eventRepository.delete(id);
+        }else{
+            throw new RuntimeException("Eseményt lezárás utáni törlése nem lehetséges!");
+        }
     }
 
     @Override
     public Collection<Event> findAll() {
         return eventRepository.findAll();
+    }
+
+    @Override
+    public void update(Event event){
+        Event iEvent = eventRepository.findById(event.getId());
+        iEvent.setTitle(event.getTitle());
+        iEvent.setDescription(event.getDescription());
+        iEvent.setStart(new Date());
+        iEvent.setEnd(event.getEnd());
     }
 }

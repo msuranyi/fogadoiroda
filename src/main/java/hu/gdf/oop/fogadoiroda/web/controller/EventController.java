@@ -1,19 +1,21 @@
 package hu.gdf.oop.fogadoiroda.web.controller;
 
+import hu.gdf.oop.fogadoiroda.model.Event;
 import hu.gdf.oop.fogadoiroda.service.EventService;
-import hu.gdf.oop.fogadoiroda.web.model.EventReg;
 import hu.gdf.oop.fogadoiroda.web.validator.EventValidator;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.Date;
 
 @Controller
 public class EventController {
@@ -28,18 +30,33 @@ public class EventController {
         return "event/list";
     }
     @RequestMapping("event/editor")
-    public String editEvent(Model model) {
-        model.addAttribute("eventReg", new EventReg());
+    public String editEvent(Model model, @RequestParam(value = "id", required = false) String id) {
+        if(id == null) {
+            model.addAttribute("event", new Event());
+        }else{
+            Event event = eventService.findbyId(Integer.parseInt(id));
+            model.addAttribute("event", event);
+        }
         return "event/editor";
     }
+    @RequestMapping("event/delete/{id}")
+    public String deleteEvent(Model model, @PathVariable Integer id) {
+        eventService.delete(id);
+        return "redirect:/events";
+    }
     @RequestMapping(value = "event/new-event", method = RequestMethod.POST)
-    public String register(Model model, @Valid EventReg eventReg, BindingResult result) {
+    public String newEvent(Model model, @Valid Event event, BindingResult result) {
         EventValidator validator = new EventValidator();
-        validator.validate(eventReg, result);
+        validator.validate(event, result);
         if (result.hasErrors()) {
             return "event/editor";
         }
-        eventService.create(eventReg.getInstance());
-        return "event/list";
+        if(eventService.findbyId(event.getId()) != null){
+            eventService.update(event);
+        }else {
+            event.setStart(new Date());
+            eventService.create(event);
+        }
+        return "redirect:/events";
     }
 }

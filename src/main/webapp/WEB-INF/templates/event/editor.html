@@ -9,7 +9,8 @@
         <h1>Esemény létrehozás</h1>
     </div>
 
-    <form class="form-horizontal" th:object="${eventReg}" th:action="@{/event/new-event}" method="post">
+    <form class="form-horizontal" th:object="${event}" th:action="@{/event/new-event}" method="post">
+        <input type="hidden" class="form-control" th:field="*{id}" />
         <div th:class="${#fields.hasErrors('title')}? 'form-group has-error' : 'form-group'">
             <div class="col-sm-4">
                 <input type="text" class="form-control" th:field="*{title}" placeholder="Cím" autofocus="autofocus" />
@@ -20,23 +21,23 @@
             </th:div>
         </div>
         <div th:class="${#fields.hasErrors('description')}? 'form-group has-error' : 'form-group'">
-        <div class="col-sm-4">
-            <input type="text" class="form-control" th:field="*{description}" placeholder="Leírás" />
-        </div>
-        <th:div th:if="${#fields.hasErrors('description')}" th:each="err : ${#fields.errors('description')}" >
-            <th:span th:text="${err}" class="label label-danger" />
-            <br />
-        </th:div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" th:field="*{description}" placeholder="Leírás" />
+            </div>
+            <th:div th:if="${#fields.hasErrors('description')}" th:each="err : ${#fields.errors('description')}" >
+                <th:span th:text="${err}" class="label label-danger" />
+                <br />
+            </th:div>
         </div>
         <div th:class="${#fields.hasErrors('end')}? 'form-group has-error' : 'form-group'">
-        <div class="col-sm-4">
-            <input type="text" class="form-control" th:field="*{end}" placeholder="Zárás" />
+            <div class="col-sm-4">
+                <input type="text" class="form-control" th:field="*{end}" placeholder="Zárás" />
+            </div>
+            <th:div th:if="${#fields.hasErrors('end')}" th:each="err : ${#fields.errors('end')}" >
+                <th:span th:text="${err}" class="label label-danger" />
+                <br />
+            </th:div>
         </div>
-        <th:div th:if="${#fields.hasErrors('end')}" th:each="err : ${#fields.errors('end')}" >
-            <th:span th:text="${err}" class="label label-danger" />
-            <br />
-        </th:div>
-    </div>
         <button type="submit" class="btn btn-sm btn-primary">Mentés</button>
     </form>
 </th:block>

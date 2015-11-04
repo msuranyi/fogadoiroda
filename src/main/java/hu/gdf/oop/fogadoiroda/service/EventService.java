@@ -10,7 +10,9 @@ public interface EventService {
 
     void create(Event event);
 
-    void deleteEvent(int id);
+    void update(Event event);
+
+    void delete(int id);
 
     Collection<Event> findAll();
 

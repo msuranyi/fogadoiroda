@@ -43,4 +43,5 @@ public class BetServiceImpl implements BetService {
         }
         bets.remove(eventId);
     }
+
 }

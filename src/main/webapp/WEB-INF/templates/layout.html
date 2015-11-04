@@ -54,7 +54,7 @@
 
 				<ul class="nav navbar-nav">
 					<li><a th:href="@{/events}">Események <span class="sr-only">(current)</span></a></li>
-					<li><a th:href="@{/bets/events}">Fogadás</a></li>
+					<li sec:authorize="!hasRole('ROLE_OPERATOR')"><a  th:href="@{/bets/events}">Fogadás</a></li>
 					<li class="dropdown" sec:authorize="hasRole('ROLE_OPERATOR')">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Adminisztráció <span class="caret"></span></a>
 						<ul class="dropdown-menu">

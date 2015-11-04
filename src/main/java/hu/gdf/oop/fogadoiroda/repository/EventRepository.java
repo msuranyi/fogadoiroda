@@ -8,7 +8,7 @@ public interface EventRepository {
 
     void create(Event event);
 
-    void deleteEvent(int id);
+    void delete(int id);
 
     Event findById(int id);
 

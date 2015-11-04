@@ -85,4 +85,5 @@ public class Event {
     public void setOutcomes(Map<Integer, Outcome> outcomes) {
         this.outcomes = outcomes;
     }
+
 }

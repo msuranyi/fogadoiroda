@@ -16,8 +16,8 @@ public class UserRepositoryImpl implements UserRepository {
     @PostConstruct
     public void init() {
         create(new User("user", "a", "USER"));
-        create(new User("operator", "a", "USER", "OPERATOR"));
-        create(new User("admin", "a", "USER", "OPERATOR"));
+        create(new User("operator", "a", "OPERATOR"));
+        create(new User("admin", "a", "OPERATOR"));
     }
 
     @Override
