@@ -9,7 +9,7 @@
         <h1>Alkalmazás hiba</h1>
     </div>
 
-    <div class="alert alert-danger" role="alert" th:text="${exception.message}"/>
+    <div class="alert alert-danger" role="alert" th:text="${exception} + ': ' + ${exception.message}"/>
 
 </th:block>
 </body>
