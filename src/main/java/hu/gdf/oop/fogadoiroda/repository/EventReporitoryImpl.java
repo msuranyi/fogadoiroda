@@ -16,17 +16,18 @@ public class EventReporitoryImpl implements EventRepository {
 
     private Map<String, Event> events = new HashMap<>();
 
-
     @PostConstruct
     public void init() {
-        create(new Event("Teszt", "Desc", new Date(),new Date(2016,01,01)));
 
         Date start = new Date();
         Date end = new Date(start.getTime() + 1000*60*120);
         Event event = new Event("FTC - Vasas", "FTC - Vasas, NB1-es labdarúgó mérkőzés", start, end);
-        event.getOutcomes().add(new Outcome(event, "FTC nyer"));
-        event.getOutcomes().add(new Outcome(event, "Vasas nyer"));
-        event.getOutcomes().add(new Outcome(event, "Döntetlen"));
+        Outcome outcome = new Outcome(event, "FTC nyer");
+        event.getOutcomes().put(outcome.getId(),outcome);
+        outcome = new Outcome(event, "Vasas nyer");
+        event.getOutcomes().put(outcome.getId(),outcome);
+        outcome = new Outcome(event, "Döntetlen");
+        event.getOutcomes().put(outcome.getId(),outcome);
         create(event);
 
     }

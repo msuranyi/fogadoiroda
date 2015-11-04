@@ -26,8 +26,7 @@ public class BetServiceImpl implements BetService {
         }
         Event event = eventService.findbyId(eventId);
 
-        // TODO jobb lenne, ha az event outcomes listája Map lenne
-        for (Outcome outcome : event.getOutcomes()) {
+        for (Outcome outcome : event.getOutcomes().values()) {
             if (outcome.getId().equals(outcomeId)) {
                 bets.put(eventId, outcome);
                 break;

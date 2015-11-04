@@ -1,8 +1,6 @@
 package hu.gdf.oop.fogadoiroda.model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class Event {
 
@@ -18,7 +16,7 @@ public class Event {
 
     private Date end;
 
-    private List<Outcome> outcomes = new ArrayList<>();
+    private Map<Integer, Outcome> outcomes = new HashMap<>();
 
     public Event() {
         this.id = SequenceGenerator.next();
@@ -80,11 +78,11 @@ public class Event {
         this.end = end;
     }
 
-    public List<Outcome> getOutcomes() {
+    public Map<Integer, Outcome> getOutcomes() {
         return outcomes;
     }
 
-    public void setOutcomes(List<Outcome> outcomes) {
+    public void setOutcomes(Map<Integer, Outcome> outcomes) {
         this.outcomes = outcomes;
     }
 }

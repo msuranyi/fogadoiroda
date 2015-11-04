@@ -31,8 +31,8 @@
         <div th:class="${#fields.hasErrors('outcomeId')}? 'form-group has-error' : 'form-group'">
             <div th:each="outcome,stat : ${event.outcomes}" class="radio col-sm-offset-2">
                 <label>
-                    <input type="radio" th:field="*{outcomeId}" th:value="${outcome.id}" />
-                    <th:block th:text="${outcome.name}" />
+                    <input type="radio" th:field="*{outcomeId}" th:value="${outcome.value.id}" />
+                    <th:block th:text="${outcome.value.name}" />
                 </label>
             </div>
             <div th:if="${#fields.hasErrors('outcomeId')}" th:each="err : ${#fields.errors('outcomeId')}" >
