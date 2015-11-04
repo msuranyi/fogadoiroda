@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,7 +31,7 @@ public class DefaultController {
             public void setAsText(String text) throws IllegalArgumentException {
                 try {
                     setValue(new SimpleDateFormat("yyyy.MM.dd HH:mm").parse(text));
-                } catch(ParseException e) {
+                } catch (ParseException e) {
                     setValue(null);
                 }
             }
@@ -64,8 +63,7 @@ public class DefaultController {
     }
 
     @RequestMapping({"/welcome", "/"})
-    public String welcome(Model model) {
-        model.addAttribute("example", new Example());
+    public String welcome() {
         return "welcome";
     }
 }

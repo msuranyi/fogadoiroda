@@ -58,13 +58,8 @@
 					<li class="dropdown" sec:authorize="hasRole('ROLE_OPERATOR')">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Adminisztráció <span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a th:href="@{/admin/welcome}">Action</a></li>
-							<li><a th:href="@{/users}">Felhasználók</a></li>
-							<li><a href="#">Something else here</a></li>
-							<li role="separator" class="divider"></li>
+							<li><a th:href="@{/users}">Felhasználók kezelése</a></li>
 							<li><a th:href="@{/event/editor}">Új esemény</a></li>
-							<li role="separator" class="divider"></li>
-							<li><a href="#">One more separated link</a></li>
 						</ul>
 					</li>
 				</ul>

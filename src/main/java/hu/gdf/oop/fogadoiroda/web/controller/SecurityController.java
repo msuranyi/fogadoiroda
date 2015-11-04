@@ -3,7 +3,6 @@ package hu.gdf.oop.fogadoiroda.web.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -20,17 +19,5 @@ public class SecurityController {
     @RequestMapping("/access-denied")
     public String accessDenied() {
         return "auth/access-denied";
-    }
-
-    @RequestMapping("/admin/welcome")
-    public String secured(Model model) {
-        model.addAttribute("example", new Example());
-        return "welcome";
-    }
-
-    @RequestMapping(value = "/postSomething", method = RequestMethod.POST)
-    public String postSomething(Model model, Example example) {
-        model.addAttribute(example);
-        return "example";
     }
 }
