@@ -6,7 +6,7 @@
 <th:block th:fragment="content">
 
     <div class="page-header">
-        <h1>Nyitott események listája</h1>
+        <h1>Nyitott események</h1>
     </div>
 
     <table class="table table-striped table-hover">
@@ -14,15 +14,13 @@
             <th>#</th>
             <th>Cím</th>
             <th>Leírás</th>
-            <th>Kezdés ideje</th>
-            <th>Befejezés ideje</th>
+            <th>Fogadási határidő</th>
             <th>Fogadás</th>
         </tr>
         <tr th:each="event,stat : ${events}">
             <td th:text="${stat.count}"/>
             <td th:text="${event.title}" />
             <td th:text="${event.description}"/>
-            <td th:text="${#dates.format(event.start, 'yyyy. MMMM d,  HH:mm')}"/>
             <td th:text="${#dates.format(event.end, 'yyyy. MMMM d,  HH:mm')}"/>
             <td>
                 <a th:unless="${user.bets.containsKey(event.id)}" th:href="@{/bets/events/__${event.id}__}">

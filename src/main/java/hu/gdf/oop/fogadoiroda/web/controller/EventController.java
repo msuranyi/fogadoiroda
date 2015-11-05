@@ -78,11 +78,6 @@ public class EventController {
     }
     @RequestMapping(value = "event/new-event", method = RequestMethod.POST)
     public String newEvent(@Valid Event event, BindingResult result) {
-        EventValidator validator = new EventValidator();
-        validator.validate(event, result);
-        if (result.hasErrors()) {
-            return "event/editor";
-        }
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(event.getEnd());
@@ -92,6 +87,12 @@ public class EventController {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         event.setEnd(calendar.getTime());
+
+        EventValidator validator = new EventValidator();
+        validator.validate(event, result);
+        if (result.hasErrors()) {
+            return "event/editor";
+        }
 
         if(eventService.findbyId(event.getId()) != null){
             eventService.update(event);
