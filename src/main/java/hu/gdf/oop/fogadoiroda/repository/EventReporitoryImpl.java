@@ -22,11 +22,11 @@ public class EventReporitoryImpl implements EventRepository {
         Date start = new Date();
         Date end = new Date(start.getTime() + 1000*60);
         Event event = new Event("FTC - Vasas", "FTC - Vasas, NB1-es labdarúgó mérkőzés", start, end);
-        Outcome outcome = new Outcome(event, "FTC nyer");
+        Outcome outcome = new Outcome(event.getId(), "FTC nyer");
         event.getOutcomes().put(outcome.getId(),outcome);
-        outcome = new Outcome(event, "Vasas nyer");
+        outcome = new Outcome(event.getId(), "Vasas nyer");
         event.getOutcomes().put(outcome.getId(),outcome);
-        outcome = new Outcome(event, "Döntetlen");
+        outcome = new Outcome(event.getId(), "Döntetlen");
         event.getOutcomes().put(outcome.getId(),outcome);
         create(event);
 

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:include="layout :: page">
+<body>
+<th:block th:fragment="content">
+
+    <div class="page-header">
+        <h1>Tételek</h1>
+    </div>
+    <form class="form-horizontal" th:object="${outcomes}" th:action="@{/event/__${event.id}__/outcome/save}" method="post">
+
+        <div th:each="outcome,stat : ${outcomes}" class="form-group">
+            <div class="col-sm-4">
+                    <input type="hidden" th:value="${outcome.value.id}" />
+                    <input type="hidden" th:value="${event.id}" />
+                    <input type="text" th:value="${outcome.value.text}" />
+                    <input type="radio" name="outcome"  th:value="${outcome.value.won}" />
+                <button type="submit" class="btn btn-xs btn-default" th:formaction="@{/event/__${event.id}__/outcome/delete/?outcomeId=__${outcome.value.id}__}">
+                    <span class="glyphicon glyphicon-remove" title="Törlés"/>
+                </button>
+            </div>
+        </div>
+            <button type="submit" class="btn btn-sm btn-primary" th:formaction="@{/event/__${event.id}__/outcome/add}">
+                <span class="glyphicon glyphicon-plus" title="Új tétel"/>
+            </button>
+            <button type="submit" class="btn btn-sm btn-primary">Mentés</button>
+    </form>
+</th:block>
+</body>
+</html>

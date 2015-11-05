@@ -1,6 +1,7 @@
 package hu.gdf.oop.fogadoiroda.web.controller;
 
 import hu.gdf.oop.fogadoiroda.model.Event;
+import hu.gdf.oop.fogadoiroda.model.Outcome;
 import hu.gdf.oop.fogadoiroda.service.EventService;
 import hu.gdf.oop.fogadoiroda.web.validator.EventValidator;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,6 +18,8 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class EventController {
@@ -40,6 +43,34 @@ public class EventController {
         }
         return "event/editor";
     }
+    @RequestMapping("event/{id}/outcome")
+    public String editOutcome(Model model, @PathVariable Integer id) {
+        Event event = eventService.findbyId(id);
+        model.addAttribute("event", event);
+        model.addAttribute("outcomes", event.getOutcomes());
+        return "event/outcome";
+    }
+    @RequestMapping("event/{id}/outcome/add")
+    public String addOutcome(Model model, @PathVariable Integer id) {
+        Event event = eventService.findbyId(id);
+        Outcome outcome = new Outcome(event.getId(),"");
+        event.getOutcomes().put(outcome.getId(), outcome);
+        return "redirect:/event/{id}/outcome";
+    }
+    @RequestMapping("event/{id}/outcome/delete")
+    public String deleteOutcome(Model model, @PathVariable Integer id, @RequestParam(value = "outcomeId", required = false) Integer outcomeId) {
+        Event event = eventService.findbyId(id);
+        event.getOutcomes().remove(outcomeId);
+        return "redirect:/event/{id}/outcome";
+    }
+
+    // TODO: outcome.html-ben th:field mezõkre hibát ír, az nélkül meg üresen küldi vissza
+    @RequestMapping(value = "event/{id}/outcome/save", method = RequestMethod.POST)
+    public String saveOutcome(@RequestParam Map<Integer,Outcome> outcomes, @PathVariable Integer id) {
+        eventService.findbyId(id).setOutcomes(outcomes);
+        return "redirect:/events";
+    }
+
     @RequestMapping("event/delete/{id}")
     public String deleteEvent(@PathVariable Integer id) {
         eventService.delete(id);

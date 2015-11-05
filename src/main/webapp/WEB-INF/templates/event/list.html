@@ -23,11 +23,14 @@
             <td th:text="${stat.count}"/>
             <td th:text="${item.title}" />
             <td th:text="${item.description}"/>
-            <td th:text="${item.start}"/>
-            <td th:text="${item.end}"/>
+            <td th:text="${#dates.format(item.start, 'yyyy. MMMM d,  HH:mm')}"/>
+            <td th:text="${#dates.format(item.end, 'yyyy. MMMM d,  HH:mm')}"/>
             <th th:if="${operator}">
                 <a th:href="@{/event/editor/?id=__${item.id}__}">
                     <span class="glyphicon glyphicon-pencil" title="Szerkesztés"/>
+                </a>
+                <a th:href="@{/event/__${item.id}__/outcome/}">
+                    <span class="glyphicon glyphicon-align-justify" title="Tételek szerkesztése"/>
                 </a>
                 <a th:href="@{/event/delete/__${item.id}__}">
                     <span class="glyphicon glyphicon-remove" title="Törlés"/>
