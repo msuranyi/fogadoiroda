@@ -106,4 +106,11 @@ public class Event {
         this.outcomes = outcomes;
     }
 
+    public boolean isClosed() {
+        boolean result = true;
+        if (end == null || end.after(new Date())) {
+            result = false;
+        }
+        return result;
+    }
 }

@@ -39,6 +39,13 @@ public class BetController {
         return "bet/event-list";
     }
 
+    @RequestMapping("/list")
+    public String listBets(Model model) {
+        User user = userService.actualUser();
+        model.addAttribute("bets", user.getBets().values());
+        return "bet/bet-list";
+    }
+
     @RequestMapping("events/{id}")
     public String eventDetail(Model model, @PathVariable Integer id) {
 

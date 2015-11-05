@@ -8,7 +8,7 @@ public class Outcome {
 
     private String name;
 
-    private boolean won;
+    private Boolean won;
 
     public Outcome(Event parent, String name) {
         this.id = SequenceGenerator.next();
@@ -40,11 +40,11 @@ public class Outcome {
         this.name = name;
     }
 
-    public boolean isWon() {
+    public Boolean getWon() {
         return won;
     }
 
-    public void setWon(boolean won) {
+    public void setWon(Boolean won) {
         this.won = won;
     }
 }
