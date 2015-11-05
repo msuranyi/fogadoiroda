@@ -16,4 +16,5 @@ public interface EventService {
 
     Collection<Event> findAll();
 
+    Collection<Event> findAllOpen();
 }

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -27,10 +29,10 @@ public class EventServiceImpl implements EventService {
     @Override
     public void delete(int id) {
         Event event = eventRepository.findById(id);
-        if(event.getEnd().after(new Date())){
+        if (event.getEnd().after(new Date())) {
             eventRepository.delete(id);
-        }else{
-            throw new RuntimeException("Eseményt lezárás utáni törlése nem lehetséges!");
+        } else {
+            throw new RuntimeException("Esemï¿½nyt lezï¿½rï¿½s utï¿½ni tï¿½rlï¿½se nem lehetsï¿½ges!");
         }
     }
 
@@ -40,11 +42,18 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void update(Event event){
+    public void update(Event event) {
         Event iEvent = eventRepository.findById(event.getId());
         iEvent.setTitle(event.getTitle());
         iEvent.setDescription(event.getDescription());
         iEvent.setStart(new Date());
         iEvent.setEnd(event.getEnd());
+    }
+
+    @Override
+    public Collection<Event> findAllOpen() {
+        Date now = new Date();
+        Collection<Event> events = eventRepository.findAll();
+        return events.stream().filter(event -> event.getEnd().after(now)).collect(Collectors.toList());
     }
 }

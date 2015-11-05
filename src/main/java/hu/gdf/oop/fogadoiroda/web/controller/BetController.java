@@ -35,7 +35,7 @@ public class BetController {
     @RequestMapping("events")
     public String listOpenEvents(Model model) {
         model.addAttribute("user", userService.actualUser());
-        model.addAttribute("events", eventService.findAll());
+        model.addAttribute("events", eventService.findAllOpen());
         return "bet/event-list";
     }
 
