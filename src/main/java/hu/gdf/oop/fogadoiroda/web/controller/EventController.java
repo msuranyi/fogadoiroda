@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.Calendar;
 import java.util.Date;
 
 @Controller
@@ -40,17 +41,27 @@ public class EventController {
         return "event/editor";
     }
     @RequestMapping("event/delete/{id}")
-    public String deleteEvent(Model model, @PathVariable Integer id) {
+    public String deleteEvent(@PathVariable Integer id) {
         eventService.delete(id);
         return "redirect:/events";
     }
     @RequestMapping(value = "event/new-event", method = RequestMethod.POST)
-    public String newEvent(Model model, @Valid Event event, BindingResult result) {
+    public String newEvent(@Valid Event event, BindingResult result) {
         EventValidator validator = new EventValidator();
         validator.validate(event, result);
         if (result.hasErrors()) {
             return "event/editor";
         }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(event.getEnd());
+        String[] time = event.getEndTime().split(":");
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        event.setEnd(calendar.getTime());
+
         if(eventService.findbyId(event.getId()) != null){
             eventService.update(event);
         }else {

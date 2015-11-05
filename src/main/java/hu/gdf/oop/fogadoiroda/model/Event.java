@@ -1,5 +1,8 @@
 package hu.gdf.oop.fogadoiroda.model;
 
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.*;
 
 public class Event {
@@ -15,6 +18,8 @@ public class Event {
     private Date start;
 
     private Date end;
+
+    private String endTime;
 
     private Map<Integer, Outcome> outcomes = new HashMap<>();
 
@@ -38,6 +43,7 @@ public class Event {
         this.id = id;
     }
 
+    @NotNull
     public String getTitle() {
         return title;
     }
@@ -46,6 +52,7 @@ public class Event {
         this.title = title;
     }
 
+    @NotNull
     public String getDescription() {
         return description;
     }
@@ -70,12 +77,25 @@ public class Event {
         this.start = start;
     }
 
+    @Future
+    @NotNull
     public Date getEnd() {
         return end;
     }
 
     public void setEnd(Date end) {
         this.end = end;
+    }
+
+
+    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]")
+    @NotNull
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public Map<Integer, Outcome> getOutcomes() {

@@ -9,7 +9,22 @@
         <h1>Alkalmazás hiba</h1>
     </div>
 
-    <div class="alert alert-danger" role="alert" th:text="${exception} + ': ' + ${exception.message}"/>
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    <a th:text="${exception}" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" />
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <th:block th:if="${exception}">
+                        <span th:each="stackTrace : ${exception.stackTrace}" th:text="${stackTrace}"></span>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </th:block>
 </body>

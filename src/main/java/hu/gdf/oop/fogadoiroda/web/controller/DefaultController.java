@@ -30,7 +30,7 @@ public class DefaultController {
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
                 try {
-                    setValue(new SimpleDateFormat("yyyy.MM.dd HH:mm").parse(text));
+                    setValue(new SimpleDateFormat("yyyy.MM.dd").parse(text));
                 } catch (ParseException e) {
                     setValue(null);
                 }
@@ -40,7 +40,7 @@ public class DefaultController {
             public String getAsText() {
                 String result = null;
                 if (getValue() != null) {
-                    result = new SimpleDateFormat("yyyy.MM.dd HH:mm").format((Date) getValue());
+                    result = new SimpleDateFormat("yyyy.MM.dd").format((Date) getValue());
                 }
                 return result;
             }
