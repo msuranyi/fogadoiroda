@@ -1,9 +1,10 @@
 package hu.gdf.oop.fogadoiroda.model;
 
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Event {
 
@@ -77,7 +78,6 @@ public class Event {
         this.start = start;
     }
 
-    @Future
     @NotNull
     public Date getEnd() {
         return end;
