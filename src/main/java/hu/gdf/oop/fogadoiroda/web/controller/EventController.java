@@ -53,14 +53,19 @@ public class EventController {
     @RequestMapping(value = "event/{id}/outcome/add", method = RequestMethod.POST)
     public String addOutcome(Model model,@Valid Outcome outcome, BindingResult result, @PathVariable Integer id) {
         Event event = eventService.findbyId(id);
-        outcome.setParent(event);
-        event.getOutcomes().put(outcome.getId(), outcome);
+        if(!event.isClosed()) {
+            outcome.setParent(event);
+            outcome.setWon(false);
+            event.getOutcomes().put(outcome.getId(), outcome);
+        }
         return "redirect:/event/{id}/outcome";
     }
     @RequestMapping("event/{id}/outcome/delete")
     public String deleteOutcome(Model model, @PathVariable Integer id, @RequestParam(value = "outcomeId", required = false) Integer outcomeId) {
         Event event = eventService.findbyId(id);
-        event.getOutcomes().remove(outcomeId);
+        if(!event.isClosed()) {
+            event.getOutcomes().remove(outcomeId);
+        }
         return "redirect:/event/{id}/outcome";
     }
 
