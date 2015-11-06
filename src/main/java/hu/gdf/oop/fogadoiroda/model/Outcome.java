@@ -10,10 +10,15 @@ public class Outcome {
 
     private Boolean won;
 
+    public Outcome(){
+        this.id = SequenceGenerator.next();
+    }
+
     public Outcome(Event parent, String text) {
         this.id = SequenceGenerator.next();
         this.parent = parent;
         this.text = text;
+        this.won = false;
     }
 
     public Integer getId() {

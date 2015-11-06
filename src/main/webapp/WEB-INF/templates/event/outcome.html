@@ -8,6 +8,7 @@
     <div class="page-header">
         <h1>Tételek</h1>
     </div>
+    <!--
     <form class="form-horizontal" th:object="${outcomes}" th:action="@{/event/__${event.id}__/outcome/save}" method="post">
 
         <div th:each="outcome,stat : ${outcomes}" class="form-group">
@@ -26,6 +27,39 @@
             </button>
             <button type="submit" class="btn btn-sm btn-primary">Mentés</button>
     </form>
+    -->
+
+    <table class="table table-striped table-hover">
+        <tr>
+            <th>Tétel</th>
+            <th>Funkciók</th>
+        </tr>
+        <tr th:each="outcome,stat : ${outcomes}">
+            <td th:text="${outcome.value.text}"/>
+            <td>
+                <th:block th:unless="${closed}">
+                    <a th:href="@{/event/__${event.id}__/outcome/delete/?outcomeId=__${outcome.value.id}__}">
+                        <span class="glyphicon glyphicon-remove" title="Törlés"/>
+                    </a>
+                </th:block>
+                <th:block th:if="${closed}">
+                    <a th:href="@{/event/__${event.id}__/outcome/result/?outcomeId=__${outcome.value.id}__}">
+                        <span th:if="${outcome.value.won}" class="glyphicon glyphicon-thumbs-up" title="Nyert"/>
+                        <span th:unless="${outcome.value.won}" class="glyphicon glyphicon-thumbs-down" title="Nem nyert"/>
+                    </a>
+                </th:block>
+            </td>
+        </tr>
+    </table>
+
+    <form class="form-horizontal" th:object="${outcome}" th:action="@{/event/__${event.id}__/outcome/add}" method="post">
+            <div class="col-sm-4">
+                <input type="hidden" th:field="*{id}" th:value="${outcome.id}" />
+                <input type="text" th:field="*{text}" />
+                <button type="submit" class="btn btn-sm btn-primary">Új tétel</button>
+            </div>
+    </form>
+
 </th:block>
 </body>
 </html>

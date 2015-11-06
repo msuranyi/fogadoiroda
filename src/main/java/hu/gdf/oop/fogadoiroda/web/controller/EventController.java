@@ -44,13 +44,16 @@ public class EventController {
     public String editOutcome(Model model, @PathVariable Integer id) {
         Event event = eventService.findbyId(id);
         model.addAttribute("event", event);
+        model.addAttribute("closed", event.isClosed());
         model.addAttribute("outcomes", event.getOutcomes());
+        model.addAttribute("outcome", new Outcome());
         return "event/outcome";
     }
-    @RequestMapping("event/{id}/outcome/add")
-    public String addOutcome(Model model, @PathVariable Integer id) {
+
+    @RequestMapping(value = "event/{id}/outcome/add", method = RequestMethod.POST)
+    public String addOutcome(Model model,@Valid Outcome outcome, BindingResult result, @PathVariable Integer id) {
         Event event = eventService.findbyId(id);
-        Outcome outcome = new Outcome(event,"");
+        outcome.setParent(event);
         event.getOutcomes().put(outcome.getId(), outcome);
         return "redirect:/event/{id}/outcome";
     }
@@ -61,11 +64,20 @@ public class EventController {
         return "redirect:/event/{id}/outcome";
     }
 
-    // TODO: outcome.html-ben th:field mezõkre hibát ír, az nélkül meg üresen küldi vissza
-    @RequestMapping(value = "event/{id}/outcome/save", method = RequestMethod.POST)
-    public String saveOutcome(@RequestParam Map<Integer,Outcome> outcomes, @PathVariable Integer id) {
-        eventService.findbyId(id).setOutcomes(outcomes);
-        return "redirect:/events";
+    @RequestMapping("event/{id}/outcome/result")
+    public String changeOutcomeState(Model model, @PathVariable Integer id, @RequestParam(value = "outcomeId", required = true) Integer outcomeId) {
+        Event event = eventService.findbyId(id);
+        boolean state = !event.getOutcomes().get(outcomeId).getWon();
+        for (Outcome outcome : event.getOutcomes().values()){
+            if(outcome.getId().equals(outcomeId)){
+                outcome.setWon(state);
+            }else{
+                if(state == true){
+                    outcome.setWon(false);
+                }
+            }
+        }
+        return "redirect:/event/{id}/outcome";
     }
 
     @RequestMapping("event/delete/{id}")
