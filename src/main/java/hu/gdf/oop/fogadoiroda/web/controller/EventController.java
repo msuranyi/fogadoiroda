@@ -55,7 +55,8 @@ public class EventController {
         Event event = eventService.findbyId(id);
         if(!event.isClosed()) {
             outcome.setParent(event);
-            outcome.setWon(false);
+            // szerintem ezt hagyjuk null-nak
+            // outcome.setWon(false);
             event.getOutcomes().put(outcome.getId(), outcome);
         }
         return "redirect:/event/{id}/outcome";
