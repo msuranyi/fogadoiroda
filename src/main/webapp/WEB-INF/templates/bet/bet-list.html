@@ -20,7 +20,7 @@
         <tr th:each="bet,stat : ${bets}">
             <td th:text="${stat.count}"/>
             <td th:text="${bet.parent.title}" />
-            <td th:text="${bet.name}"/>
+            <td th:text="${bet.text}"/>
             <th:block th:if="${bet.won == null}">
                 <td th:text="${bet.parent.closed ? 'Lezárt' : 'Nyitott'}" />
             </th:block>

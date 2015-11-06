@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class EventController {
@@ -53,7 +50,7 @@ public class EventController {
     @RequestMapping("event/{id}/outcome/add")
     public String addOutcome(Model model, @PathVariable Integer id) {
         Event event = eventService.findbyId(id);
-        Outcome outcome = new Outcome(event.getId(),"");
+        Outcome outcome = new Outcome(event,"");
         event.getOutcomes().put(outcome.getId(), outcome);
         return "redirect:/event/{id}/outcome";
     }

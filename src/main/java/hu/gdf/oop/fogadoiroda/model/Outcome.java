@@ -4,13 +4,13 @@ public class Outcome {
 
     private Integer id;
 
-    private Integer parent;
+    private Event parent;
 
     private String text;
 
     private Boolean won;
 
-    public Outcome(Integer parent, String text) {
+    public Outcome(Event parent, String text) {
         this.id = SequenceGenerator.next();
         this.parent = parent;
         this.text = text;
@@ -24,11 +24,11 @@ public class Outcome {
         this.id = id;
     }
 
-    public Integer getParent() {
+    public Event getParent() {
         return parent;
     }
 
-    public void setParent(Integer parent) {
+    public void setParent(Event parent) {
         this.parent = parent;
     }
 
