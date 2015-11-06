@@ -62,7 +62,7 @@
         </tr>
     </table>
 
-    <form class="form-horizontal" th:object="${outcome}" th:action="@{/event/__${event.id}__/outcome/add}" method="post">
+    <form th:unless="${closed}" class="form-horizontal" th:object="${outcome}" th:action="@{/event/__${event.id}__/outcome/add}" method="post">
             <div class="col-sm-4">
                 <input type="hidden" th:field="*{id}" th:value="${outcome.id}" />
                 <input type="text" th:field="*{text}" />
