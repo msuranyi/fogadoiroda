@@ -4,9 +4,7 @@ import org.junit.Test;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class SecurityControllerTest extends AbstractControllerTest {
 
@@ -61,20 +59,5 @@ public class SecurityControllerTest extends AbstractControllerTest {
     public void securedNoLogin() throws Exception {
         mockMvc.perform(get("/admin/welcome"))
                 .andExpect(status().isFound());
-    }
-
-    @Test
-    public void securedWithUser() throws Exception {
-        mockMvc.perform(get("/admin/welcome")
-                .with(user("user")))
-                .andExpect(status().isForbidden());
-    }
-
-    @Test
-    public void securedWithOperator() throws Exception {
-        mockMvc.perform(get("/admin/welcome")
-                .with(user("operator").password("a").roles("USER", "OPERATOR")))
-                .andExpect(status().isOk())
-                .andExpect(view().name("welcome"));
     }
 }
