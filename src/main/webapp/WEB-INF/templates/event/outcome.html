@@ -32,10 +32,21 @@
     <table class="table table-striped table-hover">
         <tr>
             <th>Tétel</th>
+            <th>Állapot</th>
             <th>Funkciók</th>
         </tr>
         <tr th:each="outcome,stat : ${outcomes}">
             <td th:text="${outcome.value.text}"/>
+            <td th:unless="${closed}">
+                Nyitott
+            </td>
+            <td th:if="${closed}">
+                <th:block th:unless="${outcome.value.evaluated}" th:text="${'N/A'}"/>
+                <th:block th:if="${outcome.value.evaluated}">
+                    <th:block th:if="${outcome.value.won}" th:text="${'Nyert'}" />
+                    <th:block th:unless="${outcome.value.won}" th:text="${'Vesztett'}"/>
+                </th:block>
+            </td>
             <td>
                 <th:block th:unless="${closed}">
                     <a th:href="@{/event/__${event.id}__/outcome/delete/?outcomeId=__${outcome.value.id}__}">
@@ -44,8 +55,7 @@
                 </th:block>
                 <th:block th:if="${closed}">
                     <a th:href="@{/event/__${event.id}__/outcome/result/?outcomeId=__${outcome.value.id}__}">
-                        <span th:if="${outcome.value.won}" class="glyphicon glyphicon-thumbs-up" title="Nyert"/>
-                        <span th:unless="${outcome.value.won}" class="glyphicon glyphicon-thumbs-down" title="Nem nyert"/>
+                        <span th:unless="${outcome.value.won}" class="glyphicon glyphicon-thumbs-up" title="Nyert"/>
                     </a>
                 </th:block>
             </td>

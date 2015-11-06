@@ -67,14 +67,11 @@ public class EventController {
     @RequestMapping("event/{id}/outcome/result")
     public String changeOutcomeState(Model model, @PathVariable Integer id, @RequestParam(value = "outcomeId", required = true) Integer outcomeId) {
         Event event = eventService.findbyId(id);
-        boolean state = !event.getOutcomes().get(outcomeId).getWon();
-        for (Outcome outcome : event.getOutcomes().values()){
-            if(outcome.getId().equals(outcomeId)){
-                outcome.setWon(state);
+        for (Outcome o : event.getOutcomes().values()){
+            if(o.getId().equals(outcomeId)){
+                o.setWon(true);
             }else{
-                if(state == true){
-                    outcome.setWon(false);
-                }
+                o.setWon(false);
             }
         }
         return "redirect:/event/{id}/outcome";

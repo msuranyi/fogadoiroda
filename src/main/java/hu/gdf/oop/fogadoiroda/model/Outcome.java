@@ -52,4 +52,8 @@ public class Outcome {
     public void setWon(Boolean won) {
         this.won = won;
     }
+
+    public boolean isEvaluated() {
+        return this.won != null;
+    }
 }
