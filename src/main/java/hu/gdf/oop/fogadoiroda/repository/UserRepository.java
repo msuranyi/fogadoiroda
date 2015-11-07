@@ -4,15 +4,16 @@ import hu.gdf.oop.fogadoiroda.model.User;
 
 import java.util.Collection;
 
-public interface UserRepository {
+/**
+ * A felhasználók tárolásáért felelős komponens interfésze.
+ */
+public interface UserRepository extends BaseRepository<User> {
 
+    /**
+     * Felhasználónév alapján történő keresés.
+     *
+     * @param username a keresendő felhasználó loginneve
+     * @return a keresett felhasználó
+     */
     User findByUsername(String username);
-
-    Collection<User> findAll();
-
-    void create(User user);
-
-    void update(User user);
-
-    void delete(User user);
 }

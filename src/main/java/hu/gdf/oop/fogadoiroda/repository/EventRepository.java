@@ -4,14 +4,16 @@ import hu.gdf.oop.fogadoiroda.model.Event;
 
 import java.util.Collection;
 
-public interface EventRepository {
+/**
+ * Az események tárolásáért felelős komponens interfésze.
+ */
+public interface EventRepository extends BaseRepository<Event> {
 
-    void create(Event event);
-
-    void delete(Integer id);
-
+    /**
+     * Esemény azonosító alapján történő lekérdezés
+     *
+     * @param id a keresendő esemény azonosítója
+     * @return a keresett esemény
+     */
     Event findById(int id);
-
-    Collection<Event> findAll();
-
 }

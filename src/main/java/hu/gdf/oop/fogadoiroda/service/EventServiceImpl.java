@@ -30,7 +30,7 @@ public class EventServiceImpl implements EventService {
     public void delete(int id) {
         Event event = eventRepository.findById(id);
         if (event.getEnd().after(new Date())) {
-            eventRepository.delete(id);
+            eventRepository.delete(event);
         } else {
             throw new RuntimeException("Eseményt lezárás utáni törlése nem lehetséges!");
         }
