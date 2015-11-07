@@ -66,7 +66,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * az authentikáció számára a loginnév alapján a megfelelő felhasználó entitás kikeresését
+     * Az authentikáció számára a loginnév alapján a megfelelő felhasználó entitás kikeresését
      * végző komponens.
      * @return a user details service komponens
      */
