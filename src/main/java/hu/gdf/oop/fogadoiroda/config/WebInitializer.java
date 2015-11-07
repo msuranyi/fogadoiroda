@@ -6,6 +6,21 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+/**
+ * A web alkalmazás betöltő osztálya, a régi web.xml java-s megfelelője.
+ * <br><br>
+ * Induláskor felolvassa a Spring-es konfigurációkat a {@link SpringRootConfig} és {@link SpringSecurityConfig}
+ * osztályokból, valamint a Spring MVC konfigurációt a {@link SpringWebConfig} osztályból.
+ * Ez utóbbihoz bedefiniálja a Spring MVC DispatcherServlet-jét a root ("/") URL-re,
+ * ami végső soron felel a kliensektől bejövő kérések továbbításáért a Controller-ek felé.
+ * <br><br>
+ * Ezen kívül még két Filter is felvételre került:
+ * <br>
+ * <ul>
+ *     <li>CharacterEncodingFilter - a magyar ékezetek helyes megjelenítése miatt volt szükséges</li>
+ *     <li>DelegatingFilterProxy - a jogosultság kezelő keretrendszernek kellett</li>
+ * </ul>
+ */
 public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override

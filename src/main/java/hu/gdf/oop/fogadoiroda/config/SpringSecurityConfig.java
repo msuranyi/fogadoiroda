@@ -18,16 +18,31 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    /**
+     * Ebben a metódusban lehet a keretrendszer számára bedefiniálni, hogy melyik komponens végzi
+     * az authentikáció számára a loginnév alapján a megfelelő felhasználó entitás kikeresését.
+     *
+     * @param registry authentikációért felelős manager komponens összeszereléséhez szükséges registry
+     * @throws Exception sikertelen keresés esetén
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder registry) throws Exception {
         registry.userDetailsService(userDetailsService());
     }
 
+    /**
+     * A teljes jogosultság konfigurációja.
+     *
+     * @param http Spring Security komponens, ezt lehet testreszabni
+     * @throws Exception hiba esetén
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        // Cross-site Request Forgery ellen védekezés
         http.csrf();
 
+        // URL pattern alapú authorizációs szabályok
         http.authorizeRequests().antMatchers("/css/**", "/fonts/**", "/js/**").permitAll();
         http.authorizeRequests().antMatchers("/sign-up", "/register").anonymous();
         http.authorizeRequests().antMatchers("/admin/**").hasRole("OPERATOR");
@@ -37,17 +52,24 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/bets/**").hasRole("USER");
         http.authorizeRequests().anyRequest().authenticated();
 
+        // belépési oldal beállításai
         http.formLogin().loginPage("/login");
         http.formLogin().loginProcessingUrl("/authenticate");
         http.formLogin().defaultSuccessUrl("/welcome", true);
         http.formLogin().failureUrl("/login?error=1").permitAll();
 
-//		http.logout().logoutUrl("/logout");
+        // kilépés beállításai
         http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 
+        // authorizációs hiba esetén ide küldjük a klienst
         http.exceptionHandling().accessDeniedPage("/access-denied");
     }
 
+    /**
+     * az authentikáció számára a loginnév alapján a megfelelő felhasználó entitás kikeresését
+     * végző komponens.
+     * @return a user details service komponens
+     */
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetailsService userDetailsService = new MyUserDetailsServiceImpl();

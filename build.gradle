@@ -10,6 +10,10 @@ description = "Fogadoiroda Web Application"
 //sourceCompatibility = 1.8
 //targetCompatibility = 1.8
 
+javadoc {
+    options.charSet = 'UTF-8'
+}
+
 repositories {
     mavenLocal()
     mavenCentral()
