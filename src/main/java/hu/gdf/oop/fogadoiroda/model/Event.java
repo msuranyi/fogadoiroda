@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Event {
+public class Event extends BaseEntity {
 
     private Integer id;
 
@@ -23,6 +23,11 @@ public class Event {
     private String endTime;
 
     private Map<Integer, Outcome> outcomes = new HashMap<>();
+
+    @Override
+    public String getIdentitfier() {
+        return id != null ? id.toString() : null;
+    }
 
     public Event() {
         this.id = SequenceGenerator.next();

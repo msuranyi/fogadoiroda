@@ -12,9 +12,7 @@ import java.util.Map;
 
 
 @Component
-public class EventReporitoryImpl implements EventRepository {
-
-    private Map<String, Event> events = new HashMap<>();
+public class EventMemoryReporitory extends AbstractMemoryRepository<Event> implements EventRepository {
 
     @PostConstruct
     public void init() {
@@ -33,24 +31,12 @@ public class EventReporitoryImpl implements EventRepository {
     }
 
     @Override
-    public void create(Event event) {
-        int eventId = event.getId();
-        events.put(eventId+"",event);
-    }
-
-    @Override
-    public void delete(int id) {
-        events.remove(id+"");
+    public void delete(Integer id) {
+        super.delete(entities.get(id.toString()));
     }
 
     @Override
     public Event findById(int id) {
-        return events.get(id+"");
+        return entities.get(id+"");
     }
-
-    @Override
-    public Collection<Event> findAll() {
-        return events.values();
-    }
-
 }

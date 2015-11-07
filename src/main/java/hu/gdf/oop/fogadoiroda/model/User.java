@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class User {
+public class User extends BaseEntity {
 
     private String username;
 
@@ -44,6 +44,11 @@ public class User {
             this.roles = Arrays.asList(roles);
         }
         this.email = registration.getEmail();
+    }
+
+    @Override
+    public String getIdentitfier() {
+        return username;
     }
 
     public String getUsername() {
