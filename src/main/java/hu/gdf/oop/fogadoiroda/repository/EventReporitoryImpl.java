@@ -20,7 +20,7 @@ public class EventReporitoryImpl implements EventRepository {
     public void init() {
 
         Date start = new Date();
-        Date end = new Date(start.getTime() + 1000*60);
+        Date end = new Date(start.getTime() + 1000*60*10);
         Event event = new Event("FTC - Vasas", "FTC - Vasas, NB1-es labdarúgó mérkőzés", start, end);
         Outcome outcome = new Outcome(event, "FTC nyer");
         event.getOutcomes().put(outcome.getId(),outcome);
