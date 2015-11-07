@@ -32,7 +32,7 @@ public class EventServiceImpl implements EventService {
         if (event.getEnd().after(new Date())) {
             eventRepository.delete(id);
         } else {
-            throw new RuntimeException("Esem�nyt lez�r�s ut�ni t�rl�se nem lehets�ges!");
+            throw new RuntimeException("Eseményt lezárás utáni törlése nem lehetséges!");
         }
     }
 
