@@ -8,10 +8,19 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+/**
+ * Felhasználói profil módosítást ellenőrző validátor komponens.
+ */
 public class ProfileValidator implements Validator {
 
     private UserService userService;
 
+    /**
+     * A validátor konstruktora. A működéséhez szükség van a {@link UserService} komponensre is,
+     * a régi jelszó ellenőrzése miatt.
+     *
+     * @param userService felhasználóval kapcsolatos üzleti logikát kezelő komponens
+     */
     public ProfileValidator(UserService userService) {
         this.userService = userService;
     }

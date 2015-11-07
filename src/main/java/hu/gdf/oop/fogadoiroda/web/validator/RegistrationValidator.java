@@ -4,6 +4,9 @@ import hu.gdf.oop.fogadoiroda.web.model.Registration;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+/**
+ * Felhasználói regisztrációt ellenőrző validátor komponens.
+ */
 public class RegistrationValidator implements Validator {
 
     @Override

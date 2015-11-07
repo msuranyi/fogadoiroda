@@ -7,6 +7,9 @@ import org.springframework.validation.Validator;
 
 import java.util.Date;
 
+/**
+ * Esemény létrehozást ellenőrző validátor komponens.
+ */
 public class EventValidator implements Validator{
 
     @Override
