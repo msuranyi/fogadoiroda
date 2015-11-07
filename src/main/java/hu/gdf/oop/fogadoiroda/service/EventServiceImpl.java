@@ -10,6 +10,9 @@ import java.util.Date;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+/**
+ * Az eseményekkel kapcsolatos üzleti logikát implementáló komponens.
+ */
 @Service
 public class EventServiceImpl implements EventService {
 

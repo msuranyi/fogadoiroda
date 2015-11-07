@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Map;
 
+/**
+ * A fogadásokkal kapcsolatos üzleti logikát implementáló komponens.
+ */
 @Service
 public class BetServiceImpl implements BetService {
 

@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Collection;
 
+/**
+ * A felhasználókkal kapcsolatos üzleti logikát implementáló komponens.
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
