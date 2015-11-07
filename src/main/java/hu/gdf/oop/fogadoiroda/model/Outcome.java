@@ -1,5 +1,7 @@
 package hu.gdf.oop.fogadoiroda.model;
 
+import javax.validation.constraints.NotNull;
+
 public class Outcome {
 
     private Integer id;
@@ -37,6 +39,7 @@ public class Outcome {
         this.parent = parent;
     }
 
+    @NotNull
     public String getText() {
         return text;
     }
