@@ -14,7 +14,7 @@ import java.util.Map;
  * Az események tárolását memóriában implementáló komponens.
  */
 @Component
-public class EventMemoryReporitory extends AbstractMemoryRepository<Event> implements EventRepository {
+public class EventMemoryRepository extends AbstractMemoryRepository<Event> implements EventRepository {
 
     /**
      * A komponens példányosítása és függőségeinek beinjektálásai után lefutó inicializáló metódus.

@@ -10,5 +10,5 @@ public abstract class BaseEntity {
      *
      * @return az entitás azonosítója
      */
-    public abstract String getIdentitfier();
+    public abstract String getIdentifier();
 }

@@ -26,19 +26,19 @@ public abstract class AbstractMemoryRepository<E extends BaseEntity> implements 
     @Override
     public void create(E entity) {
         preCreate(entity);
-        entities.put(entity.getIdentitfier(), entity);
+        entities.put(entity.getIdentifier(), entity);
     }
 
     @Override
     public void update(E entity) {
         preUpdate(entity);
-        entities.put(entity.getIdentitfier(), entity);
+        entities.put(entity.getIdentifier(), entity);
     }
 
     @Override
     public void delete(E entity) {
         preDelete(entity);
-        entities.remove(entity.getIdentitfier());
+        entities.remove(entity.getIdentifier());
     }
 
     /**
@@ -49,7 +49,7 @@ public abstract class AbstractMemoryRepository<E extends BaseEntity> implements 
      */
     protected void preCreate(E entity) {
         checkNotNull(entity);
-        checkNotExists(entity.getIdentitfier());
+        checkNotExists(entity.getIdentifier());
     }
 
     /**
@@ -60,7 +60,7 @@ public abstract class AbstractMemoryRepository<E extends BaseEntity> implements 
      */
     protected void preUpdate(E entity) {
         checkNotNull(entity);
-        checkExists(entity.getIdentitfier());
+        checkExists(entity.getIdentifier());
     }
 
     /**
@@ -71,7 +71,7 @@ public abstract class AbstractMemoryRepository<E extends BaseEntity> implements 
      */
     protected void preDelete(E entity) {
         checkNotNull(entity);
-        checkExists(entity.getIdentitfier());
+        checkExists(entity.getIdentifier());
     }
 
     /**
