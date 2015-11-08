@@ -88,30 +88,48 @@ public class EventController {
         eventService.delete(id);
         return "redirect:/events";
     }
-    @RequestMapping(value = "event/new-event", method = RequestMethod.POST)
+    @RequestMapping(value = "event/new-event", method = RequestMethod.POST, params="action=save")
     public String newEvent(@Valid Event event, BindingResult result) {
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(event.getEnd());
-        String[] time = event.getEndTime().split(":");
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
-        calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        event.setEnd(calendar.getTime());
-
-        EventValidator validator = new EventValidator();
+        processEndDate(event);
+        EventValidator validator = new EventValidator(false);
         validator.validate(event, result);
         if (result.hasErrors()) {
             return "event/editor";
         }
 
-        if(eventService.findbyId(event.getId()) != null){
+        if(event.getId() != null && eventService.findbyId(event.getId()) != null){
             eventService.update(event);
         }else {
-            event.setStart(new Date());
             eventService.create(event);
         }
         return "redirect:/events";
+    }
+
+    @RequestMapping(value = "event/new-event", method = RequestMethod.POST, params="action=publish")
+    public String publish(@Valid Event event, BindingResult result) {
+        processEndDate(event);
+        EventValidator validator = new EventValidator(true);
+        validator.validate(event, result);
+        if (result.hasErrors()) {
+            return "event/editor";
+        }
+
+        event.setStart(new Date());
+        eventService.update(event);
+        return "redirect:/events";
+    }
+
+    private void processEndDate(Event event) {
+        if (event.getEnd() != null && event.getEndTime() != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(event.getEnd());
+            String[] time = event.getEndTime().split(":");
+            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
+            calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            event.setEnd(calendar.getTime());
+        }
     }
 }

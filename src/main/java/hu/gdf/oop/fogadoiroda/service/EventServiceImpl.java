@@ -1,6 +1,7 @@
 package hu.gdf.oop.fogadoiroda.service;
 
 import hu.gdf.oop.fogadoiroda.model.Event;
+import hu.gdf.oop.fogadoiroda.model.SequenceGenerator;
 import hu.gdf.oop.fogadoiroda.repository.EventRepository;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,9 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public void create(Event event) {
+        if (event.getId() == null) {
+            event.setId(SequenceGenerator.next());
+        }
         eventRepository.create(event);
     }
 
@@ -49,14 +53,23 @@ public class EventServiceImpl implements EventService {
         Event iEvent = eventRepository.findById(event.getId());
         iEvent.setTitle(event.getTitle());
         iEvent.setDescription(event.getDescription());
-        iEvent.setStart(new Date());
+        iEvent.setStart(event.getStart());
         iEvent.setEnd(event.getEnd());
+        iEvent.setEndTime(event.getEndTime());
     }
 
     @Override
     public Collection<Event> findAllOpen() {
         Date now = new Date();
         Collection<Event> events = eventRepository.findAll();
-        return events.stream().filter(event -> event.getEnd().after(now)).collect(Collectors.toList());
+        return events.stream().filter(event -> isOpen(event, now)).collect(Collectors.toList());
+    }
+
+    private boolean isOpen(Event event, Date now) {
+        boolean result = false;
+        if (event.getStart() != null) {
+            result = event.getEnd().after(now);
+        }
+        return result;
     }
 }

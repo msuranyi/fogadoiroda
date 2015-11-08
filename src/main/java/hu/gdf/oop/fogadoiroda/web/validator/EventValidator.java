@@ -3,6 +3,7 @@ package hu.gdf.oop.fogadoiroda.web.validator;
 
 import hu.gdf.oop.fogadoiroda.model.Event;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import java.util.Date;
@@ -10,7 +11,13 @@ import java.util.Date;
 /**
  * Esemény létrehozást ellenőrző validátor komponens.
  */
-public class EventValidator implements Validator{
+public class EventValidator implements Validator {
+
+    private boolean publish;
+
+    public EventValidator(boolean publish) {
+        this.publish = publish;
+    }
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -20,7 +27,13 @@ public class EventValidator implements Validator{
     @Override
     public void validate(Object target, Errors errors) {
         Event event = (Event) target;
-        if (event.getEnd().before(new Date())) {
+
+        if (publish) {
+            ValidationUtils.rejectIfEmpty(errors, "end", "Required");
+            ValidationUtils.rejectIfEmpty(errors, "endTime", "Required");
+        }
+
+        if (event.getEnd() != null && event.getEndTime() != null && event.getEnd().before(new Date())) {
             errors.rejectValue("end", "Future");
         }
     }

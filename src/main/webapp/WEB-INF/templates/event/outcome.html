@@ -48,7 +48,7 @@
                 </th:block>
             </td>
             <td>
-                <th:block th:unless="${closed}">
+                <th:block th:unless="${event.start}">
                     <a th:href="@{/event/__${event.id}__/outcome/delete/?outcomeId=__${outcome.value.id}__}">
                         <span class="glyphicon glyphicon-remove" title="Törlés"/>
                     </a>
@@ -62,7 +62,7 @@
         </tr>
     </table>
 
-    <form th:unless="${closed}" class="form-horizontal" th:object="${outcome}" th:action="@{/event/__${event.id}__/outcome/add}" method="post">
+    <form th:unless="${event.start}" class="form-horizontal" th:object="${outcome}" th:action="@{/event/__${event.id}__/outcome/add}" method="post">
             <div class="col-sm-4">
                 <input type="hidden" th:field="*{id}" th:value="${outcome.id}" />
                 <input type="text" th:field="*{text}" />

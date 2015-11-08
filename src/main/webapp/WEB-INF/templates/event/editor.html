@@ -67,8 +67,10 @@
             </th:div>
         </div>
 
-        <button type="submit" class="btn btn-sm btn-primary">Mentés</button>
+        <button type="submit" class="btn btn-sm btn-primary" name="action" value="save">Mentés</button>
 
+        <button type="submit" th:if="${event.id}" name="action" value="publish"
+                class="btn btn-sm btn-primary" th:text="${'Véglegezés'}"/>
     </form>
 </th:block>
 </body>

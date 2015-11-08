@@ -31,7 +31,6 @@ public class Event extends BaseEntity {
      * Esemény objektumot létrehozó konstruktor.
      */
     public Event() {
-        this.id = SequenceGenerator.next();
     }
 
     /**
@@ -152,7 +151,6 @@ public class Event extends BaseEntity {
      *
      * @return az esemény lezárásának dátuma
      */
-    @NotNull
     public Date getEnd() {
         return end;
     }
@@ -172,7 +170,6 @@ public class Event extends BaseEntity {
      * @return az esemény óra:perc értéke
      */
     @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]")
-    @NotNull
     public String getEndTime() {
         return endTime;
     }
