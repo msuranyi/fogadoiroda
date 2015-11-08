@@ -82,7 +82,7 @@ public class User extends BaseEntity {
     }
 
     @Override
-    public String getIdentitfier() {
+    public String getIdentifier() {
         return username;
     }
 

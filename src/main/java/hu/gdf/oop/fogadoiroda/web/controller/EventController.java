@@ -51,18 +51,16 @@ public class EventController {
     }
 
     @RequestMapping(value = "event/{id}/outcome/add", method = RequestMethod.POST)
-    public String addOutcome(Model model,@Valid Outcome outcome, BindingResult result, @PathVariable Integer id) {
+    public String addOutcome(@Valid Outcome outcome, @PathVariable Integer id) {
         Event event = eventService.findbyId(id);
         if(!event.isClosed()) {
             outcome.setParent(event);
-            // szerintem ezt hagyjuk null-nak
-            // outcome.setWon(false);
             event.getOutcomes().put(outcome.getId(), outcome);
         }
         return "redirect:/event/{id}/outcome";
     }
     @RequestMapping("event/{id}/outcome/delete")
-    public String deleteOutcome(Model model, @PathVariable Integer id, @RequestParam(value = "outcomeId", required = false) Integer outcomeId) {
+    public String deleteOutcome(@PathVariable Integer id, @RequestParam(value = "outcomeId", required = false) Integer outcomeId) {
         Event event = eventService.findbyId(id);
         if(!event.isClosed()) {
             event.getOutcomes().remove(outcomeId);
@@ -71,7 +69,7 @@ public class EventController {
     }
 
     @RequestMapping("event/{id}/outcome/result")
-    public String changeOutcomeState(Model model, @PathVariable Integer id, @RequestParam(value = "outcomeId", required = true) Integer outcomeId) {
+    public String changeOutcomeState(@PathVariable Integer id, @RequestParam(value = "outcomeId", required = true) Integer outcomeId) {
         Event event = eventService.findbyId(id);
         for (Outcome o : event.getOutcomes().values()){
             if(o.getId().equals(outcomeId)){

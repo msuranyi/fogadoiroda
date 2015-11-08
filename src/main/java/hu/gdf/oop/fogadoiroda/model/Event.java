@@ -51,7 +51,7 @@ public class Event extends BaseEntity {
     }
 
     @Override
-    public String getIdentitfier() {
+    public String getIdentifier() {
         return id != null ? id.toString() : null;
     }
 
