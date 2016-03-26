@@ -18,7 +18,7 @@ public class UserRepositoryTest {
     public void testCreate() {
 
         createUser(1, "marci", "123456", "marci@mail.hu", "OPERATOR", true, 100);
-        User user = tested.findOne(1L);
+        User user = tested.findOne(1);
 
         assertEquals(1, user.getId().intValue());
         assertEquals("marci", user.getUsername());
@@ -36,12 +36,12 @@ public class UserRepositoryTest {
     public void testUpdate() {
 
         createUser(2, "janos", "123", "janos@mail.hu", "OPERATOR", true, 200);
-        User user = tested.findOne(2L);
+        User user = tested.findOne(2);
 
         user.setPassword("12345678");
         user.setActive(false);
         tested.update(user);
-        user = tested.findOne(2L);
+        user = tested.findOne(2);
 
         assertEquals(2, user.getId().intValue());
         assertEquals("janos", user.getUsername());
@@ -64,9 +64,9 @@ public class UserRepositoryTest {
     public void testDelete() {
 
         createUser(3, "geza", "abc", "geza@mail.hu", "OPERATOR", true, 200);
-        User user = tested.findOne(3L);
+        User user = tested.findOne(3);
         tested.delete(user);
-        user = tested.findOne(3L);
+        user = tested.findOne(3);
 
         assertNull(user);
     }

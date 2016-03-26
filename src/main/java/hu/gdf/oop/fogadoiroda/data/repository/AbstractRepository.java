@@ -15,7 +15,7 @@ public abstract class AbstractRepository<E> {
 
     private String driver = "oracle.jdbc.driver.OracleDriver";
 
-    private String url = "jdbc:oracle:thin:@szofidb:1521:szofidb";
+    private String url = "jdbc:oracle:thin:@localhost:1521:orcl";
 
     private String user = "fogadoiroda";
 
@@ -42,7 +42,7 @@ public abstract class AbstractRepository<E> {
         }
     }
 
-    public E findOne(Long id) {
+    public E findOne(Integer id) {
         createConnection();
         E result = internalFindOne(id);
         closeConnection();
@@ -74,7 +74,7 @@ public abstract class AbstractRepository<E> {
         closeConnection();
     }
 
-    protected abstract E internalFindOne(Long id);
+    protected abstract E internalFindOne(Integer id);
 
     protected abstract List<E> internalFindAll();
 
