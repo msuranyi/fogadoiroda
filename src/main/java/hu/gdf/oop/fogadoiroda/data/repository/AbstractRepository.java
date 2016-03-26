@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 public abstract class AbstractRepository<E> {
 
@@ -13,13 +15,35 @@ public abstract class AbstractRepository<E> {
 
     private Connection conn = null;
 
-    private String driver = "oracle.jdbc.driver.OracleDriver";
+//    private String driver = "oracle.jdbc.driver.OracleDriver";
+    private String driver;
 
-    private String url = "jdbc:oracle:thin:@localhost:1521:orcl";
+//    private String url = "jdbc:oracle:thin:@localhost:1521:orcl";
+    private String url;
 
-    private String user = "fogadoiroda";
+//    private String user = "fogadoiroda";
+    private String user;
 
-    private String password = "fogadoiroda";
+//    private String password = "fogadoiroda";
+    private String password;
+
+    public AbstractRepository() {
+        ResourceBundle dsProps = findResourceBundle();
+        driver = dsProps.getString("jdbc.driver");
+        url = dsProps.getString("jdbc.url");
+        user = dsProps.getString("jdbc.schema");
+        password = dsProps.getString("jdbc.password");
+    }
+
+    private ResourceBundle findResourceBundle() {
+        ResourceBundle result = null;
+        try {
+            result = ResourceBundle.getBundle("datasource-local");
+        } catch (MissingResourceException e) {
+            result = ResourceBundle.getBundle("datasource-default");
+        }
+        return result;
+    }
 
     private void createConnection() {
         try {
