@@ -45,6 +45,10 @@ exclude(module: 'commons-logging')
     providedCompile group: 'javax.servlet.jsp', name: 'jsp-api', version:'2.2'
 }
 
+test {
+    exclude 'hu/gdf/oop/fogadoiroda/data/**'
+}
+
 task wrapper(type: Wrapper) {
    gradleVersion = '2.12'
 }
