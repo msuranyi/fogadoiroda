@@ -15,9 +15,10 @@ javadoc {
 }
 
 repositories {
-    mavenLocal()
+    // mavenLocal()
     mavenCentral()
 }
+
 dependencies {
     compile group: 'org.springframework', name: 'spring-webmvc', version:'4.2.1.RELEASE'
     compile(group: 'org.springframework', name: 'spring-context-support', version:'4.2.1.RELEASE') {
@@ -32,7 +33,9 @@ exclude(module: 'commons-logging')
     compile group: 'org.slf4j', name: 'jcl-over-slf4j', version:'1.7.2'
     compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.2'
     compile group: 'ch.qos.logback', name: 'logback-classic', version:'1.1.2'
-    compile group: 'com.oracle', name: 'ojdbc6', version: '11.2.0.4.0'
+
+    //compile group: 'com.oracle', name: 'ojdbc6', version: '11.2.0.4.0'
+	runtime files('lib/ojdbc6-11.2.0.4.0.jar')
 
     testCompile group: 'junit', name: 'junit', version:'4.11'
     testCompile group: 'org.springframework', name: 'spring-test', version:'4.2.1.RELEASE'
@@ -40,4 +43,8 @@ exclude(module: 'commons-logging')
 
     providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.1.0'
     providedCompile group: 'javax.servlet.jsp', name: 'jsp-api', version:'2.2'
+}
+
+task wrapper(type: Wrapper) {
+   gradleVersion = '2.12'
 }
