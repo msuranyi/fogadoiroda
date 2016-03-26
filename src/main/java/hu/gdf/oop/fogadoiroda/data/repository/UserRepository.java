@@ -10,7 +10,7 @@ import java.util.List;
 public class UserRepository extends AbstractRepository<User> {
 
     @Override
-    protected User internalFindOne(Long id) {
+    protected User internalFindOne(Integer id) {
         return singleResult("select * from USERS where ID = ?", id);
     }
 
