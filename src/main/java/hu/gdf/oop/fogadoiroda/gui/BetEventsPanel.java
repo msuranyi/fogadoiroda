@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 public class BetEventsPanel extends JPanel implements ActionListener{
 
     public BetEventsPanel(){
-        this.add(new JLabel("Fogad·sok"));
+        this.add(new JLabel("Fogad√°sok"));
     }
 
     @Override

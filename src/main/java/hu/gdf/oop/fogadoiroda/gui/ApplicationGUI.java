@@ -10,12 +10,12 @@ public class ApplicationGUI extends JFrame implements ActionListener {
     UsersPanel usersPanel = new UsersPanel();
     BetEventsPanel betEventsPanel = new BetEventsPanel();
     JMenuBar mBar = new JMenuBar();
-    JMenu mFile = new JMenu("Fájl");
-    JMenuItem mExit = new JMenuItem("Bezárás");
+    JMenu mFile = new JMenu("FÃ¡jl");
+    JMenuItem mExit = new JMenuItem("BezÃ¡rÃ¡s");
 
-    JMenu mTables = new JMenu("Táblák");
-    JMenuItem mUsers = new JMenuItem("Felhasználók");
-    JMenuItem mBetEvents = new JMenuItem("Fogadások");
+    JMenu mTables = new JMenu("TÃ¡blÃ¡k");
+    JMenuItem mUsers = new JMenuItem("FelhasznÃ¡lÃ³k");
+    JMenuItem mBetEvents = new JMenuItem("FogadÃ¡sok");
 
     public ApplicationGUI(){
         initComponents();
@@ -39,7 +39,7 @@ public class ApplicationGUI extends JFrame implements ActionListener {
 
     private void initFrame(){
         this.setJMenuBar(mBar);
-        this.setTitle("Fogadóiroda Back Office");
+        this.setTitle("FogadÃ³iroda Back Office");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800, 600);
         this.setVisible(true);
