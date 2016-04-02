@@ -7,8 +7,8 @@ import java.awt.event.ActionListener;
 public class ApplicationGUI extends JFrame implements ActionListener {
 
     JPanel cp;
-    UsersPanel usersPanel = new UsersPanel();
-    BetEventsPanel betEventsPanel = new BetEventsPanel();
+    UsersPanel usersPanel;
+    BetEventsPanel betEventsPanel;
     JMenuBar mBar = new JMenuBar();
     JMenu mFile = new JMenu("Fájl");
     JMenuItem mExit = new JMenuItem("Bezárás");
@@ -34,7 +34,6 @@ public class ApplicationGUI extends JFrame implements ActionListener {
         mUsers.addActionListener(this);
         mBetEvents.addActionListener(this);
         mExit.addActionListener(this);
-
     }
 
     private void initFrame(){
@@ -56,9 +55,11 @@ public class ApplicationGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
         if(src.equals(mUsers)){
+            if(usersPanel == null) usersPanel = new UsersPanel();
             setActivePanel(usersPanel);
         }else
         if(src.equals(mBetEvents)){
+            if(betEventsPanel == null) betEventsPanel = new BetEventsPanel();
             setActivePanel(betEventsPanel);
         }else
         if(src.equals(mExit)){
