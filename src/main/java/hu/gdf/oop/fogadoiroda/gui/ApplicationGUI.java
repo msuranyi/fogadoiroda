@@ -30,7 +30,7 @@ public class ApplicationGUI extends JFrame implements ActionListener {
         mBar.add(mTables);
         mTables.add(mUsers);
         mTables.add(mBetEvents);
-        
+
         mUsers.addActionListener(this);
         mBetEvents.addActionListener(this);
         mExit.addActionListener(this);

@@ -84,4 +84,13 @@ public class User {
         this.created = created;
     }
 
+    public Object[] toArray(){
+        Object[] array = {id,username,password,email,authority,active,balance,created};
+        return array;
+    }
+
+    public static Object[] getEmptyModel(){
+        return new Object[8];
+    }
+
 }
