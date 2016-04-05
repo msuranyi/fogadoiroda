@@ -1,6 +1,7 @@
 package hu.gdf.oop.fogadoiroda.gui;
 
 import javax.swing.table.AbstractTableModel;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +52,17 @@ class DataTable extends AbstractTableModel{
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        return data.get(0)[columnIndex].getClass();
+        switch (columnIndex) {
+            case 0:
+            case 6:
+                return Integer.class;
+            case 5:
+                return Boolean.class;
+            case 7:
+                return LocalDateTime.class;
+            default:
+                return String.class;
+        }
     }
 
     @Override
