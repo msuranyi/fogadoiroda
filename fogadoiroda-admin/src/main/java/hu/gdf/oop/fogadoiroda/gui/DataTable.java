@@ -27,6 +27,7 @@ class DataTable extends AbstractTableModel{
 
     public void loadData(ArrayList<Object[]> data) {
         this.data = data;
+        resetRowStatus();
     }
 
     public void resetRowStatus(){
