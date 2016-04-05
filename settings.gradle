@@ -1,2 +1,2 @@
 // subprojects
-include 'fogadoiroda-web', 'fogadoiroda-admin'
+include 'fogadoiroda-web', 'fogadoiroda-admin', 'fogadoiroda-model'

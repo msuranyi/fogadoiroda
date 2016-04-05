@@ -1,0 +1,32 @@
+buildscript {
+	repositories {
+		jcenter()
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'org.liquibase:liquibase-gradle-plugin:1.2.1'
+		classpath fileTree(dir: '../lib', includes: ['ojdbc6-11.2.0.4.0.jar'])
+	}
+}
+
+apply plugin: 'org.liquibase.gradle'
+apply plugin: 'java'
+
+repositories {
+	mavenCentral()
+}
+
+liquibase {
+	activities {
+		dev {
+			changeLogFile 'src/main/resources/db/changelog-xml-master.xml'
+			url dbUrl
+			username dbSchema
+			password dbPassword
+			contexts 'default,test-data'
+			logLevel 'info'
+		}
+	}
+
+	runList = 'dev'
+}

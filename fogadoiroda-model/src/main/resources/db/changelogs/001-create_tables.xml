@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    logicalFilePath="001-create_tables"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="marcell.suranyi@gmail.com">
+        <preConditions>
+            <dbms type="oracle" />
+        </preConditions>
+        <comment>Rendezést beállító logon trigger</comment>
+        <createProcedure>
+            create or replace TRIGGER data_logon_trigger
+            after logon ON DATABASE
+            begin
+            execute immediate 'alter session set nls_sort = HUNGARIAN';
+            end;
+        </createProcedure>
+        <rollback>
+            <!--kihagyva-->
+        </rollback>
+    </changeSet>
+
+    <changeSet id="2" author="marcell.suranyi@gmail.com">
+        <comment>Szekvenciák létrehozása.</comment>
+        <createSequence sequenceName="users_seq" minValue="1" incrementBy="1" />
+        <createSequence sequenceName="bet_events_seq" minValue="1" incrementBy="1" />
+        <createSequence sequenceName="outcomes_seq" minValue="1" incrementBy="1" />
+        <rollback>
+            <dropSequence sequenceName="outcomes_seq" />
+            <dropSequence sequenceName="bet_events_seq" />
+            <dropSequence sequenceName="users_seq" />
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="3" author="marcell.suranyi@gmail.com">
+        <comment>USERS tábla létrehozása.</comment>
+        <createTable tableName="users">
+            <column name="id" type="number(10)" remarks="Felhasználó elsődleges kulcsa.">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="username" type="varchar(20 char)" remarks="Felhasználó bejelentkezési neve.">
+                <constraints nullable="false" />
+            </column>
+            <column name="password" type="varchar(40 char)" remarks="Felhasználó jelszava.">
+                <constraints nullable="false" />
+            </column>
+            <column name="email" type="varchar(40 char)" remarks="Felhasználó email címe." />
+            <column name="authority" type="varchar(40 char)" remarks="Felhasználó szerepköre.">
+                <constraints nullable="false" />
+            </column>
+            <column name="balance" type="number(10)" remarks="Felhasználó egyenlege." />
+            <column name="active" type="boolean" remarks="Felhasználó aktív-e.">
+                <constraints nullable="false" />
+            </column>
+            <column name="created" type="date" remarks="Felhasználó létrehozásának dátuma.">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="users" />
+        </rollback>
+    </changeSet>
+
+    <changeSet id="4" author="marcell.suranyi@gmail.com">
+        <comment>BET_EVENTS tábla létrehozása.</comment>
+        <createTable tableName="bet_events">
+            <column name="id" type="number(10)" remarks="Esemény elsődleges kulcsa.">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="user_id" type="number(10)" remarks="Eseményt létrehozó felhasználóra hivatkozás.">
+                <constraints referencedTableName="users"
+                                             referencedColumnNames="id"
+                                             foreignKeyName="fk_bet_event_user"
+                                             nullable="false" />
+            </column>
+            <column name="title" type="varchar(30 char)" remarks="Esemény címe">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="boolean" remarks="Esemény aktív-e.">
+                <constraints nullable="false" />
+            </column>
+            <column name="created" type="date" remarks="Esemény létrehozásának dátuma.">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="bet_events" />
+        </rollback>
+    </changeSet>
+        
+    <changeSet id="5" author="marcell.suranyi@gmail.com">
+        <comment>OUTCOMES tábla létrehozása.</comment>
+        <createTable tableName="outcomes">
+            <column name="id" type="number(10)" remarks="Kimenetel elsődleges kulcsa.">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="bet_event_id" type="number(10)" remarks="Kimenetel eseményére hivatkozás.">
+                <constraints referencedTableName="bet_events"
+                                             referencedColumnNames="id"
+                                             foreignKeyName="fk_outcome_bet_event"
+                                             nullable="false" />
+            </column>
+            <column name="title" type="varchar(30 char)" remarks="Kimenetel címe.">
+                <constraints nullable="false" />
+            </column>
+            <column name="won" type="boolean" remarks="Kimenetel nyert-e.">
+                <constraints nullable="false" />
+            </column>
+            <column name="sum_bet_amount" type="number(10)" remarks="Kimenetelre adott fogadások összege."/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="outcomes" />
+        </rollback>
+    </changeSet>
+        
+</databaseChangeLog>
