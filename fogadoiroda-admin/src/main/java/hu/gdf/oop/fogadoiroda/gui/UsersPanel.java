@@ -67,14 +67,23 @@ public class UsersPanel extends javax.swing.JPanel {
             DataTable.RowStatus status = userTable.rowStatus.get(i);
             boolean change = (status == DataTable.RowStatus.CHANGED || status == DataTable.RowStatus.DISABLED);
             if(change){
-                int userId = (int)(data.get(i)[0]);
+                try{
+                    int userId = (int)(data.get(i)[0]);
                 User user = userRepository.findOne(userId);
                 if(status == DataTable.RowStatus.DISABLED){
                     userRepository.delete(user);
                 }else{
-                    if(user == null){
-                        user = new User();
-                        user.setId((int)data.get(i)[0]);
+                    user.setUsername((String)data.get(i)[1]);
+                    user.setPassword((String) data.get(i)[2]);
+                    user.setEmail((String) data.get(i)[3]);
+                    user.setAuthority((String) data.get(i)[4]);
+                    user.setActive((boolean) data.get(i)[5]);
+                    user.setBalance((int)data.get(i)[6]);
+                    userRepository.update(user);
+                }
+                }catch(NullPointerException e){
+                    if(status == DataTable.RowStatus.CHANGED){
+                        User user = new User();
                         user.setUsername((String)data.get(i)[1]);
                         user.setPassword((String) data.get(i)[2]);
                         user.setEmail((String) data.get(i)[3]);
@@ -83,18 +92,11 @@ public class UsersPanel extends javax.swing.JPanel {
                         user.setBalance((int)data.get(i)[6]);
                         user.setCreated(LocalDateTime.now());
                         userRepository.create(user);
-                    }else{
-                        user.setUsername((String)data.get(i)[1]);
-                        user.setPassword((String) data.get(i)[2]);
-                        user.setEmail((String) data.get(i)[3]);
-                        user.setAuthority((String) data.get(i)[4]);
-                        user.setActive((boolean) data.get(i)[5]);
-                        user.setBalance((int)data.get(i)[6]);
-                        userRepository.update(user);
                     }
                 }
             }
         }
+        userTable.resetRowStatus();
     }
     
     /**

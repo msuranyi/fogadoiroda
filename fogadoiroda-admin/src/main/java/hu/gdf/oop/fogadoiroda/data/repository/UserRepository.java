@@ -22,8 +22,7 @@ public class UserRepository extends AbstractRepository<User> {
     @Override
     protected void internalCreate(User entity) {
         execute("insert into USERS (id, username, password, email, authority, active, balance, created) " +
-                " VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                entity.getId(),
+                " VALUES (users_seq.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)",
                 entity.getUsername(),
                 entity.getPassword(),
                 entity.getEmail(),
