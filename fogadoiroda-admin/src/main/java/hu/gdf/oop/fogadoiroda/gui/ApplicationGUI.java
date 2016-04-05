@@ -55,6 +55,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
         mBetEvents = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Fogadóiroda backoffice alkalmazás");
 
         mainPanel.setLayout(new java.awt.CardLayout());
 
@@ -87,6 +88,11 @@ public class ApplicationGUI extends javax.swing.JFrame {
         loginPanel.add(tfLogin, gridBagConstraints);
 
         pfPassword.setPreferredSize(new java.awt.Dimension(150, 26));
+        pfPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                pfPasswordKeyPressed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -217,7 +223,27 @@ public class ApplicationGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_mBetEventsActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        doLogin();
+    }//GEN-LAST:event_btnLoginActionPerformed
 
+    private void mLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLogoutActionPerformed
+        mLogout.setEnabled(false);
+        mUsers.setEnabled(false);
+        mBetEvents.setEnabled(false);
+    }//GEN-LAST:event_mLogoutActionPerformed
+
+    private void mExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mExitActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_mExitActionPerformed
+
+    private void pfPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pfPasswordKeyPressed
+        System.out.println(evt.getKeyCode());
+        if (evt.getKeyCode() == 10) {
+            doLogin();
+        }
+    }//GEN-LAST:event_pfPasswordKeyPressed
+
+    private void doLogin() {
         tfLogin.setEnabled(false);
         pfPassword.setEnabled(false);
         btnLogin.setEnabled(false);
@@ -244,19 +270,9 @@ public class ApplicationGUI extends javax.swing.JFrame {
         tfLogin.setEnabled(true);
         pfPassword.setEnabled(true);
         btnLogin.setEnabled(true);
-        btnReset.setEnabled(true);
-    }//GEN-LAST:event_btnLoginActionPerformed
-
-    private void mLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLogoutActionPerformed
-        mLogout.setEnabled(false);
-        mUsers.setEnabled(false);
-        mBetEvents.setEnabled(false);
-    }//GEN-LAST:event_mLogoutActionPerformed
-
-    private void mExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mExitActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_mExitActionPerformed
-
+        btnReset.setEnabled(true);        
+    }
+    
     /**
      * @param args the command line arguments
      */
