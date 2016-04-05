@@ -9,5 +9,6 @@
 	<property name="now" value="sysdate" dbms="oracle" />
 
 	<include file="src/main/resources/db/changelogs/001-create_tables.xml" />
+	<include file="src/main/resources/db/changelogs/002-test_data.xml" />
 
 </databaseChangeLog>

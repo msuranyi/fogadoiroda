@@ -10,11 +10,6 @@ buildscript {
 }
 
 apply plugin: 'org.liquibase.gradle'
-apply plugin: 'java'
-
-repositories {
-	mavenCentral()
-}
 
 liquibase {
 	activities {
