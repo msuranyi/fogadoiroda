@@ -40,6 +40,9 @@
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="JPasswordField pwf = new JPasswordField();&#xa;DefaultCellEditor editor = new DefaultCellEditor(pwf);&#xa;table.getColumnModel().getColumn(2).setCellEditor(editor);&#xa;PasswordCellRenderer pcr = new PasswordCellRenderer();&#xa;table.getColumnModel().getColumn(2).setCellRenderer(pcr);"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

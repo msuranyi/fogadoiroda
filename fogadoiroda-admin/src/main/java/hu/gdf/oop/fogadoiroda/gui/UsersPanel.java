@@ -10,6 +10,8 @@ import hu.gdf.oop.fogadoiroda.data.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JPasswordField;
 
 /**
  *
@@ -126,6 +128,11 @@ public class UsersPanel extends javax.swing.JPanel {
         setLayout(new java.awt.BorderLayout());
 
         table.setModel(userTable);
+        JPasswordField pwf = new JPasswordField();
+        DefaultCellEditor editor = new DefaultCellEditor(pwf);
+        table.getColumnModel().getColumn(2).setCellEditor(editor);
+        PasswordCellRenderer pcr = new PasswordCellRenderer();
+        table.getColumnModel().getColumn(2).setCellRenderer(pcr);
         jScrollPane1.setViewportView(table);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
