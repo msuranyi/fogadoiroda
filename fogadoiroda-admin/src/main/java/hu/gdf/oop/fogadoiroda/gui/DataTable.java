@@ -71,16 +71,16 @@ class DataTable extends AbstractTableModel{
     @Override
     public void setValueAt(Object value, int row, int col) {
         data.get(row)[col] = value;
-        columnStatus.set(row,ColumnStatus.CHANGED);
+        rowStatus.set(row,RowStatus.CHANGED);
         fireTableCellUpdated(row, col);
     }
 
     public void addRow(Object[] model){
         data.add(model);
-        columnStatus.add(ColumnStatus.NOT_CHANGED);
+        rowStatus.add(RowStatus.NOT_CHANGED);
     }
 
     public void deleteRow(int row){
-        columnStatus.set(row,ColumnStatus.DISABLED);
+        rowStatus.set(row,RowStatus.DISABLED);
     }
 }
