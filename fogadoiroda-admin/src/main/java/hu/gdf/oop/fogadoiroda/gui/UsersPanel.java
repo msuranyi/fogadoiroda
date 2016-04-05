@@ -41,14 +41,20 @@ public class UsersPanel extends javax.swing.JPanel {
     
     UserRepository userRepository = new UserRepository();
     DataTable userTable;
-    
-    private void setTableData(){
+
+    public void loadData() {
         List<User> userList = userRepository.findAll();
         ArrayList<Object[]> data = new ArrayList<Object[]>();
         for(int i = 0; i<userList.size();i++){
             data.add(userList.get(i).toArray());
         }
-        userTable = new DataTable(columnNames,data);
+        userTable.loadData(data);
+        table.revalidate();
+        table.repaint();
+    }
+
+    private void setTableData(){
+        userTable = new DataTable(columnNames, new ArrayList<Object[]>());
         userTable.setEditableColumns(editableColumns);
     }
     private void addRow(){

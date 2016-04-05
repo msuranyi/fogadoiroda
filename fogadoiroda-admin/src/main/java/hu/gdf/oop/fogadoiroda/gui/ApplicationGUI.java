@@ -45,6 +45,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         usersPanel = new hu.gdf.oop.fogadoiroda.gui.UsersPanel();
+        betEventsPanel = new hu.gdf.oop.fogadoiroda.gui.BetEventsPanel();
         mBar = new javax.swing.JMenuBar();
         mFile = new javax.swing.JMenu();
         mLogout = new javax.swing.JMenuItem();
@@ -140,6 +141,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
 
         mainPanel.add(loginPanel, "login");
         mainPanel.add(usersPanel, "users");
+        mainPanel.add(betEventsPanel, "betEvents");
 
         mFile.setText("Fájl");
 
@@ -201,6 +203,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mUsersActionPerformed
+        usersPanel.loadData();
         ((CardLayout) mainPanel.getLayout()).show(mainPanel, "users");
     }//GEN-LAST:event_mUsersActionPerformed
 
@@ -210,7 +213,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnResetMouseClicked
 
     private void mBetEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mBetEventsActionPerformed
-        ((CardLayout) mainPanel.getLayout()).show(mainPanel, "login");
+        ((CardLayout) mainPanel.getLayout()).show(mainPanel, "betEvents");
     }//GEN-LAST:event_mBetEventsActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
@@ -290,6 +293,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private hu.gdf.oop.fogadoiroda.gui.BetEventsPanel betEventsPanel;
     private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnReset;
     private javax.swing.JLabel jLabel1;

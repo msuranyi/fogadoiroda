@@ -19,11 +19,16 @@ class DataTable extends AbstractTableModel{
 
     public ArrayList<RowStatus> rowStatus;
 
-    public DataTable(String[] columnNames,ArrayList<Object[]> data){
+    public DataTable(String[] columnNames, ArrayList<Object[]> data){
         this.columnNames = columnNames;
         this.data = data;
         resetRowStatus();
     }
+
+    public void loadData(ArrayList<Object[]> data) {
+        this.data = data;
+    }
+
     public void resetRowStatus(){
         rowStatus = new ArrayList<RowStatus>();
         for(int i=0;i<data.size();i++){
