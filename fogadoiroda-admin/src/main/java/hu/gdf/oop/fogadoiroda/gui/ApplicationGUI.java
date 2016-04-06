@@ -245,6 +245,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnResetMouseClicked
 
     private void mBetEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mBetEventsActionPerformed
+        betEventsPanel.loadData();
         ((CardLayout) mainPanel.getLayout()).show(mainPanel, "betEvents");
     }//GEN-LAST:event_mBetEventsActionPerformed
 

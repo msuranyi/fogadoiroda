@@ -46,4 +46,13 @@ public class Outcome {
     public void setSumBetAmount(Integer sumBetAmount) {
         this.sumBetAmount = sumBetAmount;
     }
+    
+    public Object[] toArray(){
+        Object[] array = {id,betEventId,title,won,sumBetAmount};
+        return array;
+    }
+
+    public static Object[] getEmptyModel(){
+        return new Object[5];
+    }
 }
