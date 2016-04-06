@@ -5,110 +5,95 @@
  */
 package hu.gdf.oop.fogadoiroda.gui;
 
-import hu.gdf.oop.fogadoiroda.data.entity.User;
-import hu.gdf.oop.fogadoiroda.data.repository.UserRepository;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 import javax.swing.DefaultCellEditor;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableModelEvent;
 
 /**
  *
  * @author marci
  */
 public class UsersPanel extends javax.swing.JPanel {
-
-    String[] columnNames = {"ID",
-            "Felhasználónév",
-            "Jelszó",
-            "Email",
-            "Jogosultságok",
-            "Státusz",
-            "Egyenleg",
-            "Létrehozva"
-    };
-
-    String[] editableColumns = {
-            "Felhasználónév",
-            "Jelszó",
-            "Email",
-            "Jogosultságok",
-            "Státusz",
-            "Egyenleg"
-    };
     
-    UserRepository userRepository = new UserRepository();
-    DataTable userTable;
-    Consumer<String> notificationPublisher;
+    private UserTableModel userTable;
+    private Consumer<String> notificationPublisher;
+    private Consumer<String> warningPublisher;
 
     public void loadData() {
-        List<User> userList = userRepository.findAll();
-        ArrayList<Object[]> data = new ArrayList<Object[]>();
-        for(int i = 0; i<userList.size();i++){
-            data.add(userList.get(i).toArray());
-        }
-        userTable.loadData(data);
+        userTable.loadData();
         table.revalidate();
         table.repaint();
     }
 
     private void setTableData(){
-        userTable = new DataTable(columnNames, new ArrayList<Object[]>());
-        userTable.setEditableColumns(editableColumns);
+        userTable = new UserTableModel();
     }
+
+    private void addTableListeners() {
+        table.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow > -1 && table.getSelectedRowCount() == 1) {
+                btnDelete.setEnabled(true);
+                if (!userTable.isNew(selectedRow)) {
+                    boolean active = userTable.isActive(selectedRow);
+                    btnActivate.setEnabled(!active);
+                    btnInactivate.setEnabled(active);
+                }
+            } else {
+                btnDelete.setEnabled(false);
+                btnActivate.setEnabled(false);
+                btnInactivate.setEnabled(false);
+            }
+        });
+        userTable.addTableModelListener((TableModelEvent e) -> {
+            btnSave.setEnabled(true);
+            table.repaint();
+        });
+    }
+
     private void addRow(){
-        userTable.addRow(User.getEmptyModel());
+        userTable.addRow();
         table.revalidate();
         table.repaint();
-        this.notificationPublisher.accept("addRow");
     }
 
     private void deleteRow(){
         if(table.getSelectedRow() == -1) return;
-        userTable.deleteRow(table.getSelectedRow());
-        table.revalidate();
-        table.repaint();
-        this.notificationPublisher.accept("deleteRow");
+        int confirm = JOptionPane.showConfirmDialog(null, "Biztosan törölni szeretné a felhasználót?", "Megerősítés", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                userTable.deleteRow(table.getSelectedRow());
+                this.notificationPublisher.accept("A felhasználó törlése sikeresen megtörtént.");
+                loadData();
+                btnDelete.setEnabled(false);
+                btnActivate.setEnabled(false);
+                btnInactivate.setEnabled(false);
+            } catch (ApplicationException ex) {
+                this.warningPublisher.accept(ex.getMessage());
+            }        
+        }
     }
 
+    private void inactivateRow() {
+        if(table.getSelectedRow() == -1) return;
+        userTable.inactivateRow(table.getSelectedRow());
+        this.notificationPublisher.accept("A felhasználó inaktiválása sikeresen megtörtént.");
+    }
+
+    private void activateRow() {
+        if(table.getSelectedRow() == -1) return;
+        userTable.activateRow(table.getSelectedRow());
+        this.notificationPublisher.accept("A felhasználó aktiválása sikeresen megtörtént.");
+    }
+    
     private void saveData(){
-        ArrayList<Object[]> data = userTable.data;
-        for(int i=0; i<userTable.rowStatus.size();i++){
-            DataTable.RowStatus status = userTable.rowStatus.get(i);
-            boolean change = (status == DataTable.RowStatus.CHANGED || status == DataTable.RowStatus.DISABLED);
-            if(change){
-                if(data.get(i)[0] == null){
-                    if(status == DataTable.RowStatus.CHANGED){
-                        User user = new User();
-                        user.setUsername((String)data.get(i)[1]);
-                        user.setPassword((String) data.get(i)[2]);
-                        user.setEmail((String) data.get(i)[3]);
-                        user.setAuthority((String) data.get(i)[4]);
-                        user.setActive(data.get(i)[5] == null ? false : (boolean) data.get(i)[5]);
-                        user.setBalance((int)data.get(i)[6]);
-                        user.setCreated(LocalDateTime.now());
-                        userRepository.create(user);
-                    }
-                }else{
-                    int userId = (int)(data.get(i)[0]);
-                    User user = userRepository.findOne(userId);
-                    if(status == DataTable.RowStatus.DISABLED){
-                        userRepository.delete(user);
-                    }else{
-                        user.setUsername((String)data.get(i)[1]);
-                        user.setPassword((String) data.get(i)[2]);
-                        user.setEmail((String) data.get(i)[3]);
-                        user.setAuthority((String) data.get(i)[4]);
-                        user.setActive((boolean) data.get(i)[5]);
-                        user.setBalance((int)data.get(i)[6]);
-                        userRepository.update(user);
-                    }
-                }
-            }
-        }
-        this.loadData();
+        userTable.saveRows();
+        loadData();
+        this.notificationPublisher.accept("Az adatok mentése sikeresen megtörtént.");
+        btnSave.setEnabled(false);
     }
     
     /**
@@ -117,12 +102,15 @@ public class UsersPanel extends javax.swing.JPanel {
     public UsersPanel() {
         setTableData();
         initComponents();
+        addTableListeners();
     }
 
-    public UsersPanel(Consumer<String> notificationPublisher) {
+    public UsersPanel(Consumer<String> notificationPublisher, Consumer<String> warningPublisher) {
         setTableData();
         initComponents();
+        addTableListeners();
         this.notificationPublisher = notificationPublisher;
+        this.warningPublisher = warningPublisher;        
     }
     
     /**
@@ -140,6 +128,8 @@ public class UsersPanel extends javax.swing.JPanel {
         btnSave = new javax.swing.JButton();
         btnCreate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
+        btnInactivate = new javax.swing.JButton();
+        btnActivate = new javax.swing.JButton();
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(452, 300));
 
@@ -152,6 +142,7 @@ public class UsersPanel extends javax.swing.JPanel {
         jScrollPane1.setViewportView(table);
 
         btnSave.setText("Mentés");
+        btnSave.setEnabled(false);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -166,9 +157,27 @@ public class UsersPanel extends javax.swing.JPanel {
         });
 
         btnDelete.setText("Törlés");
+        btnDelete.setEnabled(false);
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnInactivate.setText("Inaktiválás");
+        btnInactivate.setToolTipText("");
+        btnInactivate.setEnabled(false);
+        btnInactivate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInactivateActionPerformed(evt);
+            }
+        });
+
+        btnActivate.setText("Aktiválás");
+        btnActivate.setEnabled(false);
+        btnActivate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActivateActionPerformed(evt);
             }
         });
 
@@ -183,7 +192,11 @@ public class UsersPanel extends javax.swing.JPanel {
                 .addComponent(btnCreate)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDelete)
-                .addGap(118, 118, 118))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnInactivate)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnActivate)
+                .addContainerGap())
         );
         controlPanelLayout.setVerticalGroup(
             controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -192,7 +205,9 @@ public class UsersPanel extends javax.swing.JPanel {
                 .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
                     .addComponent(btnCreate)
-                    .addComponent(btnDelete))
+                    .addComponent(btnDelete)
+                    .addComponent(btnInactivate)
+                    .addComponent(btnActivate))
                 .addContainerGap())
         );
 
@@ -200,13 +215,13 @@ public class UsersPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -224,10 +239,20 @@ public class UsersPanel extends javax.swing.JPanel {
         deleteRow();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
+    private void btnInactivateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInactivateActionPerformed
+        inactivateRow();
+    }//GEN-LAST:event_btnInactivateActionPerformed
+
+    private void btnActivateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActivateActionPerformed
+        activateRow();
+    }//GEN-LAST:event_btnActivateActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActivate;
     private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnInactivate;
     private javax.swing.JButton btnSave;
     private javax.swing.JPanel controlPanel;
     private javax.swing.JScrollPane jScrollPane1;

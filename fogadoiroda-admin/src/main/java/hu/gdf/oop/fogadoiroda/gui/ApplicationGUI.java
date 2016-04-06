@@ -55,7 +55,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
         btnReset = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        usersPanel = new UsersPanel(this::showNotification);
+        usersPanel = new UsersPanel(this::showNotification, this::showWarning);
         ;
         betEventsPanel = new hu.gdf.oop.fogadoiroda.gui.BetEventsPanel();
         mBar = new javax.swing.JMenuBar();
@@ -348,9 +348,15 @@ public class ApplicationGUI extends javax.swing.JFrame {
     }
     
     public void showNotification(String message) {
+        lInfoMessage.setForeground(Color.BLUE);
         lInfoMessage.setText(message);
     }
     
+    public void showWarning(String message) {
+        lInfoMessage.setForeground(Color.RED);
+        lInfoMessage.setText(message);
+    }
+
     /**
      * @param args the command line arguments
      */

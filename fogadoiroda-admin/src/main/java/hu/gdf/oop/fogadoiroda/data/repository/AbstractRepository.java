@@ -128,6 +128,30 @@ public abstract class AbstractRepository<E> {
         return results;
     }
 
+    protected int count(String sql, Object... params) {
+        int result = 0;
+        try {
+            createConnection();
+            try (PreparedStatement statement = conn.prepareStatement(sql)) {
+                if (params != null) {
+                    int index = 1;
+                    for (Object param : params) {
+                        statement.setObject(index++, param);
+                    }
+                }
+                ResultSet resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    result = resultSet.getInt(1);
+                }
+            } catch (SQLException ex) {
+                LOGGER.error("Hiba történt a lekérdezés közben! ", ex);
+            }
+        } finally {
+            closeConnection();
+        }
+        return result;
+    }
+    
     private List<E> query(String sql, Object... params) {
 
         List<E> results = new ArrayList<>();

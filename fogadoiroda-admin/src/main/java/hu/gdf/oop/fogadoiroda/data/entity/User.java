@@ -1,6 +1,7 @@
 package hu.gdf.oop.fogadoiroda.data.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class User {
 
@@ -19,6 +20,8 @@ public class User {
     private Integer balance;
 
     private LocalDateTime created;
+    
+    private boolean dirty;
 
     public Integer getId() {
         return id;
@@ -84,13 +87,38 @@ public class User {
         this.created = created;
     }
 
-    public Object[] toArray(){
-        Object[] array = {id,username,password,email,authority,active,balance,created};
-        return array;
+    public boolean isDirty() {
+        return dirty;
     }
 
-    public static Object[] getEmptyModel(){
-        return new Object[8];
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 79 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final User other = (User) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }

@@ -1,6 +1,7 @@
 package hu.gdf.oop.fogadoiroda.data.repository;
 
 import hu.gdf.oop.fogadoiroda.data.entity.BetEvent;
+import hu.gdf.oop.fogadoiroda.data.entity.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -59,4 +60,9 @@ public class BetEventRepository extends AbstractRepository<BetEvent> {
 
         return betEvent;
     }
+    
+    public int countByUser(User user) {
+        return count("select count(*) from BET_EVENTS where USER_ID = ?", user.getId());
+    }
+    
 }
