@@ -8,10 +8,18 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class UserRepository extends AbstractRepository<User> {
-
+    
+    /*
     public boolean login(String username, String password) {
         User user = singleResult("select * from USERS where USERNAME = ?", username);
+        if(user == null) return false;
         return user.getPassword().equals(password);
+    }
+    */
+    
+    public User login(String username, String password) {
+        User user = singleResult("select * from USERS where USERNAME = ? and PASSWORD = ?", username, password);
+        return user;
     }
     
     @Override

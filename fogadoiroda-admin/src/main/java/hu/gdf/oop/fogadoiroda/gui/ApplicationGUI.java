@@ -1,5 +1,6 @@
 package hu.gdf.oop.fogadoiroda.gui;
 
+import hu.gdf.oop.fogadoiroda.data.entity.User;
 import hu.gdf.oop.fogadoiroda.data.repository.UserRepository;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -17,6 +18,8 @@ import java.util.logging.Logger;
  */
 public class ApplicationGUI extends javax.swing.JFrame {
 
+    public static User loggedInUser;
+    
     /**
      * Creates new form ApplicationGUI
      */
@@ -72,7 +75,6 @@ public class ApplicationGUI extends javax.swing.JFrame {
 
         lUserLoggedIn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lUserLoggedIn.setPreferredSize(new java.awt.Dimension(100, 0));
-        lUserLoggedIn.setSize(new java.awt.Dimension(100, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -194,8 +196,8 @@ public class ApplicationGUI extends javax.swing.JFrame {
             loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(loginPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(514, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         loginPanelLayout.setVerticalGroup(
             loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -319,7 +321,11 @@ public class ApplicationGUI extends javax.swing.JFrame {
 
         String username = tfLogin.getText();
         String passString = new String(pfPassword.getPassword());
-        boolean auth = userRepository.login(username, passString);
+        
+        loggedInUser = userRepository.login(username, passString);
+        //boolean auth = userRepository.login(username, passString);
+        boolean auth = loggedInUser != null;
+        
         
         if (auth) {
             lUserLoggedIn.setText(username);
