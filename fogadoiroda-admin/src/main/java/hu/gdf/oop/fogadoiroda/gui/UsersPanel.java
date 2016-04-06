@@ -30,7 +30,6 @@ public class UsersPanel extends javax.swing.JPanel {
     };
 
     String[] editableColumns = {
-            "ID",
             "Felhasználónév",
             "Jelszó",
             "Email",
@@ -75,21 +74,7 @@ public class UsersPanel extends javax.swing.JPanel {
             DataTable.RowStatus status = userTable.rowStatus.get(i);
             boolean change = (status == DataTable.RowStatus.CHANGED || status == DataTable.RowStatus.DISABLED);
             if(change){
-                try{
-                    int userId = (int)(data.get(i)[0]);
-                User user = userRepository.findOne(userId);
-                if(status == DataTable.RowStatus.DISABLED){
-                    userRepository.delete(user);
-                }else{
-                    user.setUsername((String)data.get(i)[1]);
-                    user.setPassword((String) data.get(i)[2]);
-                    user.setEmail((String) data.get(i)[3]);
-                    user.setAuthority((String) data.get(i)[4]);
-                    user.setActive((boolean) data.get(i)[5]);
-                    user.setBalance((int)data.get(i)[6]);
-                    userRepository.update(user);
-                }
-                }catch(NullPointerException e){
+                if(data.get(i)[0] == null){
                     if(status == DataTable.RowStatus.CHANGED){
                         User user = new User();
                         user.setUsername((String)data.get(i)[1]);
@@ -100,6 +85,20 @@ public class UsersPanel extends javax.swing.JPanel {
                         user.setBalance((int)data.get(i)[6]);
                         user.setCreated(LocalDateTime.now());
                         userRepository.create(user);
+                    }
+                }else{
+                    int userId = (int)(data.get(i)[0]);
+                    User user = userRepository.findOne(userId);
+                    if(status == DataTable.RowStatus.DISABLED){
+                        userRepository.delete(user);
+                    }else{
+                        user.setUsername((String)data.get(i)[1]);
+                        user.setPassword((String) data.get(i)[2]);
+                        user.setEmail((String) data.get(i)[3]);
+                        user.setAuthority((String) data.get(i)[4]);
+                        user.setActive((boolean) data.get(i)[5]);
+                        user.setBalance((int)data.get(i)[6]);
+                        userRepository.update(user);
                     }
                 }
             }
@@ -131,7 +130,7 @@ public class UsersPanel extends javax.swing.JPanel {
         btnCreate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
 
-        setLayout(new java.awt.BorderLayout());
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(452, 300));
 
         table.setModel(userTable);
         JPasswordField pwf = new JPasswordField();
@@ -140,8 +139,6 @@ public class UsersPanel extends javax.swing.JPanel {
         PasswordCellRenderer pcr = new PasswordCellRenderer();
         table.getColumnModel().getColumn(2).setCellRenderer(pcr);
         jScrollPane1.setViewportView(table);
-
-        add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         btnSave.setText("Mentés");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -175,20 +172,33 @@ public class UsersPanel extends javax.swing.JPanel {
                 .addComponent(btnCreate)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDelete)
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addGap(118, 118, 118))
         );
         controlPanelLayout.setVerticalGroup(
             controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(controlPanelLayout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, controlPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
                     .addComponent(btnCreate)
                     .addComponent(btnDelete))
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
-        add(controlPanel, java.awt.BorderLayout.SOUTH);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
