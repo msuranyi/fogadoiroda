@@ -20,8 +20,7 @@ public class OutcomeRepository extends AbstractRepository<Outcome> {
     @Override
     protected void internalCreate(Outcome entity) {
         execute("insert into OUTCOMES (id, bet_event_id, title, won, sum_bet_amount) " +
-                        " VALUES (?, ?, ?, ?, ?)",
-                entity.getId(),
+                        " VALUES (outcomes_seq.NEXTVAL, ?, ?, ?, ?)",
                 entity.getBetEventId(),
                 entity.getTitle(),
                 entity.isWon(),

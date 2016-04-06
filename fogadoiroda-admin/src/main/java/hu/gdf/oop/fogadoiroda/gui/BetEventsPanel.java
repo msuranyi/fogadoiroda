@@ -9,11 +9,13 @@ import hu.gdf.oop.fogadoiroda.data.entity.BetEvent;
 import hu.gdf.oop.fogadoiroda.data.entity.Outcome;
 import hu.gdf.oop.fogadoiroda.data.repository.BetEventRepository;
 import hu.gdf.oop.fogadoiroda.data.repository.OutcomeRepository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -91,6 +93,16 @@ public class BetEventsPanel extends javax.swing.JPanel {
     private void setTableData(){
         outcomeTable = new DataTable(columnNames, new ArrayList<Object[]>());
         outcomeTable.setEditableColumns(editableColumns);
+    }
+    
+    private void fillOutcomeTable(BetEvent event){
+        ArrayList<Object[]> data = new ArrayList<Object[]>();
+        for(int i = 0; i<event.getOutcomes().size();i++){
+            data.add(event.getOutcomes().get(i).toArray());
+        }
+        outcomeTable.loadData(data);
+        table.revalidate();
+        table.repaint();
     }
     
     class CustomTreeNode<E> extends DefaultMutableTreeNode{
@@ -380,7 +392,7 @@ public class BetEventsPanel extends javax.swing.JPanel {
             resetFields();
             return;
         }
-        txtId.setText(event.getId().toString());
+        txtId.setText(event.getId() == -1 ? "" : event.getId().toString());
         txtUserId.setText(event.getUserId().toString());
         txtTitle.setText(event.getTitle());
         txtCreated.setText(event.getCreated().toString());
@@ -388,16 +400,19 @@ public class BetEventsPanel extends javax.swing.JPanel {
         
         allowControls(true);
         
-        ArrayList<Object[]> data = new ArrayList<Object[]>();
-        for(int i = 0; i<event.getOutcomes().size();i++){
-            data.add(event.getOutcomes().get(i).toArray());
-        }
-        outcomeTable.loadData(data);
-        table.revalidate();
-        table.repaint();
+        fillOutcomeTable(event);        
     }//GEN-LAST:event_treeValueChanged
 
+    
     private void btnDeleteEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteEventActionPerformed
+        int response = JOptionPane.showConfirmDialog(null, "Biztos törölni szeretnéd?", "megerősítés",
+        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.NO_OPTION) {
+            return;
+        } else if (response == JOptionPane.CLOSED_OPTION) {
+            return;
+        }
+        
         BetEvent event = getSelectedBetEvent();
         if(event == null) return;
         if(event.getOutcomes().size() > 0){
@@ -414,45 +429,66 @@ public class BetEventsPanel extends javax.swing.JPanel {
     private void btnSaveEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveEventActionPerformed
         BetEvent event = getSelectedBetEvent();
         if(event == null) return;
-        event.setUserId(Integer.parseInt(txtUserId.getText()));
-        event.setTitle(txtTitle.getText());
-        event.setStatus(cbStatus.getSelectedIndex());
-        eventRepository.update(event);
+        if(event.getId() == -1){
+            event.setUserId(Integer.parseInt(txtUserId.getText()));
+            event.setTitle(txtTitle.getText());
+            event.setStatus(cbStatus.getSelectedIndex());
+            event.setCreated(LocalDateTime.now());
+            eventRepository.create(event);
+        }else{
+            event.setUserId(Integer.parseInt(txtUserId.getText()));
+            event.setTitle(txtTitle.getText());
+            event.setStatus(cbStatus.getSelectedIndex());
+            eventRepository.update(event);
+        }
+        
+        getSelectedEventNode().setUserObject(event.getTitle());
         
         ArrayList<Object[]> data = outcomeTable.data;
+        event.setOutcomes(new ArrayList<Outcome>());
         for(int i=0; i<outcomeTable.rowStatus.size();i++){
+            Outcome outcome;
             DataTable.RowStatus status = outcomeTable.rowStatus.get(i);
             boolean change = (status == DataTable.RowStatus.CHANGED || status == DataTable.RowStatus.DISABLED);
             if(change){
+                boolean created = false;
                 if(data.get(i)[0] == null){
-                    if(status == DataTable.RowStatus.CHANGED){
-                        Outcome outcome = new Outcome();
-                        //TODO Create sequence id
-                        outcome.setBetEventId(event.getId());
-                        outcome.setTitle((String) data.get(i)[2]);
-                        outcome.setWon((boolean)data.get(i)[3]);
-                        outcome.setSumBetAmount((int)data.get(i)[4]);
-                        outcomeRepository.create(outcome);
-                    }
+                    outcome = new Outcome();
+                    created = true;
                 }else{
                     int outcomeId = (int)(data.get(i)[0]);
-                    Outcome outcome = outcomeRepository.findOne(outcomeId);
-                    if(status == DataTable.RowStatus.DISABLED){
-                        outcomeRepository.delete(outcome);
-                    }else{
-                        outcome.setBetEventId(event.getId());
-                        outcome.setTitle((String) data.get(i)[2]);
-                        outcome.setWon((boolean)data.get(i)[3]);
-                        outcome.setSumBetAmount((int)data.get(i)[4]);
+                    outcome = outcomeRepository.findOne(outcomeId);
+                }
+                if(status == DataTable.RowStatus.CHANGED){
+                    outcome.setBetEventId(event.getId());
+                    outcome.setTitle((String) data.get(i)[2]);
+                    outcome.setWon(false);
+                    outcome.setSumBetAmount(0);
+                    //outcome.setWon((boolean)data.get(i)[3]);
+                    //outcome.setSumBetAmount((int)data.get(i)[4]);
+                    if(created){
+                        outcomeRepository.create(outcome);
+                        }else{
                         outcomeRepository.update(outcome);
                     }
+                    event.getOutcomes().add(outcome);
+                }else if(status == DataTable.RowStatus.DISABLED){
+                    outcomeRepository.delete(outcome);
                 }
-            }
+                }else{
+                    if(data.get(i)[0] != null){
+                        int outcomeId = (int)(data.get(i)[0]);
+                        outcome = outcomeRepository.findOne(outcomeId);
+                        event.getOutcomes().add(outcome);
+                    }
+                }
         }
-        outcomeTable.resetRowStatus();
+        fillOutcomeTable(event);
+        tree.repaint();
     }//GEN-LAST:event_btnSaveEventActionPerformed
 
     private void btnDeleteOutcomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteOutcomeActionPerformed
+        if(table.getSelectedRow() == -1) return;
         outcomeTable.deleteRow(table.getSelectedRow());
         table.revalidate();
         table.repaint();
@@ -465,7 +501,16 @@ public class BetEventsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnCreateOutcomeActionPerformed
 
     private void btnCreateEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateEventActionPerformed
-        // TODO add your handling code here:
+        BetEvent event = new BetEvent();
+        CustomTreeNode<BetEvent> node = new CustomTreeNode("Új esemény");
+        node.containedObject = event;
+        event.setId(-1);
+        event.setUserId(ApplicationGUI.loggedInUser.getId());
+        event.setTitle("");
+        event.setStatus(0);
+        event.setCreated(LocalDateTime.now());
+        event.setOutcomes(new ArrayList<Outcome>());
+        treeModel.insertNodeInto(node,(DefaultMutableTreeNode)treeModel.getRoot(),treeModel.getChildCount(treeModel.getRoot()));
     }//GEN-LAST:event_btnCreateEventActionPerformed
 
 

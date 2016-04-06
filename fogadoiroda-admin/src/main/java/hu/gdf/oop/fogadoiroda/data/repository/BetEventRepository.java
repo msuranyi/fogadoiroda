@@ -22,8 +22,7 @@ public class BetEventRepository extends AbstractRepository<BetEvent> {
     @Override
     protected void internalCreate(BetEvent entity) {
         execute("insert into BET_EVENTS (id, user_id, title, created, status) " +
-                        " VALUES (?, ?, ?, ?, ?)",
-                entity.getId(),
+                        " VALUES (bet_events_seq.NEXTVAL, ?, ?, ?, ?)",
                 entity.getUserId(),
                 entity.getTitle(),
                 Timestamp.valueOf(entity.getCreated()),
