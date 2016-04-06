@@ -86,7 +86,7 @@ public class UsersPanel extends javax.swing.JPanel {
                         user.setPassword((String) data.get(i)[2]);
                         user.setEmail((String) data.get(i)[3]);
                         user.setAuthority((String) data.get(i)[4]);
-                        user.setActive((boolean) data.get(i)[5]);
+                        user.setActive(data.get(i)[5] == null ? false : (boolean) data.get(i)[5]);
                         user.setBalance((int)data.get(i)[6]);
                         user.setCreated(LocalDateTime.now());
                         userRepository.create(user);
@@ -108,7 +108,7 @@ public class UsersPanel extends javax.swing.JPanel {
                 }
             }
         }
-        userTable.resetRowStatus();
+        this.loadData();
     }
     
     /**
