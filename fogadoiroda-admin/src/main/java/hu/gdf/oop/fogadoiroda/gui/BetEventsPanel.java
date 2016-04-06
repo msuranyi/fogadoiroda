@@ -123,12 +123,46 @@ public class BetEventsPanel extends javax.swing.JPanel {
         }
     }
     
+    private CustomTreeNode getSelectedEventNode(){
+        if(tree.getLastSelectedPathComponent() instanceof CustomTreeNode) {
+            CustomTreeNode node = (CustomTreeNode) tree.getLastSelectedPathComponent();
+            if (node.containedObject instanceof BetEvent) {
+                return node;
+            } else if (node.containedObject instanceof Outcome) {
+                return (CustomTreeNode)node.getParent();
+            }
+            return null;
+        }else{
+            return null;
+        }
+    } 
+    
+    private void resetFields(){
+        txtId.setText("");
+        txtUserId.setText("");
+        txtTitle.setText("");
+        txtCreated.setText("");
+        cbStatus.setSelectedIndex(0);
+        outcomeTable.loadData(new ArrayList<Object[]>());
+        table.revalidate();
+        table.repaint();
+        allowControls(false);
+    }
+    
+    private void allowControls(boolean state){
+        btnSaveEvent.setEnabled(state);
+        btnDeleteEvent.setEnabled(state);
+        btnCreateOutcome.setEnabled(state);
+        btnDeleteOutcome.setEnabled(state);
+    }
+    
     /**
      * Creates new form BetEventsPanel
      */
     public BetEventsPanel() {
         setTableData();
         initComponents();
+        allowControls(false);
     }
 
     /**
@@ -342,35 +376,44 @@ public class BetEventsPanel extends javax.swing.JPanel {
 
     private void treeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_treeValueChanged
         BetEvent event = getSelectedBetEvent();
-        if(event != null){
-            txtId.setText(event.getId().toString());
-            txtUserId.setText(event.getUserId().toString());
-            txtTitle.setText(event.getTitle());
-            txtCreated.setText(event.getCreated().toString());
-            cbStatus.setSelectedIndex(event.getStatus());
-            
-            ArrayList<Object[]> data = new ArrayList<Object[]>();
-            for(int i = 0; i<event.getOutcomes().size();i++){
-                data.add(event.getOutcomes().get(i).toArray());
-            }
-            outcomeTable.loadData(data);
-            table.revalidate();
-            table.repaint();
+        if(event == null){
+            resetFields();
+            return;
         }
+        txtId.setText(event.getId().toString());
+        txtUserId.setText(event.getUserId().toString());
+        txtTitle.setText(event.getTitle());
+        txtCreated.setText(event.getCreated().toString());
+        cbStatus.setSelectedIndex(event.getStatus());
+        
+        allowControls(true);
+        
+        ArrayList<Object[]> data = new ArrayList<Object[]>();
+        for(int i = 0; i<event.getOutcomes().size();i++){
+            data.add(event.getOutcomes().get(i).toArray());
+        }
+        outcomeTable.loadData(data);
+        table.revalidate();
+        table.repaint();
     }//GEN-LAST:event_treeValueChanged
 
     private void btnDeleteEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteEventActionPerformed
         BetEvent event = getSelectedBetEvent();
+        if(event == null) return;
         if(event.getOutcomes().size() > 0){
             for(int i=0;i<event.getOutcomes().size();i++){
                 outcomeRepository.delete(event.getOutcomes().get(i));
             }
         }
         eventRepository.delete(event);
+        treeModel.removeNodeFromParent(getSelectedEventNode());
+        
+        resetFields();
     }//GEN-LAST:event_btnDeleteEventActionPerformed
 
     private void btnSaveEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveEventActionPerformed
         BetEvent event = getSelectedBetEvent();
+        if(event == null) return;
         event.setUserId(Integer.parseInt(txtUserId.getText()));
         event.setTitle(txtTitle.getText());
         event.setStatus(cbStatus.getSelectedIndex());

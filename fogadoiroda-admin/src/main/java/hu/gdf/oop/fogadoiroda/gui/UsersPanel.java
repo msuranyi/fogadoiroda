@@ -63,6 +63,7 @@ public class UsersPanel extends javax.swing.JPanel {
     }
 
     private void deleteRow(){
+        if(table.getSelectedRow() == -1) return;
         userTable.deleteRow(table.getSelectedRow());
         table.revalidate();
         table.repaint();
