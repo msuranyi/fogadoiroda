@@ -9,6 +9,11 @@ import java.util.List;
 
 public class UserRepository extends AbstractRepository<User> {
 
+    public boolean login(String username, String password) {
+        User user = singleResult("select * from USERS where USERNAME = ?", username);
+        return user.getPassword().equals(password);
+    }
+    
     @Override
     protected User internalFindOne(Integer id) {
         return singleResult("select * from USERS where ID = ?", id);

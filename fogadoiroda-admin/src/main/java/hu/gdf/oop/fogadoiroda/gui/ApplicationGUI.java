@@ -1,5 +1,6 @@
 package hu.gdf.oop.fogadoiroda.gui;
 
+import hu.gdf.oop.fogadoiroda.data.repository.UserRepository;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.util.logging.Level;
@@ -21,6 +22,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
      */
     public ApplicationGUI() {
         initComponents();
+        userRepository = new UserRepository();
         ((CardLayout) mainPanel.getLayout()).show(mainPanel, "card2");
     }
 
@@ -32,7 +34,13 @@ public class ApplicationGUI extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
+        userRepository = new hu.gdf.oop.fogadoiroda.data.repository.UserRepository();
+        statusBarPanel = new javax.swing.JPanel();
+        lUserLoggedIn = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        lInfoMessage = new javax.swing.JLabel();
         mainPanel = new javax.swing.JPanel();
         loginPanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -44,7 +52,8 @@ public class ApplicationGUI extends javax.swing.JFrame {
         btnReset = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        usersPanel = new hu.gdf.oop.fogadoiroda.gui.UsersPanel();
+        usersPanel = new UsersPanel(this::showNotification);
+        ;
         betEventsPanel = new hu.gdf.oop.fogadoiroda.gui.BetEventsPanel();
         mBar = new javax.swing.JMenuBar();
         mFile = new javax.swing.JMenu();
@@ -56,6 +65,35 @@ public class ApplicationGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Fogadóiroda backoffice alkalmazás");
+
+        statusBarPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        statusBarPanel.setPreferredSize(new java.awt.Dimension(809, 16));
+        statusBarPanel.setLayout(new java.awt.GridBagLayout());
+
+        lUserLoggedIn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lUserLoggedIn.setPreferredSize(new java.awt.Dimension(100, 0));
+        lUserLoggedIn.setSize(new java.awt.Dimension(100, 0));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        statusBarPanel.add(lUserLoggedIn, gridBagConstraints);
+
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        statusBarPanel.add(jSeparator1, gridBagConstraints);
+
+        lInfoMessage.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 0.5;
+        statusBarPanel.add(lInfoMessage, gridBagConstraints);
+
+        getContentPane().add(statusBarPanel, java.awt.BorderLayout.SOUTH);
 
         mainPanel.setMinimumSize(new java.awt.Dimension(0, 0));
         mainPanel.setLayout(new java.awt.CardLayout());
@@ -92,6 +130,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
 
         jLabel1.setText("Kérjük adja meg a belépési adatait!");
 
+        jLabel2.setForeground(java.awt.Color.red);
         jLabel2.setToolTipText("");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -156,14 +195,14 @@ public class ApplicationGUI extends javax.swing.JFrame {
             .addGroup(loginPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(311, Short.MAX_VALUE))
+                .addContainerGap(514, Short.MAX_VALUE))
         );
         loginPanelLayout.setVerticalGroup(
             loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(loginPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(283, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         mainPanel.add(loginPanel, "login");
@@ -174,6 +213,8 @@ public class ApplicationGUI extends javax.swing.JFrame {
         betEventsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Események"));
         betEventsPanel.setMinimumSize(new java.awt.Dimension(0, 0));
         mainPanel.add(betEventsPanel, "betEvents");
+
+        getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
 
         mFile.setText("Fájl");
 
@@ -220,21 +261,11 @@ public class ApplicationGUI extends javax.swing.JFrame {
 
         setJMenuBar(mBar);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE)
-        );
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void mUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mUsersActionPerformed
+        showNotification("");
         usersPanel.loadData();
         ((CardLayout) mainPanel.getLayout()).show(mainPanel, "users");
     }//GEN-LAST:event_mUsersActionPerformed
@@ -245,6 +276,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnResetMouseClicked
 
     private void mBetEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mBetEventsActionPerformed
+        showNotification("");
         betEventsPanel.loadData();
         ((CardLayout) mainPanel.getLayout()).show(mainPanel, "betEvents");
     }//GEN-LAST:event_mBetEventsActionPerformed
@@ -254,11 +286,14 @@ public class ApplicationGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void mLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLogoutActionPerformed
+        showNotification("");
         mLogout.setEnabled(false);
         mUsers.setEnabled(false);
         mBetEvents.setEnabled(false); 
+        lUserLoggedIn.setText("");
         jLabel2.setVisible(false);
         ((CardLayout) mainPanel.getLayout()).show(mainPanel, "login");
+        showNotification("Sikeres kilépés");
     }//GEN-LAST:event_mLogoutActionPerformed
 
     private void mExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mExitActionPerformed
@@ -266,7 +301,6 @@ public class ApplicationGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_mExitActionPerformed
 
     private void pfPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pfPasswordKeyPressed
-        System.out.println(evt.getKeyCode());
         if (evt.getKeyCode() == 10) {
             doLogin();
         }
@@ -283,24 +317,32 @@ public class ApplicationGUI extends javax.swing.JFrame {
             Logger.getLogger(ApplicationGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        String username = tfLogin.getText();
         String passString = new String(pfPassword.getPassword());
-        if ("".equals(passString)) {
-            jLabel2.setForeground(Color.RED);
-            jLabel2.setText("A megadott felhasználónév és/vagy jelszó érvénytelen!");
-        } else {
-            jLabel2.setForeground(Color.BLUE);
-            jLabel2.setText("Sikeres belépés");
+        boolean auth = userRepository.login(username, passString);
+        
+        if (auth) {
+            lUserLoggedIn.setText(username);
+            lInfoMessage.setText("Sikeres belépés");
+            jLabel2.setText("");
             mLogout.setEnabled(true);
             mUsers.setEnabled(true);
             mBetEvents.setEnabled(true);
             tfLogin.setText("");
             pfPassword.setText("");
+        } else {
+            jLabel2.setForeground(Color.RED);
+            jLabel2.setText("A megadott felhasználónév és/vagy jelszó érvénytelen!");
         }
         jLabel2.setVisible(true);
         tfLogin.setEnabled(true);
         pfPassword.setEnabled(true);
         btnLogin.setEnabled(true);
         btnReset.setEnabled(true);        
+    }
+    
+    public void showNotification(String message) {
+        lInfoMessage.setText(message);
     }
     
     /**
@@ -345,8 +387,11 @@ public class ApplicationGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lInfoMessage;
     private javax.swing.JLabel lLogin;
     private javax.swing.JLabel lPassword;
+    private javax.swing.JLabel lUserLoggedIn;
     private javax.swing.JPanel loginPanel;
     private javax.swing.JMenuBar mBar;
     private javax.swing.JMenuItem mBetEvents;
@@ -357,7 +402,9 @@ public class ApplicationGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem mUsers;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JPasswordField pfPassword;
+    private javax.swing.JPanel statusBarPanel;
     private javax.swing.JTextField tfLogin;
+    private hu.gdf.oop.fogadoiroda.data.repository.UserRepository userRepository;
     private hu.gdf.oop.fogadoiroda.gui.UsersPanel usersPanel;
     // End of variables declaration//GEN-END:variables
 }

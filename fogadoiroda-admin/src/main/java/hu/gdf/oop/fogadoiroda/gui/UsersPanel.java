@@ -10,6 +10,7 @@ import hu.gdf.oop.fogadoiroda.data.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JPasswordField;
 
@@ -40,6 +41,7 @@ public class UsersPanel extends javax.swing.JPanel {
     
     UserRepository userRepository = new UserRepository();
     DataTable userTable;
+    Consumer<String> notificationPublisher;
 
     public void loadData() {
         List<User> userList = userRepository.findAll();
@@ -60,6 +62,7 @@ public class UsersPanel extends javax.swing.JPanel {
         userTable.addRow(User.getEmptyModel());
         table.revalidate();
         table.repaint();
+        this.notificationPublisher.accept("addRow");
     }
 
     private void deleteRow(){
@@ -67,6 +70,7 @@ public class UsersPanel extends javax.swing.JPanel {
         userTable.deleteRow(table.getSelectedRow());
         table.revalidate();
         table.repaint();
+        this.notificationPublisher.accept("deleteRow");
     }
 
     private void saveData(){
@@ -115,6 +119,12 @@ public class UsersPanel extends javax.swing.JPanel {
         initComponents();
     }
 
+    public UsersPanel(Consumer<String> notificationPublisher) {
+        setTableData();
+        initComponents();
+        this.notificationPublisher = notificationPublisher;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

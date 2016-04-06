@@ -32,7 +32,7 @@ public abstract class AbstractRepository<E> {
     }
 
     private ResourceBundle findResourceBundle() {
-        ResourceBundle result = null;
+        ResourceBundle result;
         try {
             result = ResourceBundle.getBundle("datasource-local");
         } catch (MissingResourceException e) {
@@ -63,35 +63,25 @@ public abstract class AbstractRepository<E> {
     }
 
     public E findOne(Integer id) {
-        createConnection();
         E result = internalFindOne(id);
-        closeConnection();
         return result;
     }
 
     public List<E> findAll() {
-        createConnection();
         List<E> result = internalFindAll();
-        closeConnection();
         return result;
     }
 
     public void create(E entity) {
-        createConnection();
         internalCreate(entity);
-        closeConnection();
     }
 
     public void update(E entity) {
-        createConnection();
         internalUpdate(entity);
-        closeConnection();
     }
 
     public void delete(E entity) {
-        createConnection();
         internalDelete(entity);
-        closeConnection();
     }
 
     protected abstract E internalFindOne(Integer id);
@@ -107,16 +97,21 @@ public abstract class AbstractRepository<E> {
     protected abstract E mapRow(ResultSet resultSet) throws SQLException;
 
     protected void execute(String statement, Object... params) {
-        try (PreparedStatement stmt = conn.prepareStatement(statement)) {
-            if (params != null) {
-                int index = 1;
-                for (Object param : params) {
-                    stmt.setObject(index++, param);
+        try {
+            createConnection();
+            try (PreparedStatement stmt = conn.prepareStatement(statement)) {
+                if (params != null) {
+                    int index = 1;
+                    for (Object param : params) {
+                        stmt.setObject(index++, param);
+                    }
                 }
+                stmt.executeUpdate();
+            } catch (SQLException ex) {
+                LOGGER.error("Hiba történt az utasítás végrehajtása közben! ", ex);
             }
-            stmt.executeUpdate();
-        } catch (SQLException ex) {
-            LOGGER.error("Hiba történt az utasítás végrehajtása közben! ", ex);
+        } finally {
+            closeConnection();
         }
     }
 
@@ -136,20 +131,24 @@ public abstract class AbstractRepository<E> {
     private List<E> query(String sql, Object... params) {
 
         List<E> results = new ArrayList<>();
-
-        try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            if (params != null) {
-                int index = 1;
-                for (Object param : params) {
-                    statement.setObject(index++, param);
+        try {
+            createConnection();
+            try (PreparedStatement statement = conn.prepareStatement(sql)) {
+                if (params != null) {
+                    int index = 1;
+                    for (Object param : params) {
+                        statement.setObject(index++, param);
+                    }
                 }
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    results.add(mapRow(resultSet));
+                }
+            } catch (SQLException ex) {
+                LOGGER.error("Hiba történt a lekérdezés közben! ", ex);
             }
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                results.add(mapRow(resultSet));
-            }
-        } catch (SQLException ex) {
-            LOGGER.error("Hiba történt a lekérdezés közben! ", ex);
+        } finally {
+            closeConnection();
         }
 
         return results;
