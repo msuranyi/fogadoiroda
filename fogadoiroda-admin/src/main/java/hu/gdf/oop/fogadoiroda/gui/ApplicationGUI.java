@@ -4,8 +4,7 @@ import hu.gdf.oop.fogadoiroda.data.entity.User;
 import hu.gdf.oop.fogadoiroda.data.repository.UserRepository;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.SwingWorker;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,7 +18,7 @@ import java.util.logging.Logger;
 public class ApplicationGUI extends javax.swing.JFrame {
 
     public static User loggedInUser;
-    
+
     /**
      * Creates new form ApplicationGUI
      */
@@ -41,9 +40,12 @@ public class ApplicationGUI extends javax.swing.JFrame {
 
         userRepository = new hu.gdf.oop.fogadoiroda.data.repository.UserRepository();
         statusBarPanel = new javax.swing.JPanel();
-        lUserLoggedIn = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
+        infoMessagePanel = new javax.swing.JPanel();
         lInfoMessage = new javax.swing.JLabel();
+        progressBarPanel = new javax.swing.JPanel();
+        jProgressBar1 = new javax.swing.JProgressBar();
+        usernamePanel = new javax.swing.JPanel();
+        lUserLoggedIn = new javax.swing.JLabel();
         mainPanel = new javax.swing.JPanel();
         loginPanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -69,31 +71,76 @@ public class ApplicationGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Fogadóiroda backoffice alkalmazás");
 
-        statusBarPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        statusBarPanel.setPreferredSize(new java.awt.Dimension(809, 16));
+        statusBarPanel.setPreferredSize(new java.awt.Dimension(809, 26));
         statusBarPanel.setLayout(new java.awt.GridBagLayout());
 
-        lUserLoggedIn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lUserLoggedIn.setPreferredSize(new java.awt.Dimension(100, 0));
+        infoMessagePanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        infoMessagePanel.setPreferredSize(new java.awt.Dimension(260, 26));
+        infoMessagePanel.setLayout(new java.awt.GridBagLayout());
+
+        lInfoMessage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lInfoMessage.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        statusBarPanel.add(lUserLoggedIn, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        infoMessagePanel.add(lInfoMessage, gridBagConstraints);
 
-        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        statusBarPanel.add(infoMessagePanel, gridBagConstraints);
+
+        progressBarPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        progressBarPanel.setMaximumSize(new java.awt.Dimension(170, 26));
+        progressBarPanel.setMinimumSize(new java.awt.Dimension(170, 26));
+        progressBarPanel.setPreferredSize(new java.awt.Dimension(170, 26));
+        progressBarPanel.setSize(new java.awt.Dimension(170, 26));
+        progressBarPanel.setLayout(new java.awt.GridBagLayout());
+
+        jProgressBar1.setMaximumSize(new java.awt.Dimension(160, 20));
+        jProgressBar1.setMinimumSize(new java.awt.Dimension(160, 20));
+        jProgressBar1.setPreferredSize(new java.awt.Dimension(160, 20));
+        jProgressBar1.setSize(new java.awt.Dimension(160, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        progressBarPanel.add(jProgressBar1, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        statusBarPanel.add(jSeparator1, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        statusBarPanel.add(progressBarPanel, gridBagConstraints);
 
-        lInfoMessage.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        usernamePanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        usernamePanel.setPreferredSize(new java.awt.Dimension(100, 26));
+        usernamePanel.setLayout(new java.awt.GridBagLayout());
+
+        lUserLoggedIn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lUserLoggedIn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lUserLoggedIn.setMaximumSize(new java.awt.Dimension(100, 20));
+        lUserLoggedIn.setMinimumSize(new java.awt.Dimension(100, 20));
+        lUserLoggedIn.setPreferredSize(new java.awt.Dimension(100, 16));
+        lUserLoggedIn.setSize(new java.awt.Dimension(100, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        usernamePanel.add(lUserLoggedIn, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.weightx = 0.5;
-        statusBarPanel.add(lInfoMessage, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        statusBarPanel.add(usernamePanel, gridBagConstraints);
 
         getContentPane().add(statusBarPanel, java.awt.BorderLayout.SOUTH);
 
@@ -197,14 +244,14 @@ public class ApplicationGUI extends javax.swing.JFrame {
             .addGroup(loginPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(431, Short.MAX_VALUE))
         );
         loginPanelLayout.setVerticalGroup(
             loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(loginPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(219, Short.MAX_VALUE))
         );
 
         mainPanel.add(loginPanel, "login");
@@ -288,10 +335,11 @@ public class ApplicationGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void mLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLogoutActionPerformed
+        loggedInUser = null;
         showNotification("");
         mLogout.setEnabled(false);
         mUsers.setEnabled(false);
-        mBetEvents.setEnabled(false); 
+        mBetEvents.setEnabled(false);
         lUserLoggedIn.setText("");
         jLabel2.setVisible(false);
         ((CardLayout) mainPanel.getLayout()).show(mainPanel, "login");
@@ -309,49 +357,59 @@ public class ApplicationGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_pfPasswordKeyPressed
 
     private void doLogin() {
+
         tfLogin.setEnabled(false);
         pfPassword.setEnabled(false);
         btnLogin.setEnabled(false);
         btnReset.setEnabled(false);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ApplicationGUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
         String username = tfLogin.getText();
         String passString = new String(pfPassword.getPassword());
-        
-        loggedInUser = userRepository.login(username, passString);
-        //boolean auth = userRepository.login(username, passString);
-        boolean auth = loggedInUser != null;
-        
-        
-        if (auth) {
-            lUserLoggedIn.setText(username);
-            lInfoMessage.setText("Sikeres belépés");
-            jLabel2.setText("");
-            mLogout.setEnabled(true);
-            mUsers.setEnabled(true);
-            mBetEvents.setEnabled(true);
-            tfLogin.setText("");
-            pfPassword.setText("");
-        } else {
-            jLabel2.setForeground(Color.RED);
-            jLabel2.setText("A megadott felhasználónév és/vagy jelszó érvénytelen!");
+
+        class LoginWorker extends SwingWorker<User, Void> {
+
+            @Override
+            protected User doInBackground() throws Exception {
+                jProgressBar1.setIndeterminate(true);
+                jProgressBar1.setValue(0);
+                Thread.sleep(1000);
+                loggedInUser = userRepository.login(username, passString);
+                return loggedInUser;
+            }
+
+            @Override
+            protected void done() {
+                boolean auth = loggedInUser != null;
+                if (auth) {
+                    lUserLoggedIn.setText(username);
+                    showNotification("Sikeres belépés");
+                    jLabel2.setText("");
+                    mLogout.setEnabled(true);
+                    mUsers.setEnabled(true);
+                    mBetEvents.setEnabled(true);
+                    tfLogin.setText("");
+                    pfPassword.setText("");
+                } else {
+                    jLabel2.setForeground(Color.RED);
+                    jLabel2.setText("A megadott felhasználónév és/vagy jelszó érvénytelen!");
+                }
+                jLabel2.setVisible(true);
+                tfLogin.setEnabled(true);
+                pfPassword.setEnabled(true);
+                btnLogin.setEnabled(true);
+                btnReset.setEnabled(true);
+                jProgressBar1.setIndeterminate(false);
+                jProgressBar1.setValue(0);
+            }
         }
-        jLabel2.setVisible(true);
-        tfLogin.setEnabled(true);
-        pfPassword.setEnabled(true);
-        btnLogin.setEnabled(true);
-        btnReset.setEnabled(true);        
+        new LoginWorker().execute();
     }
-    
+
     public void showNotification(String message) {
-        lInfoMessage.setForeground(Color.BLUE);
+        lInfoMessage.setForeground(Color.BLACK);
         lInfoMessage.setText(message);
     }
-    
+
     public void showWarning(String message) {
         lInfoMessage.setForeground(Color.RED);
         lInfoMessage.setText(message);
@@ -396,10 +454,11 @@ public class ApplicationGUI extends javax.swing.JFrame {
     private hu.gdf.oop.fogadoiroda.gui.BetEventsPanel betEventsPanel;
     private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnReset;
+    private javax.swing.JPanel infoMessagePanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JLabel lInfoMessage;
     private javax.swing.JLabel lLogin;
     private javax.swing.JLabel lPassword;
@@ -414,9 +473,11 @@ public class ApplicationGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem mUsers;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JPasswordField pfPassword;
+    private javax.swing.JPanel progressBarPanel;
     private javax.swing.JPanel statusBarPanel;
     private javax.swing.JTextField tfLogin;
     private hu.gdf.oop.fogadoiroda.data.repository.UserRepository userRepository;
+    private javax.swing.JPanel usernamePanel;
     private hu.gdf.oop.fogadoiroda.gui.UsersPanel usersPanel;
     // End of variables declaration//GEN-END:variables
 }
