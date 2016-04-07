@@ -265,8 +265,8 @@ public class ApplicationGUI extends javax.swing.JFrame {
             loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(loginPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(431, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(357, Short.MAX_VALUE))
         );
         loginPanelLayout.setVerticalGroup(
             loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -388,28 +388,33 @@ public class ApplicationGUI extends javax.swing.JFrame {
         String username = tfLogin.getText();
         String passString = new String(pfPassword.getPassword());
 
-        class LoginWorker extends SwingWorker<User, Void> {
+        class LoginWorker extends SwingWorker<Integer, Void> {
 
             @Override
-            protected User doInBackground() throws Exception {
+            protected Integer doInBackground() throws Exception {
                 internalStartProgressBar();
-                Thread.sleep(1000);
+                Thread.sleep(500);
                 loggedInUser = userRepository.login(username, passString);
-                return loggedInUser;
+                return 1;
             }
 
             @Override
             protected void done() {
-                boolean auth = loggedInUser != null;
-                if (auth) {
-                    lUserLoggedIn.setText(username);
-                    internalShowNotification("Sikeres belépés");
-                    jLabel2.setText("");
-                    mLogout.setEnabled(true);
-                    mUsers.setEnabled(true);
-                    mBetEvents.setEnabled(true);
-                    tfLogin.setText("");
-                    pfPassword.setText("");
+                if (loggedInUser != null) {
+                    if ("OPERATOR".equals(loggedInUser.getAuthority())) {
+                        lUserLoggedIn.setText(username);
+                        internalShowNotification("Sikeres belépés");
+                        jLabel2.setText("");
+                        mLogout.setEnabled(true);
+                        mUsers.setEnabled(true);
+                        mBetEvents.setEnabled(true);
+                        tfLogin.setText("");
+                        pfPassword.setText("");
+                    } else {
+                        loggedInUser = null;
+                        jLabel2.setForeground(Color.RED);
+                        jLabel2.setText("Az admin alkalmazásba csak operátorok léphetnek be!");                        
+                    }
                 } else {
                     jLabel2.setForeground(Color.RED);
                     jLabel2.setText("A megadott felhasználónév és/vagy jelszó érvénytelen!");
