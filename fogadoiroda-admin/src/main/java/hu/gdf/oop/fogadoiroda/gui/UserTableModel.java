@@ -3,9 +3,10 @@ package hu.gdf.oop.fogadoiroda.gui;
 import hu.gdf.oop.fogadoiroda.data.entity.User;
 import hu.gdf.oop.fogadoiroda.data.repository.BetEventRepository;
 import hu.gdf.oop.fogadoiroda.data.repository.UserRepository;
+
+import javax.swing.table.AbstractTableModel;
 import java.time.LocalDateTime;
 import java.util.List;
-import javax.swing.table.AbstractTableModel;
 
 public class UserTableModel extends AbstractTableModel {
 
@@ -138,7 +139,7 @@ public class UserTableModel extends AbstractTableModel {
         fireTableRowsInserted(list.size() - 1, list.size() - 1);
     }
 
-    public void deleteRow(int rowIndex) throws ApplicationException {
+    public void deleteRow(int rowIndex) {
         User selected = list.get(rowIndex);
         if (selected.getId() != null) {
             if (selected.equals(ApplicationGUI.loggedInUser)) {
