@@ -69,10 +69,10 @@ public class UsersPanel extends javax.swing.JPanel {
                     try {
                         userTable.deleteRow(table.getSelectedRow());
                         callback.showNotification("A felhasználó törlése sikeresen megtörtént.");
-                        restoreButtons();
                     } catch (ApplicationException ex) {
                         callback.showWarning(ex.getMessage());
                     }
+                    restoreButtons();
                     return 1;
                 }
 
@@ -108,10 +108,14 @@ public class UsersPanel extends javax.swing.JPanel {
             protected Integer doInBackground() throws Exception {
                 disableButtons();
                 callback.startProgressBar();
-                userTable.saveRows();
-                restoreButtons();
-                callback.showNotification("Az adatok mentése sikeresen megtörtént.");
-                loadData();
+                try {
+                    userTable.saveRows();
+                    restoreButtons();
+                    loadData();
+                    callback.showNotification("Az adatok mentése sikeresen megtörtént.");
+                } catch (ApplicationException ex) {
+                    callback.showWarning(ex.getMessage());                    
+                }
                 return 1;
             }
 

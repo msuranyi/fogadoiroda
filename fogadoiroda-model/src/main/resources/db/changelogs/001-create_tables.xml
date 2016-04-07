@@ -44,16 +44,17 @@
                 <constraints primaryKey="true" />
             </column>
             <column name="username" type="varchar(20 char)" remarks="Felhasználó bejelentkezési neve.">
-                <constraints nullable="false" />
+                <constraints unique="true"
+                             nullable="false" />
             </column>
-            <column name="PASSWORD" type="varchar(40 char)" remarks="Felhasználó jelszava.">
+            <column name="PASSWORD" type="varchar(40 char)" defaultValue="123456" remarks="Felhasználó jelszava.">
                 <constraints nullable="false" />
             </column>
             <column name="email" type="varchar(40 char)" remarks="Felhasználó email címe." />
-            <column name="authority" type="varchar(40 char)" remarks="Felhasználó szerepköre.">
+            <column name="authority" type="varchar(40 char)" defaultValue="USER" remarks="Felhasználó szerepköre.">
                 <constraints nullable="false" />
             </column>
-            <column name="balance" type="number(10)" remarks="Felhasználó egyenlege." />
+            <column name="balance" type="number(10)" defaultValueNumeric="0" remarks="Felhasználó egyenlege." />
             <column name="active" type="boolean" remarks="Felhasználó aktív-e.">
                 <constraints nullable="false" />
             </column>

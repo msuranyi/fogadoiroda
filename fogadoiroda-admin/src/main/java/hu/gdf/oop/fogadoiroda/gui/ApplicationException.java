@@ -1,6 +1,6 @@
 package hu.gdf.oop.fogadoiroda.gui;
 
-public class ApplicationException extends Exception {
+public class ApplicationException extends RuntimeException {
 
     public ApplicationException() {
     }

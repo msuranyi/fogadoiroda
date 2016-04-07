@@ -134,7 +134,6 @@ public class UserTableModel extends AbstractTableModel {
 
     public void addRow(){
         User user = new User();
-        user.setDirty(true);
         list.add(user);
         fireTableRowsInserted(list.size() - 1, list.size() - 1);
     }
@@ -178,13 +177,12 @@ public class UserTableModel extends AbstractTableModel {
         if (list != null && !list.isEmpty()) {
             list.stream().filter(u -> u.isDirty()).forEach(u -> {
                 if (u.getId() == null) {
-                    u.setCreated(LocalDateTime.now());
+                    if (u.getPassword() == null) u.setPassword("123456");
+                    if (u.getAuthority() == null) u.setAuthority("USER");
+                    if (u.getBalance() == null) u.setBalance(0);
                     repository.create(u);
                 } else {
-                    User fetched = repository.findOne(u.getId());
-                    if (fetched != null) {
-                        repository.update(u);
-                    }
+                    repository.update(u);
                 }
             });
         }
