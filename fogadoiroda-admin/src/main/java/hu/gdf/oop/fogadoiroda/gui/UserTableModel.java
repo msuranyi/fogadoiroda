@@ -133,7 +133,10 @@ public class UserTableModel extends AbstractTableModel {
     }
 
     public void addRow(){
-        list.add(new User());
+        User user = new User();
+        user.setDirty(true);
+        list.add(user);
+        fireTableRowsInserted(list.size() - 1, list.size() - 1);
     }
 
     public void deleteRow(int rowIndex) throws ApplicationException {

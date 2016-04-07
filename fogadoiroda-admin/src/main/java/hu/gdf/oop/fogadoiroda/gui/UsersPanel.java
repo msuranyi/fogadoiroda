@@ -32,11 +32,9 @@ public class UsersPanel extends javax.swing.JPanel {
             int selectedRow = table.getSelectedRow();
             if (selectedRow > -1 && table.getSelectedRowCount() == 1) {
                 btnDelete.setEnabled(true);
-                if (!userTable.isNew(selectedRow)) {
-                    boolean active = userTable.isActive(selectedRow);
-                    btnActivate.setEnabled(!active);
-                    btnInactivate.setEnabled(active);
-                }
+                boolean active = userTable.isActive(selectedRow);
+                btnActivate.setEnabled(!active);
+                btnInactivate.setEnabled(active);
             } else {
                 btnDelete.setEnabled(false);
                 btnActivate.setEnabled(false);
