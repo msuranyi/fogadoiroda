@@ -81,7 +81,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         usersPanel = new UsersPanel(callback);
-        betEventsPanel = new hu.gdf.oop.fogadoiroda.gui.BetEventsPanel();
+        betEventsPanel = new BetEventsPanel(callback);
         mBar = new javax.swing.JMenuBar();
         mFile = new javax.swing.JMenu();
         mLogout = new javax.swing.JMenuItem();
@@ -122,13 +122,11 @@ public class ApplicationGUI extends javax.swing.JFrame {
         progressBarPanel.setMaximumSize(new java.awt.Dimension(170, 26));
         progressBarPanel.setMinimumSize(new java.awt.Dimension(170, 26));
         progressBarPanel.setPreferredSize(new java.awt.Dimension(170, 26));
-        progressBarPanel.setSize(new java.awt.Dimension(170, 26));
         progressBarPanel.setLayout(new java.awt.GridBagLayout());
 
         jProgressBar1.setMaximumSize(new java.awt.Dimension(160, 20));
         jProgressBar1.setMinimumSize(new java.awt.Dimension(160, 20));
         jProgressBar1.setPreferredSize(new java.awt.Dimension(160, 20));
-        jProgressBar1.setSize(new java.awt.Dimension(160, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -151,7 +149,6 @@ public class ApplicationGUI extends javax.swing.JFrame {
         lUserLoggedIn.setMaximumSize(new java.awt.Dimension(100, 20));
         lUserLoggedIn.setMinimumSize(new java.awt.Dimension(100, 20));
         lUserLoggedIn.setPreferredSize(new java.awt.Dimension(100, 16));
-        lUserLoggedIn.setSize(new java.awt.Dimension(100, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;

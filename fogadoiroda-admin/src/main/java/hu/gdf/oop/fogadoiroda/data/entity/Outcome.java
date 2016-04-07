@@ -6,6 +6,7 @@ public class Outcome {
     private String title;
     private boolean won;
     private Integer sumBetAmount;
+    private boolean dirty;
 
     public Integer getId() {
         return id;
@@ -45,6 +46,14 @@ public class Outcome {
 
     public void setSumBetAmount(Integer sumBetAmount) {
         this.sumBetAmount = sumBetAmount;
+    }
+
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
     }
     
     public Object[] toArray(){

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -25,20 +26,8 @@ import javax.swing.tree.DefaultTreeModel;
  */
 public class BetEventsPanel extends javax.swing.JPanel {
 
-    
-    String[] columnNames = {"ID",
-            "Bet Event ID",
-            "Megnevezés",
-            "Nyert",
-            "Összes fogadás"
-    };
-    
-    String[] editableColumns = {
-            "Megnevezés",
-            "Nyert"
-    };
-    
     String[] betEventStatus = {
+        "Nem publikus",
         "Nyitott",
         "Lezárt"
     };
@@ -47,13 +36,15 @@ public class BetEventsPanel extends javax.swing.JPanel {
     OutcomeRepository outcomeRepository = new OutcomeRepository();
     List<BetEvent> events;
     DefaultTreeModel treeModel;
-    DataTable outcomeTable;
+    OutcomeTableModel outcomeTable;
+    private ApplicationCallback callback;
     
     
     private void getEventsData(){
         events = eventRepository.findAll();
         List<Outcome> outcomes = outcomeRepository.findAll();
         Map<Integer,List<Outcome>> eventOutcomes = new HashMap<Integer,List<Outcome>>();
+        /*
         for(int i=0;i<outcomes.size();i++){
             Outcome outcome = outcomes.get(i);
             if(eventOutcomes.get(outcome.getBetEventId()) == null){
@@ -62,14 +53,7 @@ public class BetEventsPanel extends javax.swing.JPanel {
                 eventOutcomes.put(outcome.getBetEventId(),list);
             }else
                 eventOutcomes.get(outcome.getBetEventId()).add(outcome);
-        }
-        for(int i=0;i<events.size();i++){
-            BetEvent event = events.get(i);
-            if(eventOutcomes.get(event.getId()) == null){
-                event.setOutcomes(new ArrayList<Outcome>());
-            }else
-                event.setOutcomes(eventOutcomes.get(event.getId()));
-        }
+        }*/
     }
 
     private void createTreeView(){
@@ -78,12 +62,13 @@ public class BetEventsPanel extends javax.swing.JPanel {
             BetEvent event = events.get(i);
             CustomTreeNode<BetEvent> node = new CustomTreeNode(event.getTitle());
             node.containedObject = event;
+            /*
             for(int k=0;k<event.getOutcomes().size();k++){
                 Outcome outcome = event.getOutcomes().get(k);
                 CustomTreeNode<Outcome> outcomeNode = new CustomTreeNode(outcome.getTitle());
                 outcomeNode.containedObject = outcome;
                 node.add(outcomeNode);
-            }
+            }*/
             top.add(node);
         }
         treeModel = new DefaultTreeModel(top);
@@ -91,16 +76,11 @@ public class BetEventsPanel extends javax.swing.JPanel {
     }
     
     private void setTableData(){
-        outcomeTable = new DataTable(columnNames, new ArrayList<Object[]>());
-        outcomeTable.setEditableColumns(editableColumns);
+        outcomeTable = new OutcomeTableModel();
     }
     
     private void fillOutcomeTable(BetEvent event){
-        ArrayList<Object[]> data = new ArrayList<Object[]>();
-        for(int i = 0; i<event.getOutcomes().size();i++){
-            data.add(event.getOutcomes().get(i).toArray());
-        }
-        outcomeTable.loadData(data);
+        outcomeTable.loadData(event);
         table.revalidate();
         table.repaint();
     }
@@ -155,10 +135,135 @@ public class BetEventsPanel extends javax.swing.JPanel {
         txtTitle.setText("");
         txtCreated.setText("");
         cbStatus.setSelectedIndex(0);
-        outcomeTable.loadData(new ArrayList<Object[]>());
+        outcomeTable.emptyTable();
         table.revalidate();
         table.repaint();
-        allowControls(false);
+        disableButtons();
+    }
+    
+    private void addOutcome(){
+        outcomeTable.addRow();
+        table.revalidate();
+        table.repaint();
+    }
+    
+    private void deleteOutcome(){
+        if (table.getSelectedRow() == -1) {
+            return;
+        }
+        int confirm = JOptionPane.showConfirmDialog(null, "Biztosan törölni szeretné a kimenetelt?", "Megerősítés", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            new SwingWorker<Integer, Void>() {
+                @Override
+                protected Integer doInBackground() throws Exception {
+                    disableButtons();
+                    callback.startProgressBar();
+                    try {
+                        outcomeTable.deleteRow(table.getSelectedRow());
+                        callback.showNotification("A kimenetel törlése sikeresen megtörtént.");
+                    } catch (ApplicationException ex) {
+                        callback.showWarning(ex.getMessage());
+                    }
+                    restoreButtons();
+                    table.revalidate();
+                    table.repaint();
+                    return 1;
+                }
+
+                @Override
+                protected void done() {
+                    callback.stopProgressBar();
+                }
+            }.execute();
+        }
+    }
+    
+    private void saveEvent(){
+        BetEvent event = getSelectedBetEvent();
+        if(event == null) return;
+        if(event.getId() == -1){
+            event.setUserId(Integer.parseInt(txtUserId.getText()));
+            event.setTitle(txtTitle.getText());
+            event.setStatus(cbStatus.getSelectedIndex());
+            event.setCreated(LocalDateTime.now());
+            eventRepository.create(event);
+        }else{
+            event.setUserId(Integer.parseInt(txtUserId.getText()));
+            event.setTitle(txtTitle.getText());
+            event.setStatus(cbStatus.getSelectedIndex());
+            eventRepository.update(event);
+        }
+        
+        getSelectedEventNode().setUserObject(event.getTitle());
+        
+        outcomeTable.saveRows();
+        
+        //fillOutcomeTable(event);
+        tree.repaint();
+    }
+    
+    private void deleteEvent(){
+        int confirm;
+        BetEvent event = getSelectedBetEvent();
+        if(event == null) return;
+        if(outcomeRepository.findWithBetEventId(event.getId()).size() > 0){
+            confirm = JOptionPane.showConfirmDialog(null, "Biztosan törölni szeretnéd? \r\n Az eseményhez tartozó kimenetelek is törlésre kerülnek.", "Megerősítés",
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        }else{
+            confirm = JOptionPane.showConfirmDialog(null, "Biztos törölni szeretnéd?", "Megerősítés",
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        }
+        if (confirm == JOptionPane.YES_OPTION) {
+            new SwingWorker<Integer, Void>() {
+                @Override
+                protected Integer doInBackground() throws Exception {
+                    disableButtons();
+                    callback.startProgressBar();
+                    try {
+                            while(outcomeTable.getRowCount() > 0){
+                                outcomeTable.deleteRow(outcomeTable.getRowCount()-1);
+                            }
+                            eventRepository.delete(event);
+                            treeModel.removeNodeFromParent(getSelectedEventNode());
+
+                            resetFields();
+                        callback.showNotification("Az esemény törlése sikeresen megtörtént.");
+                    } catch (ApplicationException ex) {
+                        callback.showWarning(ex.getMessage());
+                    }
+                    restoreButtons();
+                    table.revalidate();
+                    table.repaint();
+                    return 1;
+                }
+
+                @Override
+                protected void done() {
+                    callback.stopProgressBar();
+                }
+            }.execute();
+        }
+    }
+    
+    private void addEvent(){
+        BetEvent event = new BetEvent();
+        CustomTreeNode<BetEvent> node = new CustomTreeNode("Új esemény");
+        node.containedObject = event;
+        event.setId(-1);
+        event.setUserId(ApplicationGUI.loggedInUser.getId());
+        event.setTitle("");
+        event.setStatus(0);
+        event.setCreated(LocalDateTime.now());
+        event.setOutcomes(new ArrayList<Outcome>());
+        treeModel.insertNodeInto(node,(DefaultMutableTreeNode)treeModel.getRoot(),treeModel.getChildCount(treeModel.getRoot()));
+    }
+    
+    private void disableButtons(){
+        allowControls(false);        
+    }
+    
+    private void restoreButtons(){
+        allowControls(true);
     }
     
     private void allowControls(boolean state){
@@ -171,10 +276,11 @@ public class BetEventsPanel extends javax.swing.JPanel {
     /**
      * Creates new form BetEventsPanel
      */
-    public BetEventsPanel() {
+    public BetEventsPanel(ApplicationCallback applicationCallback) {
         setTableData();
         initComponents();
         allowControls(false);
+        this.callback = applicationCallback;
     }
 
     /**
@@ -199,8 +305,6 @@ public class BetEventsPanel extends javax.swing.JPanel {
         lblId = new javax.swing.JLabel();
         lblUserId = new javax.swing.JLabel();
         lblTitle = new javax.swing.JLabel();
-        btnSaveEvent = new javax.swing.JButton();
-        btnDeleteEvent = new javax.swing.JButton();
         txtId = new javax.swing.JTextField();
         txtUserId = new javax.swing.JTextField();
         txtTitle = new javax.swing.JTextField();
@@ -208,6 +312,8 @@ public class BetEventsPanel extends javax.swing.JPanel {
         lblStatus = new javax.swing.JLabel();
         txtCreated = new javax.swing.JTextField();
         cbStatus = new javax.swing.JComboBox<>();
+        btnSaveEvent = new javax.swing.JButton();
+        btnDeleteEvent = new javax.swing.JButton();
 
         jTextField1.setText("jTextField1");
 
@@ -259,20 +365,6 @@ public class BetEventsPanel extends javax.swing.JPanel {
 
         lblTitle.setText("Megnevezés");
 
-        btnSaveEvent.setText("Mentés");
-        btnSaveEvent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveEventActionPerformed(evt);
-            }
-        });
-
-        btnDeleteEvent.setText("Törlés");
-        btnDeleteEvent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteEventActionPerformed(evt);
-            }
-        });
-
         txtId.setEditable(false);
 
         lblCreated.setText("Készült");
@@ -291,44 +383,37 @@ public class BetEventsPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblTitle)
+                        .addGap(10, 10, 10)
+                        .addComponent(txtTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(lblTitle)
-                                .addGap(10, 10, 10)
-                                .addComponent(txtTitle))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblUserId)
-                                    .addComponent(lblId))
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGap(33, 33, 33)
-                                        .addComponent(txtId))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGap(34, 34, 34)
-                                        .addComponent(txtUserId)))))
+                            .addComponent(lblUserId)
+                            .addComponent(lblId))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(33, 33, 33)
-                                .addComponent(lblCreated))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblStatus)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCreated)
-                            .addComponent(cbStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())
+                                .addComponent(txtId))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addComponent(txtUserId)))))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnSaveEvent)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnDeleteEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(33, 33, 33)
+                        .addComponent(lblCreated))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblStatus)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtCreated)
+                    .addComponent(cbStatus, 0, 185, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblId)
                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -343,12 +428,22 @@ public class BetEventsPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTitle)
-                    .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSaveEvent)
-                    .addComponent(btnDeleteEvent)))
+                    .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
+
+        btnSaveEvent.setText("Mentés");
+        btnSaveEvent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveEventActionPerformed(evt);
+            }
+        });
+
+        btnDeleteEvent.setText("Törlés");
+        btnDeleteEvent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteEventActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -360,12 +455,20 @@ public class BetEventsPanel extends javax.swing.JPanel {
                     .addComponent(btnCreateEvent, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnCreateOutcome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnDeleteOutcome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(3, 3, 3)
+                                .addComponent(btnSaveEvent)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDeleteEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnCreateOutcome)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDeleteOutcome)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -375,13 +478,17 @@ public class BetEventsPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnCreateOutcome)
+                            .addComponent(btnDeleteOutcome))
+                        .addGap(12, 12, 12)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnCreateEvent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnCreateOutcome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDeleteOutcome))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCreateEvent)
+                    .addComponent(btnSaveEvent)
+                    .addComponent(btnDeleteEvent))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -405,112 +512,23 @@ public class BetEventsPanel extends javax.swing.JPanel {
 
     
     private void btnDeleteEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteEventActionPerformed
-        int response = JOptionPane.showConfirmDialog(null, "Biztos törölni szeretnéd?", "megerősítés",
-        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (response == JOptionPane.NO_OPTION) {
-            return;
-        } else if (response == JOptionPane.CLOSED_OPTION) {
-            return;
-        }
-        
-        BetEvent event = getSelectedBetEvent();
-        if(event == null) return;
-        if(event.getOutcomes().size() > 0){
-            for(int i=0;i<event.getOutcomes().size();i++){
-                outcomeRepository.delete(event.getOutcomes().get(i));
-            }
-        }
-        eventRepository.delete(event);
-        treeModel.removeNodeFromParent(getSelectedEventNode());
-        
-        resetFields();
+        deleteEvent();
     }//GEN-LAST:event_btnDeleteEventActionPerformed
 
     private void btnSaveEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveEventActionPerformed
-        BetEvent event = getSelectedBetEvent();
-        if(event == null) return;
-        if(event.getId() == -1){
-            event.setUserId(Integer.parseInt(txtUserId.getText()));
-            event.setTitle(txtTitle.getText());
-            event.setStatus(cbStatus.getSelectedIndex());
-            event.setCreated(LocalDateTime.now());
-            eventRepository.create(event);
-        }else{
-            event.setUserId(Integer.parseInt(txtUserId.getText()));
-            event.setTitle(txtTitle.getText());
-            event.setStatus(cbStatus.getSelectedIndex());
-            eventRepository.update(event);
-        }
-        
-        getSelectedEventNode().setUserObject(event.getTitle());
-        
-        ArrayList<Object[]> data = outcomeTable.data;
-        event.setOutcomes(new ArrayList<Outcome>());
-        for(int i=0; i<outcomeTable.rowStatus.size();i++){
-            Outcome outcome;
-            DataTable.RowStatus status = outcomeTable.rowStatus.get(i);
-            boolean change = (status == DataTable.RowStatus.CHANGED || status == DataTable.RowStatus.DISABLED);
-            if(change){
-                boolean created = false;
-                if(data.get(i)[0] == null){
-                    outcome = new Outcome();
-                    created = true;
-                }else{
-                    int outcomeId = (int)(data.get(i)[0]);
-                    outcome = outcomeRepository.findOne(outcomeId);
-                }
-                if(status == DataTable.RowStatus.CHANGED){
-                    outcome.setBetEventId(event.getId());
-                    outcome.setTitle((String) data.get(i)[2]);
-                    outcome.setWon(false);
-                    outcome.setSumBetAmount(0);
-                    //outcome.setWon((boolean)data.get(i)[3]);
-                    //outcome.setSumBetAmount((int)data.get(i)[4]);
-                    if(created){
-                        outcomeRepository.create(outcome);
-                        }else{
-                        outcomeRepository.update(outcome);
-                    }
-                    event.getOutcomes().add(outcome);
-                }else if(status == DataTable.RowStatus.DISABLED){
-                    outcomeRepository.delete(outcome);
-                }
-                }else{
-                    if(data.get(i)[0] != null){
-                        int outcomeId = (int)(data.get(i)[0]);
-                        outcome = outcomeRepository.findOne(outcomeId);
-                        event.getOutcomes().add(outcome);
-                    }
-                }
-        }
-        fillOutcomeTable(event);
-        tree.repaint();
+        saveEvent();
     }//GEN-LAST:event_btnSaveEventActionPerformed
 
     private void btnDeleteOutcomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteOutcomeActionPerformed
-        if(table.getSelectedRow() == -1) return;
-        outcomeTable.deleteRow(table.getSelectedRow());
-        table.revalidate();
-        table.repaint();
+        deleteOutcome();
     }//GEN-LAST:event_btnDeleteOutcomeActionPerformed
 
     private void btnCreateOutcomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateOutcomeActionPerformed
-        outcomeTable.addRow(Outcome.getEmptyModel());
-        table.revalidate();
-        table.repaint();
+        addOutcome();
     }//GEN-LAST:event_btnCreateOutcomeActionPerformed
 
     private void btnCreateEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateEventActionPerformed
-        BetEvent event = new BetEvent();
-        CustomTreeNode<BetEvent> node = new CustomTreeNode("Új esemény");
-        node.containedObject = event;
-        event.setId(-1);
-        event.setUserId(ApplicationGUI.loggedInUser.getId());
-        event.setTitle("");
-        event.setStatus(0);
-        event.setCreated(LocalDateTime.now());
-        event.setOutcomes(new ArrayList<Outcome>());
-        treeModel.insertNodeInto(node,(DefaultMutableTreeNode)treeModel.getRoot(),treeModel.getChildCount(treeModel.getRoot()));
+        addEvent();
     }//GEN-LAST:event_btnCreateEventActionPerformed
 
 

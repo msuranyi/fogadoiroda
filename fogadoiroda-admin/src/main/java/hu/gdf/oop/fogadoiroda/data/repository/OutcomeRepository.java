@@ -16,6 +16,10 @@ public class OutcomeRepository extends AbstractRepository<Outcome> {
     protected List<Outcome> internalFindAll() {
         return list("select * from OUTCOMES");
     }
+    
+    public List<Outcome> findWithBetEventId(Integer betEventId){
+        return list("select * from OUTCOMES where BET_EVENT_id=?",betEventId);
+    }
 
     @Override
     protected void internalCreate(Outcome entity) {
