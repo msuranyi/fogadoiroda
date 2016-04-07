@@ -19,6 +19,29 @@ public class ApplicationGUI extends javax.swing.JFrame {
 
     public static User loggedInUser;
 
+    private ApplicationCallback callback = new ApplicationCallback() {
+
+        @Override
+        public void showNotification(String message) {
+            internalShowNotification(message);
+        }
+
+        @Override
+        public void showWarning(String message) {
+            internalShowWarning(message);
+        }
+
+        @Override
+        public void startProgressBar() {
+            internalStartProgressBar();
+        }
+
+        @Override
+        public void stopProgressBar() {
+            internalStopProgressBar();
+        }
+    };
+
     /**
      * Creates new form ApplicationGUI
      */
@@ -57,8 +80,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
         btnReset = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        usersPanel = new UsersPanel(this::showNotification, this::showWarning);
-        ;
+        usersPanel = new UsersPanel(callback);
         betEventsPanel = new hu.gdf.oop.fogadoiroda.gui.BetEventsPanel();
         mBar = new javax.swing.JMenuBar();
         mFile = new javax.swing.JMenu();
@@ -314,7 +336,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mUsersActionPerformed
-        showNotification("");
+        internalShowNotification("");
         usersPanel.loadData();
         ((CardLayout) mainPanel.getLayout()).show(mainPanel, "users");
     }//GEN-LAST:event_mUsersActionPerformed
@@ -325,7 +347,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnResetMouseClicked
 
     private void mBetEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mBetEventsActionPerformed
-        showNotification("");
+        internalShowNotification("");
         betEventsPanel.loadData();
         ((CardLayout) mainPanel.getLayout()).show(mainPanel, "betEvents");
     }//GEN-LAST:event_mBetEventsActionPerformed
@@ -336,14 +358,14 @@ public class ApplicationGUI extends javax.swing.JFrame {
 
     private void mLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLogoutActionPerformed
         loggedInUser = null;
-        showNotification("");
+        internalShowNotification("");
         mLogout.setEnabled(false);
         mUsers.setEnabled(false);
         mBetEvents.setEnabled(false);
         lUserLoggedIn.setText("");
         jLabel2.setVisible(false);
         ((CardLayout) mainPanel.getLayout()).show(mainPanel, "login");
-        showNotification("Sikeres kilépés");
+        internalShowNotification("Sikeres kilépés");
     }//GEN-LAST:event_mLogoutActionPerformed
 
     private void mExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mExitActionPerformed
@@ -370,8 +392,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
 
             @Override
             protected User doInBackground() throws Exception {
-                jProgressBar1.setIndeterminate(true);
-                jProgressBar1.setValue(0);
+                internalStartProgressBar();
                 Thread.sleep(1000);
                 loggedInUser = userRepository.login(username, passString);
                 return loggedInUser;
@@ -382,7 +403,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
                 boolean auth = loggedInUser != null;
                 if (auth) {
                     lUserLoggedIn.setText(username);
-                    showNotification("Sikeres belépés");
+                    internalShowNotification("Sikeres belépés");
                     jLabel2.setText("");
                     mLogout.setEnabled(true);
                     mUsers.setEnabled(true);
@@ -398,21 +419,30 @@ public class ApplicationGUI extends javax.swing.JFrame {
                 pfPassword.setEnabled(true);
                 btnLogin.setEnabled(true);
                 btnReset.setEnabled(true);
-                jProgressBar1.setIndeterminate(false);
-                jProgressBar1.setValue(0);
+                internalStopProgressBar();
             }
         }
         new LoginWorker().execute();
     }
 
-    public void showNotification(String message) {
+    private void internalShowNotification(String message) {
         lInfoMessage.setForeground(Color.BLACK);
         lInfoMessage.setText(message);
     }
 
-    public void showWarning(String message) {
+    private void internalShowWarning(String message) {
         lInfoMessage.setForeground(Color.RED);
         lInfoMessage.setText(message);
+    }
+
+    private void internalStartProgressBar() {
+        jProgressBar1.setIndeterminate(true);
+        jProgressBar1.setValue(0);
+    }
+
+    private void internalStopProgressBar() {
+        jProgressBar1.setIndeterminate(false);
+        jProgressBar1.setValue(0);
     }
 
     /**
@@ -443,10 +473,8 @@ public class ApplicationGUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ApplicationGUI().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new ApplicationGUI().setVisible(true);
         });
     }
 

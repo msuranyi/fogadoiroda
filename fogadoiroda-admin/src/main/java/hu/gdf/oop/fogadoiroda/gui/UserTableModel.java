@@ -153,6 +153,8 @@ public class UserTableModel extends AbstractTableModel {
                 repository.delete(user);
             }
         }
+        list.remove(rowIndex);
+        fireTableRowsDeleted(rowIndex, rowIndex);
     }
     
     public void inactivateRow(int rowIndex) {

@@ -5,22 +5,17 @@
  */
 package hu.gdf.oop.fogadoiroda.gui;
 
-import java.util.function.Consumer;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
+import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableModelEvent;
 
-/**
- *
- * @author marci
- */
 public class UsersPanel extends javax.swing.JPanel {
-    
+
+    private ApplicationCallback callback;
     private UserTableModel userTable;
-    private Consumer<String> notificationPublisher;
-    private Consumer<String> warningPublisher;
 
     public void loadData() {
         userTable.loadData();
@@ -28,7 +23,7 @@ public class UsersPanel extends javax.swing.JPanel {
         table.repaint();
     }
 
-    private void setTableData(){
+    private void setTableData() {
         userTable = new UserTableModel();
     }
 
@@ -49,53 +44,105 @@ public class UsersPanel extends javax.swing.JPanel {
             }
         });
         userTable.addTableModelListener((TableModelEvent e) -> {
-            btnSave.setEnabled(true);
-            table.repaint();
+            if (TableModelEvent.UPDATE == e.getType()) {
+                btnSave.setEnabled(true);
+                table.repaint();
+            }
         });
     }
 
-    private void addRow(){
+    private void addRow() {
         userTable.addRow();
         table.revalidate();
         table.repaint();
     }
 
-    private void deleteRow(){
-        if(table.getSelectedRow() == -1) return;
+    private void deleteRow() {
+        if (table.getSelectedRow() == -1) {
+            return;
+        }
         int confirm = JOptionPane.showConfirmDialog(null, "Biztosan törölni szeretné a felhasználót?", "Megerősítés", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            try {
-                userTable.deleteRow(table.getSelectedRow());
-                this.notificationPublisher.accept("A felhasználó törlése sikeresen megtörtént.");
-                loadData();
-                btnDelete.setEnabled(false);
-                btnActivate.setEnabled(false);
-                btnInactivate.setEnabled(false);
-            } catch (ApplicationException ex) {
-                this.warningPublisher.accept(ex.getMessage());
-            }        
+            new SwingWorker<Integer, Void>() {
+                @Override
+                protected Integer doInBackground() throws Exception {
+                    disableButtons();
+                    callback.startProgressBar();
+                    try {
+                        userTable.deleteRow(table.getSelectedRow());
+                        callback.showNotification("A felhasználó törlése sikeresen megtörtént.");
+                        restoreButtons();
+                    } catch (ApplicationException ex) {
+                        callback.showWarning(ex.getMessage());
+                    }
+                    return 1;
+                }
+
+                @Override
+                protected void done() {
+                    callback.stopProgressBar();
+                }
+            }.execute();
         }
     }
 
     private void inactivateRow() {
-        if(table.getSelectedRow() == -1) return;
+        if (table.getSelectedRow() == -1) {
+            return;
+        }
         userTable.inactivateRow(table.getSelectedRow());
-        this.notificationPublisher.accept("A felhasználó inaktiválása sikeresen megtörtént.");
+        callback.showNotification("A felhasználó inaktiválása sikeresen megtörtént.");
     }
 
     private void activateRow() {
-        if(table.getSelectedRow() == -1) return;
+        if (table.getSelectedRow() == -1) {
+            return;
+        }
         userTable.activateRow(table.getSelectedRow());
-        this.notificationPublisher.accept("A felhasználó aktiválása sikeresen megtörtént.");
+        callback.showNotification("A felhasználó aktiválása sikeresen megtörtént.");
     }
-    
-    private void saveData(){
-        userTable.saveRows();
-        loadData();
-        this.notificationPublisher.accept("Az adatok mentése sikeresen megtörtént.");
+
+    private void saveData() {
+
+        new SwingWorker<Integer, Void>() {
+
+            @Override
+            protected Integer doInBackground() throws Exception {
+                disableButtons();
+                callback.startProgressBar();
+                userTable.saveRows();
+                restoreButtons();
+                callback.showNotification("Az adatok mentése sikeresen megtörtént.");
+                loadData();
+                return 1;
+            }
+
+            @Override
+            protected void done() {
+                callback.stopProgressBar();
+            }
+        }.execute();
+    }
+
+    private void disableButtons() {
         btnSave.setEnabled(false);
+        btnCreate.setEnabled(false);
+        btnDelete.setEnabled(false);
+        btnActivate.setEnabled(false);
+        btnInactivate.setEnabled(false);
     }
     
+    private void restoreButtons() {
+        btnCreate.setEnabled(true);
+        System.out.println(table.getSelectedRow());
+        if (table.getSelectedRowCount() == 1) {
+            btnDelete.setEnabled(true);
+            boolean active = userTable.isActive(table.getSelectedRow());
+            btnActivate.setEnabled(!active);
+            btnInactivate.setEnabled(active);            
+        }
+    }
+
     /**
      * Creates new form UsersPanel
      */
@@ -105,14 +152,13 @@ public class UsersPanel extends javax.swing.JPanel {
         addTableListeners();
     }
 
-    public UsersPanel(Consumer<String> notificationPublisher, Consumer<String> warningPublisher) {
+    public UsersPanel(ApplicationCallback applicationCallback) {
         setTableData();
         initComponents();
         addTableListeners();
-        this.notificationPublisher = notificationPublisher;
-        this.warningPublisher = warningPublisher;        
+        this.callback = applicationCallback;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -228,7 +274,7 @@ public class UsersPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-       saveData();
+        saveData();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
