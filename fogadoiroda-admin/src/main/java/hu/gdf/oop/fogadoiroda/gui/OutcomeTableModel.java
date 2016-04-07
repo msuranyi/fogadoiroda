@@ -120,7 +120,7 @@ public class OutcomeTableModel extends AbstractTableModel{
         fireTableRowsInserted(list.size() - 1, list.size() - 1);
     }
     
-    public void deleteRow(int rowIndex) {
+    public void deleteRow(int rowIndex,BetEventsTreeModel treeModel) {
         Outcome selected = list.get(rowIndex);
         if (selected.getId() != null) {
             if (parent.getStatus() == 1 || parent.getStatus() == 2) {
@@ -129,13 +129,14 @@ public class OutcomeTableModel extends AbstractTableModel{
             Outcome outcome = repository.findOne(selected.getId());
             if (outcome != null) {
                 repository.delete(outcome);
+                treeModel.removeNode(outcome);
             }
         }
         list.remove(rowIndex);
         fireTableRowsDeleted(rowIndex, rowIndex);
     }
     
-    public void saveRows() {
+    public void saveRows(BetEventsTreeModel treeModel) {
         if (list != null && !list.isEmpty()) {
             list.stream().filter(o -> o.isDirty()).forEach(o -> {
                 if (o.getId() == null) {
@@ -143,8 +144,10 @@ public class OutcomeTableModel extends AbstractTableModel{
                     if (o.getTitle() == null) o.setTitle("Kimenetel");
                     if (o.getSumBetAmount() == null) o.setSumBetAmount(0);
                     repository.create(o);
+                    treeModel.createNode(parent, o);
                 } else {
                     repository.update(o);
+                    treeModel.setNodeTitle(o, o.getTitle());
                 }
             });
         }

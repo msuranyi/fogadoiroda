@@ -1,6 +1,7 @@
 package hu.gdf.oop.fogadoiroda.data.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BetEvent {
@@ -9,7 +10,6 @@ public class BetEvent {
     private String title;
     private LocalDateTime created;
     private Integer status;
-    private List<Outcome> outcomes;
 
     public Integer getId() {
         return id;
@@ -49,13 +49,5 @@ public class BetEvent {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public List<Outcome> getOutcomes() {
-        return outcomes;
-    }
-
-    public void setOutcomes(List<Outcome> outcomes) {
-        this.outcomes = outcomes;
     }
 }

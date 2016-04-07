@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package hu.gdf.oop.fogadoiroda.gui;
 
 import hu.gdf.oop.fogadoiroda.data.entity.BetEvent;
@@ -20,10 +15,6 @@ import javax.swing.SwingWorker;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-/**
- *
- * @author Krisztián
- */
 public class BetEventsPanel extends javax.swing.JPanel {
 
     String[] betEventStatus = {
@@ -35,46 +26,10 @@ public class BetEventsPanel extends javax.swing.JPanel {
     BetEventRepository eventRepository = new BetEventRepository();
     OutcomeRepository outcomeRepository = new OutcomeRepository();
     List<BetEvent> events;
-    DefaultTreeModel treeModel;
+    BetEventsTreeModel treeModel;
     OutcomeTableModel outcomeTable;
     private ApplicationCallback callback;
-    
-    
-    private void getEventsData(){
-        events = eventRepository.findAll();
-        List<Outcome> outcomes = outcomeRepository.findAll();
-        Map<Integer,List<Outcome>> eventOutcomes = new HashMap<Integer,List<Outcome>>();
-        /*
-        for(int i=0;i<outcomes.size();i++){
-            Outcome outcome = outcomes.get(i);
-            if(eventOutcomes.get(outcome.getBetEventId()) == null){
-                List<Outcome> list = new ArrayList<Outcome>();
-                list.add(outcome);
-                eventOutcomes.put(outcome.getBetEventId(),list);
-            }else
-                eventOutcomes.get(outcome.getBetEventId()).add(outcome);
-        }*/
-    }
-
-    private void createTreeView(){
-        DefaultMutableTreeNode top = new DefaultMutableTreeNode("Események");
-        for(int i=0;i<events.size();i++){
-            BetEvent event = events.get(i);
-            CustomTreeNode<BetEvent> node = new CustomTreeNode(event.getTitle());
-            node.containedObject = event;
-            /*
-            for(int k=0;k<event.getOutcomes().size();k++){
-                Outcome outcome = event.getOutcomes().get(k);
-                CustomTreeNode<Outcome> outcomeNode = new CustomTreeNode(outcome.getTitle());
-                outcomeNode.containedObject = outcome;
-                node.add(outcomeNode);
-            }*/
-            top.add(node);
-        }
-        treeModel = new DefaultTreeModel(top);
-        tree.setModel(treeModel);
-    }
-    
+        
     private void setTableData(){
         outcomeTable = new OutcomeTableModel();
     }
@@ -85,49 +40,10 @@ public class BetEventsPanel extends javax.swing.JPanel {
         table.repaint();
     }
     
-    class CustomTreeNode<E> extends DefaultMutableTreeNode{
-        public E containedObject;
-        public CustomTreeNode(Object userObject){
-            super.setUserObject(userObject);
-        }
-    }
-    
     public void loadData(){
-        getEventsData();
-        createTreeView();
+        treeModel = new BetEventsTreeModel(new DefaultMutableTreeNode());
+        treeModel.loadData(tree);
     }
-    
-    private BetEvent getSelectedBetEvent(){
-        if(tree.getLastSelectedPathComponent() instanceof CustomTreeNode) {
-            CustomTreeNode node = (CustomTreeNode) tree.getLastSelectedPathComponent();
-            BetEvent event;
-            if (node.containedObject instanceof BetEvent) {
-                event = (BetEvent) node.containedObject;
-            } else if (node.containedObject instanceof Outcome) {
-                CustomTreeNode parent = (CustomTreeNode) node.getParent();
-                event = (BetEvent) parent.containedObject;
-            }else{
-                return null;
-            }
-            return event;
-        }else{
-            return null;
-        }
-    }
-    
-    private CustomTreeNode getSelectedEventNode(){
-        if(tree.getLastSelectedPathComponent() instanceof CustomTreeNode) {
-            CustomTreeNode node = (CustomTreeNode) tree.getLastSelectedPathComponent();
-            if (node.containedObject instanceof BetEvent) {
-                return node;
-            } else if (node.containedObject instanceof Outcome) {
-                return (CustomTreeNode)node.getParent();
-            }
-            return null;
-        }else{
-            return null;
-        }
-    } 
     
     private void resetFields(){
         txtId.setText("");
@@ -159,7 +75,7 @@ public class BetEventsPanel extends javax.swing.JPanel {
                     disableButtons();
                     callback.startProgressBar();
                     try {
-                        outcomeTable.deleteRow(table.getSelectedRow());
+                        outcomeTable.deleteRow(table.getSelectedRow(),treeModel);
                         callback.showNotification("A kimenetel törlése sikeresen megtörtént.");
                     } catch (ApplicationException ex) {
                         callback.showWarning(ex.getMessage());
@@ -179,7 +95,7 @@ public class BetEventsPanel extends javax.swing.JPanel {
     }
     
     private void saveEvent(){
-        BetEvent event = getSelectedBetEvent();
+        BetEvent event = treeModel.getSelectedBetEvent();
         if(event == null) return;
         if(event.getId() == -1){
             event.setUserId(Integer.parseInt(txtUserId.getText()));
@@ -194,17 +110,16 @@ public class BetEventsPanel extends javax.swing.JPanel {
             eventRepository.update(event);
         }
         
-        getSelectedEventNode().setUserObject(event.getTitle());
+        treeModel.setNodeTitle(event, event.getTitle());
         
-        outcomeTable.saveRows();
+        outcomeTable.saveRows(treeModel);
         
-        //fillOutcomeTable(event);
         tree.repaint();
     }
     
     private void deleteEvent(){
         int confirm;
-        BetEvent event = getSelectedBetEvent();
+        BetEvent event = treeModel.getSelectedBetEvent();
         if(event == null) return;
         if(outcomeRepository.findWithBetEventId(event.getId()).size() > 0){
             confirm = JOptionPane.showConfirmDialog(null, "Biztosan törölni szeretnéd? \r\n Az eseményhez tartozó kimenetelek is törlésre kerülnek.", "Megerősítés",
@@ -221,10 +136,10 @@ public class BetEventsPanel extends javax.swing.JPanel {
                     callback.startProgressBar();
                     try {
                             while(outcomeTable.getRowCount() > 0){
-                                outcomeTable.deleteRow(outcomeTable.getRowCount()-1);
+                                outcomeTable.deleteRow(outcomeTable.getRowCount()-1,treeModel);
                             }
+                            treeModel.removeNode(event);
                             eventRepository.delete(event);
-                            treeModel.removeNodeFromParent(getSelectedEventNode());
 
                             resetFields();
                         callback.showNotification("Az esemény törlése sikeresen megtörtént.");
@@ -247,15 +162,12 @@ public class BetEventsPanel extends javax.swing.JPanel {
     
     private void addEvent(){
         BetEvent event = new BetEvent();
-        CustomTreeNode<BetEvent> node = new CustomTreeNode("Új esemény");
-        node.containedObject = event;
         event.setId(-1);
         event.setUserId(ApplicationGUI.loggedInUser.getId());
         event.setTitle("");
         event.setStatus(0);
         event.setCreated(LocalDateTime.now());
-        event.setOutcomes(new ArrayList<Outcome>());
-        treeModel.insertNodeInto(node,(DefaultMutableTreeNode)treeModel.getRoot(),treeModel.getChildCount(treeModel.getRoot()));
+        treeModel.createNode(treeModel.getRoot(), event);
     }
     
     private void disableButtons(){
@@ -494,7 +406,7 @@ public class BetEventsPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void treeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_treeValueChanged
-        BetEvent event = getSelectedBetEvent();
+        BetEvent event = treeModel.getSelectedBetEvent();
         if(event == null){
             resetFields();
             return;

@@ -55,13 +55,4 @@ public class Outcome {
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
     }
-    
-    public Object[] toArray(){
-        Object[] array = {id,betEventId,title,won,sumBetAmount};
-        return array;
-    }
-
-    public static Object[] getEmptyModel(){
-        return new Object[5];
-    }
 }
