@@ -129,10 +129,10 @@ public class OutcomeTableModel extends AbstractTableModel{
             Outcome outcome = repository.findOne(selected.getId());
             if (outcome != null) {
                 repository.delete(outcome);
-                treeModel.removeNode(outcome);
             }
         }
         list.remove(rowIndex);
+        treeModel.removeNode(selected);
         fireTableRowsDeleted(rowIndex, rowIndex);
     }
     
