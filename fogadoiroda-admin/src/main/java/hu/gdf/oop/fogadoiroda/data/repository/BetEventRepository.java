@@ -62,7 +62,8 @@ public class BetEventRepository extends AbstractRepository<BetEvent> {
         betEvent.setId(resultSet.getInt("ID"));
         betEvent.setUserId(resultSet.getInt("USER_ID"));
         betEvent.setTitle(resultSet.getString("TITLE"));
-        betEvent.setCreated(resultSet.getTimestamp("CREATED").toLocalDateTime());
+        Timestamp ts = resultSet.getTimestamp("CREATED");
+        betEvent.setCreated(ts != null ? ts.toLocalDateTime() : null);
         betEvent.setStatus(resultSet.getInt("STATUS"));
 
         return betEvent;

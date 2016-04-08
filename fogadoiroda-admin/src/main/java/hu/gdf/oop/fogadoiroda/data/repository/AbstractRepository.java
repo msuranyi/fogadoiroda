@@ -24,7 +24,7 @@ public abstract class AbstractRepository<E extends BaseEntity> {
 
     private final String password;
 
-    public AbstractRepository() {
+    protected AbstractRepository() {
         ResourceBundle dsProps = findResourceBundle();
         driver = dsProps.getString("jdbc.driver");
         url = dsProps.getString("jdbc.url");
