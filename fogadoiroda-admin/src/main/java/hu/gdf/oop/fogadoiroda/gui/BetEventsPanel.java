@@ -188,6 +188,12 @@ public class BetEventsPanel extends javax.swing.JPanel {
     /**
      * Creates new form BetEventsPanel
      */
+    public BetEventsPanel() {
+        setTableData();
+        initComponents();
+        allowControls(false);
+    }
+
     public BetEventsPanel(ApplicationCallback applicationCallback) {
         setTableData();
         initComponents();
@@ -410,16 +416,16 @@ public class BetEventsPanel extends javax.swing.JPanel {
         if(event == null){
             resetFields();
             return;
-        }
-        txtId.setText(event.getId() == -1 ? "" : event.getId().toString());
-        txtUserId.setText(event.getUserId().toString());
-        txtTitle.setText(event.getTitle());
-        txtCreated.setText(event.getCreated().toString());
-        cbStatus.setSelectedIndex(event.getStatus());
-        
-        allowControls(true);
-        
-        fillOutcomeTable(event);        
+        } else {
+            txtId.setText(event.getId() == -1 ? "" : event.getId().toString());
+            txtUserId.setText(event.getUserId().toString());
+            txtTitle.setText(event.getTitle());
+            txtCreated.setText(event.getCreated().toString());
+            cbStatus.setSelectedIndex(event.getStatus());
+
+            fillOutcomeTable(event);                    
+            allowControls(true);
+        } 
     }//GEN-LAST:event_treeValueChanged
 
     

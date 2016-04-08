@@ -110,7 +110,10 @@ public class BetEventsTreeModel extends DefaultTreeModel{
     }
     
     public void setNodeTitle(Object search,String title){
-        findNodeContaining(search).setUserObject(title);
+        CustomTreeNode node = findNodeContaining(search);
+        if (node != null) {
+            node.setUserObject(title);
+        }
     }
     
     public void removeNode(Object remove){
@@ -120,10 +123,12 @@ public class BetEventsTreeModel extends DefaultTreeModel{
     }
     
     private CustomTreeNode findNodeContaining(Object search){
-        for(int i=0;i<nodes.size();i++){
-            CustomTreeNode node = nodes.get(i);
-            if(node.containedObject.equals(search)){
-                return node;
+        if (nodes != null) {
+            for (int i = 0; i < nodes.size(); i++) {
+                CustomTreeNode node = nodes.get(i);
+                if (node.containedObject.equals(search)) {
+                    return node;
+                }
             }
         }
         return null;
