@@ -8,23 +8,6 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="1" author="marcell.suranyi@gmail.com">
-        <preConditions>
-            <dbms type="oracle" />
-        </preConditions>
-        <comment>Rendezést beállító logon trigger</comment>
-        <createProcedure>
-            create or replace TRIGGER data_logon_trigger
-            after logon ON DATABASE
-            begin
-            execute immediate 'alter session set nls_sort = HUNGARIAN';
-            end;
-        </createProcedure>
-        <rollback>
-            <!--kihagyva-->
-        </rollback>
-    </changeSet>
-
-    <changeSet id="2" author="marcell.suranyi@gmail.com">
         <comment>Szekvenciák létrehozása.</comment>
         <createSequence sequenceName="users_seq" minValue="1" incrementBy="1" />
         <createSequence sequenceName="bet_events_seq" minValue="1" incrementBy="1" />
@@ -37,7 +20,7 @@
     </changeSet>
 
 
-    <changeSet id="3" author="marcell.suranyi@gmail.com">
+    <changeSet id="2" author="marcell.suranyi@gmail.com">
         <comment>USERS tábla létrehozása.</comment>
         <createTable tableName="users">
             <column name="id" type="number(10)" remarks="Felhasználó elsődleges kulcsa.">
@@ -67,7 +50,7 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="4" author="marcell.suranyi@gmail.com">
+    <changeSet id="3" author="marcell.suranyi@gmail.com">
         <comment>BET_EVENTS tábla létrehozása.</comment>
         <createTable tableName="bet_events">
             <column name="id" type="number(10)" remarks="Esemény elsődleges kulcsa.">
@@ -94,7 +77,7 @@
         </rollback>
     </changeSet>
         
-    <changeSet id="5" author="marcell.suranyi@gmail.com">
+    <changeSet id="4" author="marcell.suranyi@gmail.com">
         <comment>OUTCOMES tábla létrehozása.</comment>
         <createTable tableName="outcomes">
             <column name="id" type="number(10)" remarks="Kimenetel elsődleges kulcsa.">

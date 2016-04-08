@@ -8,7 +8,7 @@
 
 	<property name="now" value="sysdate" dbms="oracle" />
 
-	<include file="src/main/resources/db/changelogs/xml/001-create_tables.xml" />
-	<include file="src/main/resources/db/changelogs/xml/002-test_data.xml" />
+	<include file="src/main/resources/db/changelogs/sql/001-create_tables.sql" />
+	<include file="src/main/resources/db/changelogs/sql/002-test_data.sql" />
 
 </databaseChangeLog>

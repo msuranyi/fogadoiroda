@@ -13,8 +13,16 @@ apply plugin: 'org.liquibase.gradle'
 
 liquibase {
 	activities {
-		dev {
+		devXml {
 			changeLogFile 'src/main/resources/db/changelog-xml-master.xml'
+			url dbUrl
+			username dbSchema
+			password dbPassword
+			contexts 'default,test-data'
+			logLevel 'info'
+		}
+		devSql {
+			changeLogFile 'src/main/resources/db/changelog-sql-master.xml'
 			url dbUrl
 			username dbSchema
 			password dbPassword
@@ -23,5 +31,5 @@ liquibase {
 		}
 	}
 
-	runList = 'dev'
+	runList = 'devXml'
 }
