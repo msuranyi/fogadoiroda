@@ -12,3 +12,5 @@ target
 .nb-gradle
 
 datasource-local.properties
+
+fogadoiroda-admin/release/*.jar
