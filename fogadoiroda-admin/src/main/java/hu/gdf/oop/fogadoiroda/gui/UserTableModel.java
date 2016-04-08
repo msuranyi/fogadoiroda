@@ -6,7 +6,6 @@ import hu.gdf.oop.fogadoiroda.data.repository.UserRepository;
 
 import javax.swing.table.AbstractTableModel;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 
 public class UserTableModel extends AbstractTableModel {
@@ -16,7 +15,7 @@ public class UserTableModel extends AbstractTableModel {
     private final BetEventRepository betEventRepository = new BetEventRepository();
     private int sortColumnIndex = -1;
     private boolean asc = true;
-    
+
     public void loadData() {
         this.list = repository.findAll();
     }
@@ -94,7 +93,7 @@ public class UserTableModel extends AbstractTableModel {
         return null;
     }
 
-        @Override
+    @Override
     public Class<?> getColumnClass(int columnIndex) {
         switch (columnIndex) {
             case 0:
@@ -136,8 +135,7 @@ public class UserTableModel extends AbstractTableModel {
     }
 
     @Override
-    public boolean isCellEditable(int rowIndex, int columnIndex)
-    {
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 1:
             case 2:
@@ -173,7 +171,7 @@ public class UserTableModel extends AbstractTableModel {
         fireTableCellUpdated(rowIndex, columnIndex);
     }
 
-    public void addRow(){
+    public void addRow() {
         User user = new User();
         list.add(user);
         fireTableRowsInserted(list.size() - 1, list.size() - 1);
@@ -189,7 +187,7 @@ public class UserTableModel extends AbstractTableModel {
                 throw new ApplicationException("Az utolsó operátor nem törölhető!");
             }
             if (betEventRepository.countByUser(selected) > 0) {
-                throw new ApplicationException("A felhasználó már hozott létre eseményt, ezért nem törölhető!");                
+                throw new ApplicationException("A felhasználó már hozott létre eseményt, ezért nem törölhető!");
             }
             User user = repository.findOne(selected.getId());
             if (user != null) {
@@ -199,14 +197,14 @@ public class UserTableModel extends AbstractTableModel {
         list.remove(rowIndex);
         fireTableRowsDeleted(rowIndex, rowIndex);
     }
-    
+
     public void inactivateRow(int rowIndex) {
         User selected = list.get(rowIndex);
         selected.setActive(false);
         selected.setDirty(true);
         fireTableCellUpdated(rowIndex, 8);
     }
-    
+
     public void activateRow(int rowIndex) {
         User selected = list.get(rowIndex);
         selected.setActive(true);
@@ -228,15 +226,15 @@ public class UserTableModel extends AbstractTableModel {
             });
         }
     }
-    
+
     public boolean isActive(int rowNumber) {
         return list.get(rowNumber).isActive();
     }
-    
+
     public boolean isNew(int rowNumber) {
         return list.get(rowNumber).getId() == null;
     }
-    
+
     private long countOperators() {
         return list.stream().filter(u -> "OPERATOR".equals(u.getAuthority())).count();
     }
