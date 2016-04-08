@@ -11,6 +11,8 @@ import javax.swing.JPasswordField;
 import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableModelEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class UsersPanel extends javax.swing.JPanel {
 
@@ -45,6 +47,18 @@ public class UsersPanel extends javax.swing.JPanel {
             if (TableModelEvent.UPDATE == e.getType()) {
                 btnSave.setEnabled(true);
                 table.repaint();
+            }
+        });
+    }
+
+    private void addTableHeaderListeners() {
+        table.getTableHeader().addMouseListener(new MouseAdapter()  {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() > 1) {
+                    int columnIndex = table.columnAtPoint(e.getPoint());
+                    userTable.sortData(columnIndex);
+                }
             }
         });
     }
@@ -152,12 +166,14 @@ public class UsersPanel extends javax.swing.JPanel {
         setTableData();
         initComponents();
         addTableListeners();
+        addTableHeaderListeners();
     }
 
     public UsersPanel(ApplicationCallback applicationCallback) {
         setTableData();
         initComponents();
         addTableListeners();
+        addTableHeaderListeners();
         this.callback = applicationCallback;
     }
 

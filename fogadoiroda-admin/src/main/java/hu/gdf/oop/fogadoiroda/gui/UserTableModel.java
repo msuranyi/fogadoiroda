@@ -6,6 +6,7 @@ import hu.gdf.oop.fogadoiroda.data.repository.UserRepository;
 
 import javax.swing.table.AbstractTableModel;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 public class UserTableModel extends AbstractTableModel {
@@ -13,11 +14,50 @@ public class UserTableModel extends AbstractTableModel {
     private List<User> list;
     private final UserRepository repository = new UserRepository();
     private final BetEventRepository betEventRepository = new BetEventRepository();
+    private int sortColumnIndex = -1;
+    private boolean asc = true;
     
     public void loadData() {
         this.list = repository.findAll();
     }
-    
+
+    public void sortData(int columnIndex) {
+        asc = columnIndex == sortColumnIndex ? !asc : true;
+        sortColumnIndex = columnIndex;
+        switch (columnIndex) {
+            case 0:
+                list.sort((o1, o2) -> comp(o1.getId(), o2.getId(), asc));
+                break;
+            case 1:
+                list.sort((o1, o2) -> comp(o1.getUsername(), o2.getUsername(), asc));
+                break;
+            case 3:
+                list.sort((o1, o2) -> comp(o1.getEmail(), o2.getEmail(), asc));
+                break;
+            case 4:
+                list.sort((o1, o2) -> comp(o1.getAuthority(), o2.getAuthority(), asc));
+                break;
+            case 5:
+                list.sort((o1, o2) -> comp(o1.getBalance(), o2.getBalance(), asc));
+                break;
+            case 6:
+                list.sort((o1, o2) -> comp(o1.getCreated(), o2.getCreated(), asc));
+                break;
+            case 2:
+            case 7:
+            case 8:
+                // jelszóra, státuszra és dirty flagre nem rendezünk
+        }
+    }
+
+    private <T extends Comparable> int comp(T first, T second, boolean asc) {
+        if (first == null) {
+            return second == null ? 0 : asc ? 1 : -1;
+        } else {
+            return second == null ? asc ? -1 : 1 : asc ? first.compareTo(second) : second.compareTo(first);
+        }
+    }
+
     @Override
     public int getRowCount() {
         return list != null ? list.size() : 0;
@@ -88,9 +128,9 @@ public class UserTableModel extends AbstractTableModel {
             case 6:
                 return "Létrehozva";
             case 7:
-                return "Állapot";
+                return "Aktív-e";
             case 8:
-                return "Változott";
+                return "Változott-e";
         }
         return null;
     }
