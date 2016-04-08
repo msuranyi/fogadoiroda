@@ -60,3 +60,8 @@ A forrás fordításához 1.8-as Java szükséges.
 A **fogadoiroda-admin** projekt `release` mappájában állva az alábbi utasítást kell kiadni:
 
 `java -jar fogadoiroda-admin.jar`
+
+Első belépéshez szükséges felhasználó adatai:
+
+* login: admin
+* jelszó: 123
