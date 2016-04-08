@@ -1,4 +1,4 @@
-drop user fogadoiroda cascade;
+--drop user fogadoiroda cascade;
 
 CREATE USER fogadoiroda IDENTIFIED BY fogadoiroda PROFILE DEFAULT ACCOUNT UNLOCK;
 GRANT CONNECT TO fogadoiroda;

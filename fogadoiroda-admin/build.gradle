@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
-//sourceCompatibility = 1.8
-//targetCompatibility = 1.8
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 javadoc {
     options.charSet = 'UTF-8'
@@ -29,24 +29,26 @@ test {
     exclude 'hu/gdf/oop/fogadoiroda/data/**'
 }
 
-task releaseAdminClient(type: Jar) {
+task pack(type: Jar) {
     manifest {
         attributes 'Implementation-Title': 'Fogadoiroda-admin',
-                'Implementation-Version': '0.0.1',
+                'Implementation-Version': '0.0.2',
                 'Main-Class': 'hu.gdf.oop.fogadoiroda.gui.ApplicationGUI',
                 'Class-Path': 'ojdbc6-11.2.0.4.0.jar'
     }
-    baseName = project.name + '-all'
+    baseName = project.name + '-admin'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
+}
 
-    copy {
-        from '../lib/ojdbc6-11.2.0.4.0.jar'
-        into "release"
-    }
+task release(type: Copy) {
+    from pack
+    into "release"
 
-    copy {
-        from 'build/libs/fogadoiroda-all.jar'
-        into "release"
+    doLast {
+        copy {
+            from '../lib/ojdbc6-11.2.0.4.0.jar'
+            into "release"
+        }
     }
 }
