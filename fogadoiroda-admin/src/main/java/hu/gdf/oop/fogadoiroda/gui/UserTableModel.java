@@ -69,83 +69,109 @@ public class UserTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
+        Object result = null;
         User selected = list.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return selected.getId();
+                result = selected.getId();
+                break;
             case 1:
-                return selected.getUsername();
+                result = selected.getUsername();
+                break;
             case 2:
-                return selected.getPassword();
+                result = selected.getPassword();
+                break;
             case 3:
-                return selected.getEmail();
+                result = selected.getEmail();
+                break;
             case 4:
-                return selected.getAuthority();
+                result = selected.getAuthority();
+                break;
             case 5:
-                return selected.getBalance();
+                result = selected.getBalance();
+                break;
             case 6:
-                return selected.getCreated();
+                result = selected.getCreated();
+                break;
             case 7:
-                return selected.isActive();
+                result = selected.isActive();
+                break;
             case 8:
-                return selected.isDirty();
+                result = selected.isDirty();
         }
-        return null;
+        return result;
     }
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
+        Class<?> result;
         switch (columnIndex) {
             case 0:
             case 5:
-                return Integer.class;
+                result = Integer.class;
+                break;
             case 6:
-                return LocalDateTime.class;
+                result = LocalDateTime.class;
+                break;
             case 7:
             case 8:
-                return Boolean.class;
+                result = Boolean.class;
+                break;
             default:
-                return String.class;
+                result = String.class;
         }
+        return result;
     }
 
     @Override
     public String getColumnName(int columnIndex) {
+        String result = null;
         switch (columnIndex) {
             case 0:
-                return "ID";
+                result = "ID";
+                break;
             case 1:
-                return "Felhasználónév";
+                result = "Felhasználónév";
+                break;
             case 2:
-                return "Jelszó";
+                result = "Jelszó";
+                break;
             case 3:
-                return "Email";
+                result = "Email";
+                break;
             case 4:
-                return "Jogosultság";
+                result = "Jogosultság";
+                break;
             case 5:
-                return "Egyenleg";
+                result = "Egyenleg";
+                break;
             case 6:
-                return "Létrehozva";
+                result = "Létrehozva";
+                break;
             case 7:
-                return "Aktív-e";
+                result = "Aktív-e";
+                break;
             case 8:
-                return "Változott-e";
+                result = "Változott-e";
         }
-        return null;
+        return result;
     }
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
+        boolean result;
         switch (columnIndex) {
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
-                return true;
+                result = true;
+                break;
             default:
-                return false;
+                result = false;
         }
+        return result;
     }
 
     @Override
@@ -231,8 +257,9 @@ public class UserTableModel extends AbstractTableModel {
         return list.get(rowNumber).isActive();
     }
 
-    public boolean isNew(int rowNumber) {
-        return list.get(rowNumber).getId() == null;
+    public boolean isSameUser(int rowNumber) {
+        Integer id = list.get(rowNumber).getId();
+        return id != null && id.equals(ApplicationGUI.loggedInUser.getId());
     }
 
     private long countOperators() {

@@ -31,8 +31,10 @@ public class UsersPanel extends javax.swing.JPanel {
 
     private void addTableListeners() {
         table.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+
             int selectedRow = table.getSelectedRow();
-            if (selectedRow > -1 && table.getSelectedRowCount() == 1) {
+
+            if (selectedRow > -1 && table.getSelectedRowCount() == 1 && !userTable.isSameUser(selectedRow)) {
                 btnDelete.setEnabled(true);
                 boolean active = userTable.isActive(selectedRow);
                 btnActivate.setEnabled(!active);
@@ -75,11 +77,11 @@ public class UsersPanel extends javax.swing.JPanel {
         }
         int confirm = JOptionPane.showConfirmDialog(null, "Biztosan törölni szeretné a felhasználót?", "Megerősítés", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
+            disableButtons();
+            callback.startProgressBar();
             new SwingWorker<Integer, Void>() {
                 @Override
                 protected Integer doInBackground() throws Exception {
-                    disableButtons();
-                    callback.startProgressBar();
                     try {
                         userTable.deleteRow(table.getSelectedRow());
                         callback.showNotification("A felhasználó törlése sikeresen megtörtént.");
@@ -99,19 +101,21 @@ public class UsersPanel extends javax.swing.JPanel {
     }
 
     private void inactivateRow() {
-        if (table.getSelectedRow() == -1) {
-            return;
+        if (table.getSelectedRow() != -1) {
+            userTable.inactivateRow(table.getSelectedRow());
+            btnActivate.setEnabled(true);
+            btnInactivate.setEnabled(false);
+            callback.showNotification("A felhasználó inaktiválása sikeresen megtörtént.");
         }
-        userTable.inactivateRow(table.getSelectedRow());
-        callback.showNotification("A felhasználó inaktiválása sikeresen megtörtént.");
     }
 
     private void activateRow() {
-        if (table.getSelectedRow() == -1) {
-            return;
+        if (table.getSelectedRow() != -1) {
+            userTable.activateRow(table.getSelectedRow());
+            btnActivate.setEnabled(false);
+            btnInactivate.setEnabled(true);
+            callback.showNotification("A felhasználó aktiválása sikeresen megtörtént.");
         }
-        userTable.activateRow(table.getSelectedRow());
-        callback.showNotification("A felhasználó aktiválása sikeresen megtörtént.");
     }
 
     private void saveData() {

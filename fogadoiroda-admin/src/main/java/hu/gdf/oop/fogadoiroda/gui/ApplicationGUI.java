@@ -2,17 +2,17 @@ package hu.gdf.oop.fogadoiroda.gui;
 
 import hu.gdf.oop.fogadoiroda.data.entity.User;
 import hu.gdf.oop.fogadoiroda.data.repository.UserRepository;
-import java.awt.CardLayout;
-import java.awt.Color;
-import javax.swing.SwingWorker;
+
+import javax.swing.*;
+import java.awt.*;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 /**
- *
  * @author marci
  */
 public class ApplicationGUI extends javax.swing.JFrame {
@@ -204,73 +204,73 @@ public class ApplicationGUI extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(lLogin)
-                        .addGap(82, 82, 82)
-                        .addComponent(tfLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lPassword)
-                        .addGap(80, 80, 80)
-                        .addComponent(pfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnLogin)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnReset)))))
-                .addGap(155, 155, 155))
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(38, 38, 38)
+                                                .addComponent(jLabel1))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(2, 2, 2)
+                                                .addComponent(lLogin)
+                                                .addGap(82, 82, 82)
+                                                .addComponent(tfLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(lPassword)
+                                                .addGap(80, 80, 80)
+                                                .addComponent(pfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(46, 46, 46)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel2)
+                                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                                .addComponent(btnLogin)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(btnReset)))))
+                                .addGap(155, 155, 155))
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(6, 6, 6)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(lLogin))
-                    .addComponent(tfLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(6, 6, 6)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(lPassword))
-                    .addComponent(pfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLogin)
-                    .addComponent(btnReset))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addContainerGap(23, Short.MAX_VALUE))
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel1)
+                                .addGap(6, 6, 6)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(5, 5, 5)
+                                                .addComponent(lLogin))
+                                        .addComponent(tfLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(6, 6, 6)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(5, 5, 5)
+                                                .addComponent(lPassword))
+                                        .addComponent(pfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(12, 12, 12)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnLogin)
+                                        .addComponent(btnReset))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2)
+                                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout loginPanelLayout = new javax.swing.GroupLayout(loginPanel);
         loginPanel.setLayout(loginPanelLayout);
         loginPanelLayout.setHorizontalGroup(
-            loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(loginPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(357, Short.MAX_VALUE))
+                loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(loginPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(357, Short.MAX_VALUE))
         );
         loginPanelLayout.setVerticalGroup(
-            loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(loginPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(223, Short.MAX_VALUE))
+                loginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(loginPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(223, Short.MAX_VALUE))
         );
 
         mainPanel.add(loginPanel, "login");
@@ -333,9 +333,23 @@ public class ApplicationGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mUsersActionPerformed
-        internalShowNotification("");
-        usersPanel.loadData();
-        ((CardLayout) mainPanel.getLayout()).show(mainPanel, "users");
+
+        callback.startProgressBar();
+
+        new SwingWorker<Integer, Void>() {
+            @Override
+            protected Integer doInBackground() throws Exception {
+                internalShowNotification("");
+                usersPanel.loadData();
+                ((CardLayout) mainPanel.getLayout()).show(mainPanel, "users");
+                return 1;
+            }
+
+            @Override
+            protected void done() {
+                callback.stopProgressBar();
+            }
+        }.execute();
     }//GEN-LAST:event_mUsersActionPerformed
 
     private void btnResetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResetMouseClicked
@@ -344,9 +358,23 @@ public class ApplicationGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnResetMouseClicked
 
     private void mBetEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mBetEventsActionPerformed
-        internalShowNotification("");
-        betEventsPanel.loadData();
-        ((CardLayout) mainPanel.getLayout()).show(mainPanel, "betEvents");
+
+        callback.startProgressBar();
+
+        new SwingWorker<Integer, Void>() {
+            @Override
+            protected Integer doInBackground() throws Exception {
+                internalShowNotification("");
+                betEventsPanel.loadData();
+                ((CardLayout) mainPanel.getLayout()).show(mainPanel, "betEvents");
+                return 1;
+            }
+
+            @Override
+            protected void done() {
+                callback.stopProgressBar();
+            }
+        }.execute();
     }//GEN-LAST:event_mBetEventsActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
@@ -354,15 +382,30 @@ public class ApplicationGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void mLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLogoutActionPerformed
-        loggedInUser = null;
-        internalShowNotification("");
+
+        callback.startProgressBar();
+
         mLogout.setEnabled(false);
         mUsers.setEnabled(false);
         mBetEvents.setEnabled(false);
-        lUserLoggedIn.setText("");
         jLabel2.setVisible(false);
-        ((CardLayout) mainPanel.getLayout()).show(mainPanel, "login");
-        internalShowNotification("Sikeres kilépés");
+
+        new SwingWorker<Integer, Void>() {
+            @Override
+            protected Integer doInBackground() throws Exception {
+                loggedInUser = null;
+                ((CardLayout) mainPanel.getLayout()).show(mainPanel, "login");
+                internalShowNotification("Sikeres kilépés");
+                lUserLoggedIn.setText("");
+                return 1;
+            }
+
+            @Override
+            protected void done() {
+                callback.stopProgressBar();
+            }
+        }.execute();
+
     }//GEN-LAST:event_mLogoutActionPerformed
 
     private void mExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mExitActionPerformed
@@ -377,6 +420,8 @@ public class ApplicationGUI extends javax.swing.JFrame {
 
     private void doLogin() {
 
+        callback.startProgressBar();
+
         tfLogin.setEnabled(false);
         pfPassword.setEnabled(false);
         btnLogin.setEnabled(false);
@@ -385,11 +430,10 @@ public class ApplicationGUI extends javax.swing.JFrame {
         String username = tfLogin.getText();
         String passString = new String(pfPassword.getPassword());
 
-        class LoginWorker extends SwingWorker<Integer, Void> {
+        new SwingWorker<Integer, Void>() {
 
             @Override
             protected Integer doInBackground() {
-                callback.startProgressBar();
                 try {
                     Thread.sleep(500);
                     loggedInUser = userRepository.login(username, passString);
@@ -423,6 +467,8 @@ public class ApplicationGUI extends javax.swing.JFrame {
                     jLabel2.setForeground(Color.RED);
                     jLabel2.setText("A bejelentkezés közben hiba lépett fel!");
                 }
+
+                // restore controls
                 jLabel2.setVisible(true);
                 tfLogin.setEnabled(true);
                 pfPassword.setEnabled(true);
@@ -435,8 +481,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
             protected void done() {
                 callback.stopProgressBar();
             }
-        }
-        new LoginWorker().execute();
+        }.execute();
     }
 
     private void internalShowNotification(String message) {
