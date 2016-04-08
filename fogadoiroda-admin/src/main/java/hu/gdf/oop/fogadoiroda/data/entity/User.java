@@ -3,7 +3,7 @@ package hu.gdf.oop.fogadoiroda.data.entity;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class User {
+public class User implements BaseEntity {
 
     private Integer id;
 
@@ -23,10 +23,12 @@ public class User {
     
     private boolean dirty;
 
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

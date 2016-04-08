@@ -4,17 +4,24 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BetEvent {
+public class BetEvent implements BaseEntity {
+
     private Integer id;
+
     private Integer userId;
+
     private String title;
+
     private LocalDateTime created;
+
     private Integer status;
 
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

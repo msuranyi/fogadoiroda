@@ -1,17 +1,25 @@
 package hu.gdf.oop.fogadoiroda.data.entity;
 
-public class Outcome {
+public class Outcome implements BaseEntity {
+
     private Integer id;
+
     private Integer betEventId;
+
     private String title;
+
     private boolean won;
+
     private Integer sumBetAmount;
+
     private boolean dirty;
 
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

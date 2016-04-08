@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class BetEventRepository extends AbstractRepository<BetEvent> {
+
     @Override
     protected BetEvent internalFindOne(Integer id) {
         return singleResult("select * from BET_EVENTS where ID = ?", id);
@@ -21,9 +22,15 @@ public class BetEventRepository extends AbstractRepository<BetEvent> {
     }
 
     @Override
+    protected String getSequenceName() {
+        return "bet_events_seq";
+    }
+
+    @Override
     protected void internalCreate(BetEvent entity) {
         execute("insert into BET_EVENTS (id, user_id, title, created, status) " +
-                        " VALUES (bet_events_seq.NEXTVAL, ?, ?, ?, ?)",
+                        " VALUES (?, ?, ?, ?, ?)",
+                entity.getId(),
                 entity.getUserId(),
                 entity.getTitle(),
                 Timestamp.valueOf(entity.getCreated()),

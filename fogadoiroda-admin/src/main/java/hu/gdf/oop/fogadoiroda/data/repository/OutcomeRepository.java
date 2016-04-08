@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class OutcomeRepository extends AbstractRepository<Outcome> {
+
     @Override
     protected Outcome internalFindOne(Integer id) {
         return singleResult("select * from OUTCOMES where ID=?",id);
@@ -22,9 +23,15 @@ public class OutcomeRepository extends AbstractRepository<Outcome> {
     }
 
     @Override
+    protected String getSequenceName() {
+        return "outcomes_seq";
+    }
+
+    @Override
     protected void internalCreate(Outcome entity) {
         execute("insert into OUTCOMES (id, bet_event_id, title, won, sum_bet_amount) " +
-                        " VALUES (outcomes_seq.NEXTVAL, ?, ?, ?, ?)",
+                        " VALUES (?, ?, ?, ?, ?)",
+                entity.getId(),
                 entity.getBetEventId(),
                 entity.getTitle(),
                 entity.isWon(),

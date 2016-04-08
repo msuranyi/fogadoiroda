@@ -17,11 +17,11 @@ public class UserRepositoryTest {
     @Test
     public void testCreate() {
 
-        createUser(1, "marci", "123456", "marci@mail.hu", "OPERATOR", true, 100);
-        User user = tested.findOne(1);
+        Integer id = createUser("marci_teszt", "123456", "marci@mail.hu", "OPERATOR", true, 100);
+        User user = tested.findOne(id);
 
-        assertEquals(1, user.getId().intValue());
-        assertEquals("marci", user.getUsername());
+        assertEquals(id, user.getId());
+        assertEquals("marci_teszt", user.getUsername());
         assertEquals("123456", user.getPassword());
         assertEquals("marci@mail.hu", user.getEmail());
         assertEquals("OPERATOR", user.getAuthority());
@@ -35,15 +35,15 @@ public class UserRepositoryTest {
     @Test
     public void testUpdate() {
 
-        createUser(2, "janos", "123", "janos@mail.hu", "OPERATOR", true, 200);
-        User user = tested.findOne(2);
+        Integer id = createUser("janos", "123", "janos@mail.hu", "OPERATOR", true, 200);
+        User user = tested.findOne(id);
 
         user.setPassword("12345678");
         user.setActive(false);
         tested.update(user);
-        user = tested.findOne(2);
+        user = tested.findOne(id);
 
-        assertEquals(2, user.getId().intValue());
+        assertEquals(id, user.getId());
         assertEquals("janos", user.getUsername());
         assertEquals("12345678", user.getPassword());
         assertEquals("janos@mail.hu", user.getEmail());
@@ -63,18 +63,17 @@ public class UserRepositoryTest {
     @Test
     public void testDelete() {
 
-        createUser(3, "geza", "abc", "geza@mail.hu", "OPERATOR", true, 200);
-        User user = tested.findOne(3);
+        Integer id = createUser("geza", "abc", "geza@mail.hu", "OPERATOR", true, 200);
+        User user = tested.findOne(id);
         tested.delete(user);
-        user = tested.findOne(3);
+        user = tested.findOne(id);
 
         assertNull(user);
     }
 
-    private void createUser(Integer id, String username, String password, String email, String authority,
+    private Integer createUser(String username, String password, String email, String authority,
                             boolean active, Integer balance) {
         User user = new User();
-        user.setId(id);
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
@@ -82,7 +81,7 @@ public class UserRepositoryTest {
         user.setActive(active);
         user.setBalance(balance);
         user.setCreated(LocalDateTime.now());
-        tested.create(user);
+        return tested.create(user);
     }
 
 }

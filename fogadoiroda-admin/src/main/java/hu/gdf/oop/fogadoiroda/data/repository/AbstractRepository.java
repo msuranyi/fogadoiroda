@@ -1,5 +1,6 @@
 package hu.gdf.oop.fogadoiroda.data.repository;
 
+import hu.gdf.oop.fogadoiroda.data.entity.BaseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public abstract class AbstractRepository<E> {
+public abstract class AbstractRepository<E extends BaseEntity> {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
@@ -72,8 +73,11 @@ public abstract class AbstractRepository<E> {
         return result;
     }
 
-    public void create(E entity) {
+    public Integer create(E entity) {
+        Integer id = count("select " + getSequenceName() + ".nextval from dual");
+        entity.setId(id);
         internalCreate(entity);
+        return id;
     }
 
     public void update(E entity) {
@@ -87,6 +91,8 @@ public abstract class AbstractRepository<E> {
     protected abstract E internalFindOne(Integer id);
 
     protected abstract List<E> internalFindAll();
+
+    protected abstract String getSequenceName();
 
     protected abstract void internalCreate(E entity);
 
@@ -151,7 +157,9 @@ public abstract class AbstractRepository<E> {
         }
         return result;
     }
-    
+
+
+
     private List<E> query(String sql, Object... params) {
 
         List<E> results = new ArrayList<>();

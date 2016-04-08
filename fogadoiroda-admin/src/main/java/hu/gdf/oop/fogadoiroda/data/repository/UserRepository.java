@@ -39,6 +39,11 @@ public class UserRepository extends AbstractRepository<User> {
     }
 
     @Override
+    protected String getSequenceName() {
+        return "users_seq";
+    }
+
+    @Override
     protected void internalCreate(User entity) {
         if (entity.getUsername() == null || entity.getUsername().trim().isEmpty()) {
             throw new ApplicationException("A felhasználónevet kötelező megadni!");
@@ -47,7 +52,8 @@ public class UserRepository extends AbstractRepository<User> {
             throw new ApplicationException("A felhasználónév már foglalt!");
         }
         execute("insert into USERS (id, username, password, email, authority, active, balance, created) " +
-                " VALUES (users_seq.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)",
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                entity.getId(),
                 entity.getUsername(),
                 entity.getPassword(),
                 entity.getEmail(),
