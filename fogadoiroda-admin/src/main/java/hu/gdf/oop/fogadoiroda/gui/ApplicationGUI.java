@@ -388,40 +388,46 @@ public class ApplicationGUI extends javax.swing.JFrame {
         class LoginWorker extends SwingWorker<Integer, Void> {
 
             @Override
-            protected Integer doInBackground() throws Exception {
-                internalStartProgressBar();
-                Thread.sleep(500);
-                loggedInUser = userRepository.login(username, passString);
-                return 1;
-            }
-
-            @Override
-            protected void done() {
-                if (loggedInUser != null) {
-                    if ("OPERATOR".equals(loggedInUser.getAuthority())) {
-                        lUserLoggedIn.setText(username);
-                        internalShowNotification("Sikeres belépés");
-                        jLabel2.setText("");
-                        mLogout.setEnabled(true);
-                        mUsers.setEnabled(true);
-                        mBetEvents.setEnabled(true);
-                        tfLogin.setText("");
-                        pfPassword.setText("");
+            protected Integer doInBackground() {
+                callback.startProgressBar();
+                try {
+                    Thread.sleep(500);
+                    loggedInUser = userRepository.login(username, passString);
+                    if (loggedInUser != null) {
+                        if ("OPERATOR".equals(loggedInUser.getAuthority())) {
+                            lUserLoggedIn.setText(username);
+                            internalShowNotification("Sikeres belépés");
+                            jLabel2.setText("");
+                            mLogout.setEnabled(true);
+                            mUsers.setEnabled(true);
+                            mBetEvents.setEnabled(true);
+                            tfLogin.setText("");
+                            pfPassword.setText("");
+                        } else {
+                            loggedInUser = null;
+                            jLabel2.setForeground(Color.RED);
+                            jLabel2.setText("Az admin alkalmazásba csak operátorok léphetnek be!");
+                        }
                     } else {
-                        loggedInUser = null;
                         jLabel2.setForeground(Color.RED);
-                        jLabel2.setText("Az admin alkalmazásba csak operátorok léphetnek be!");                        
+                        jLabel2.setText("A megadott felhasználónév és/vagy jelszó érvénytelen!");
                     }
-                } else {
+                } catch (Exception e) {
+                    loggedInUser = null;
                     jLabel2.setForeground(Color.RED);
-                    jLabel2.setText("A megadott felhasználónév és/vagy jelszó érvénytelen!");
+                    jLabel2.setText("A bejelentkezés közben hiba lépett fel!");
                 }
                 jLabel2.setVisible(true);
                 tfLogin.setEnabled(true);
                 pfPassword.setEnabled(true);
                 btnLogin.setEnabled(true);
                 btnReset.setEnabled(true);
-                internalStopProgressBar();
+                return 1;
+            }
+
+            @Override
+            protected void done() {
+                callback.stopProgressBar();
             }
         }
         new LoginWorker().execute();
