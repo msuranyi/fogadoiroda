@@ -395,14 +395,20 @@ public class ApplicationGUI extends javax.swing.JFrame {
                     loggedInUser = userRepository.login(username, passString);
                     if (loggedInUser != null) {
                         if ("OPERATOR".equals(loggedInUser.getAuthority())) {
-                            lUserLoggedIn.setText(username);
-                            internalShowNotification("Sikeres belépés");
-                            jLabel2.setText("");
-                            mLogout.setEnabled(true);
-                            mUsers.setEnabled(true);
-                            mBetEvents.setEnabled(true);
-                            tfLogin.setText("");
-                            pfPassword.setText("");
+                            if (loggedInUser.isActive()) {
+                                lUserLoggedIn.setText(username);
+                                internalShowNotification("Sikeres belépés");
+                                jLabel2.setText("");
+                                mLogout.setEnabled(true);
+                                mUsers.setEnabled(true);
+                                mBetEvents.setEnabled(true);
+                                tfLogin.setText("");
+                                pfPassword.setText("");
+                            } else {
+                                loggedInUser = null;
+                                jLabel2.setForeground(Color.RED);
+                                jLabel2.setText("Inaktív státuszú felhasználó!");
+                            }
                         } else {
                             loggedInUser = null;
                             jLabel2.setForeground(Color.RED);
