@@ -12,22 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
-public class OutcomeTableModel extends AbstractTableModel{
+public class OutcomeTableModel extends AbstractTableModel {
 
-    
-    BetEvent parent;
+    private BetEvent parent;
     private List<Outcome> list;
     private OutcomeRepository repository = new OutcomeRepository();
-    
-    public void loadData(BetEvent event){
+
+    public void loadData(BetEvent event) {
         list = repository.findWithBetEventId(event.getId());
         parent = event;
     }
-    
-    public void emptyTable(){
-        list = new ArrayList<Outcome>();
+
+    public void emptyTable() {
+        list = new ArrayList<>();
     }
-    
+
     @Override
     public int getRowCount() {
         return list != null ? list.size() : 0;
@@ -40,65 +39,81 @@ public class OutcomeTableModel extends AbstractTableModel{
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
+        Object result = null;
         Outcome selected = list.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return selected.getId();
+                result = selected.getId();
+                break;
             case 1:
-                return selected.getTitle();
+                result = selected.getTitle();
+                break;
             case 2:
-                return selected.isWon();
+                result = selected.isWon();
+                break;
             case 3:
-                return selected.getSumBetAmount();
+                result = selected.getSumBetAmount();
+                break;
             case 4:
-                return selected.isDirty();
+                result = selected.isDirty();
         }
-        return null;
+        return result;
     }
-    
+
     @Override
     public String getColumnName(int columnIndex) {
+        String result = null;
         switch (columnIndex) {
             case 0:
-                return "ID";
+                result = "ID";
+                break;
             case 1:
-                return "Megnevezés";
+                result = "Megnevezés";
+                break;
             case 2:
-                return "Nyert";
+                result = "Nyert";
+                break;
             case 3:
-                return "Összes fogadás";
+                result = "Összes fogadás";
+                break;
             case 4:
-                return "Változott";
+                result = "Változott";
         }
-        return null;
+        return result;
     }
-    
+
     @Override
     public Class<?> getColumnClass(int columnIndex) {
+        Class<?> result;
         switch (columnIndex) {
             case 0:
             case 3:
-                return Integer.class;
+                result = Integer.class;
+                break;
             case 2:
             case 4:
-                return Boolean.class;
+                result = Boolean.class;
+                break;
             default:
-                return String.class;
+                result = String.class;
         }
+
+        return result;
     }
-    
+
     @Override
-    public boolean isCellEditable(int rowIndex, int columnIndex)
-    {
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        boolean result = false;
         switch (columnIndex) {
             case 1:
             case 2:
-                return true;
-            default:
-                return false;
+                result = true;
+                break;
         }
+
+        return result;
     }
-    
+
     @Override
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
         Outcome selected = list.get(rowIndex);
@@ -107,42 +122,60 @@ public class OutcomeTableModel extends AbstractTableModel{
                 selected.setTitle((String) value);
                 break;
             case 2:
-                selected.setWon((boolean)value);
+                selected.setWon((boolean) value);
                 break;
         }
         selected.setDirty(true);
         fireTableCellUpdated(rowIndex, columnIndex);
     }
-    
-    public void addRow(){
+
+    public void addRow() {
         Outcome outcome = new Outcome();
         list.add(outcome);
         fireTableRowsInserted(list.size() - 1, list.size() - 1);
     }
-    
-    public void deleteRow(int rowIndex,BetEventsTreeModel treeModel) {
+
+    public void deleteRow(int rowIndex, BetEventsTreeModel treeModel) {
         Outcome selected = list.get(rowIndex);
-        if (selected.getId() != null) {
-            if (parent.getStatus() == 1 || parent.getStatus() == 2) {
-                throw new ApplicationException("Az esemény nyilvános, ezért nem módosítható!");                
-            }
-            Outcome outcome = repository.findOne(selected.getId());
-            if (outcome != null) {
-                repository.delete(outcome);
-            }
-        }
+        delete(selected);
         list.remove(rowIndex);
         treeModel.removeNode(selected);
         fireTableRowsDeleted(rowIndex, rowIndex);
     }
-    
+
+    public void deleteAll(BetEventsTreeModel treeModel) {
+        list.forEach(o -> {
+            delete(o);
+            treeModel.removeNode(o);
+        });
+        list.clear();
+    }
+
+    private void delete(Outcome outcome) {
+        if (outcome.getId() != null) {
+            if (parent.getStatus() == 1 || parent.getStatus() == 2) {
+                throw new ApplicationException("Az esemény nyilvános, ezért nem módosítható!");
+            }
+            Outcome o = repository.findOne(outcome.getId());
+            if (o != null) {
+                repository.delete(o);
+            }
+        }
+    }
+
     public void saveRows(BetEventsTreeModel treeModel) {
         if (list != null && !list.isEmpty()) {
             list.stream().filter(o -> o.isDirty()).forEach(o -> {
                 if (o.getId() == null) {
-                    if (o.getBetEventId() == null) o.setBetEventId(parent.getId());
-                    if (o.getTitle() == null) o.setTitle("Kimenetel");
-                    if (o.getSumBetAmount() == null) o.setSumBetAmount(0);
+                    if (o.getBetEventId() == null) {
+                        o.setBetEventId(parent.getId());
+                    }
+                    if (o.getTitle() == null) {
+                        o.setTitle("Kimenetel");
+                    }
+                    if (o.getSumBetAmount() == null) {
+                        o.setSumBetAmount(0);
+                    }
                     repository.create(o);
                     treeModel.createNode(parent, o);
                 } else {
@@ -153,5 +186,4 @@ public class OutcomeTableModel extends AbstractTableModel{
         }
     }
 
-    
 }

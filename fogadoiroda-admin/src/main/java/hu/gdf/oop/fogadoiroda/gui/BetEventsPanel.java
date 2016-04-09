@@ -22,30 +22,30 @@ public class BetEventsPanel extends javax.swing.JPanel {
         "Nyitott",
         "Lezárt"
     };
-    
+
     BetEventRepository eventRepository = new BetEventRepository();
     OutcomeRepository outcomeRepository = new OutcomeRepository();
     List<BetEvent> events;
     BetEventsTreeModel treeModel;
     OutcomeTableModel outcomeTable;
     private ApplicationCallback callback;
-        
-    private void setTableData(){
+
+    private void setTableData() {
         outcomeTable = new OutcomeTableModel();
     }
-    
-    private void fillOutcomeTable(BetEvent event){
+
+    private void fillOutcomeTable(BetEvent event) {
         outcomeTable.loadData(event);
         table.revalidate();
         table.repaint();
     }
-    
-    public void loadData(){
+
+    public void loadData() {
         treeModel = new BetEventsTreeModel(new DefaultMutableTreeNode());
         treeModel.loadData(tree);
     }
-    
-    private void resetFields(){
+
+    private void resetFields() {
         txtId.setText("");
         txtUserId.setText("");
         txtTitle.setText("");
@@ -56,111 +56,111 @@ public class BetEventsPanel extends javax.swing.JPanel {
         table.repaint();
         disableButtons();
     }
-    
-    private void addOutcome(){
+
+    private void addOutcome() {
         outcomeTable.addRow();
         table.revalidate();
         table.repaint();
     }
-    
-    private void deleteOutcome(){
-        if (table.getSelectedRow() == -1) {
-            return;
-        }
-        int confirm = JOptionPane.showConfirmDialog(null, "Biztosan törölni szeretné a kimenetelt?", "Megerősítés", JOptionPane.YES_NO_OPTION);
-        if (confirm == JOptionPane.YES_OPTION) {
-            new SwingWorker<Integer, Void>() {
-                @Override
-                protected Integer doInBackground() throws Exception {
-                    disableButtons();
-                    callback.startProgressBar();
-                    try {
-                        outcomeTable.deleteRow(table.getSelectedRow(),treeModel);
-                        callback.showNotification("A kimenetel törlése sikeresen megtörtént.");
-                    } catch (ApplicationException ex) {
-                        callback.showWarning(ex.getMessage());
-                    }
-                    restoreButtons();
-                    table.revalidate();
-                    table.repaint();
-                    return 1;
-                }
 
-                @Override
-                protected void done() {
-                    callback.stopProgressBar();
-                }
-            }.execute();
+    private void deleteOutcome() {
+        if (table.getSelectedRow() != -1) {
+            int confirm = JOptionPane.showConfirmDialog(null, "Biztosan törölni szeretné a kimenetelt?", "Megerősítés", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                new SwingWorker<Integer, Void>() {
+                    @Override
+                    protected Integer doInBackground() throws Exception {
+                        disableButtons();
+                        callback.startProgressBar();
+                        try {
+                            outcomeTable.deleteRow(table.getSelectedRow(), treeModel);
+                            callback.showNotification("A kimenetel törlése sikeresen megtörtént.");
+                        } catch (ApplicationException ex) {
+                            callback.showWarning(ex.getMessage());
+                        }
+                        restoreButtons();
+                        table.revalidate();
+                        table.repaint();
+                        return 1;
+                    }
+
+                    @Override
+                    protected void done() {
+                        callback.stopProgressBar();
+                    }
+                }.execute();
+            }
         }
     }
-    
-    private void saveEvent(){
+
+    private void saveEvent() {
+        
         BetEvent event = treeModel.getSelectedBetEvent();
-        if(event == null) return;
-        if(event.getId() == -1){
-            event.setUserId(Integer.parseInt(txtUserId.getText()));
-            event.setTitle(txtTitle.getText());
-            event.setStatus(cbStatus.getSelectedIndex());
-            event.setCreated(LocalDateTime.now());
-            eventRepository.create(event);
-        }else{
-            event.setUserId(Integer.parseInt(txtUserId.getText()));
-            event.setTitle(txtTitle.getText());
-            event.setStatus(cbStatus.getSelectedIndex());
-            eventRepository.update(event);
+        
+        if (event != null) {
+            if (event.getId() == -1) {
+                event.setUserId(Integer.parseInt(txtUserId.getText()));
+                event.setTitle(txtTitle.getText());
+                event.setStatus(cbStatus.getSelectedIndex());
+                event.setCreated(LocalDateTime.now());
+                eventRepository.create(event);
+            } else {
+                event.setUserId(Integer.parseInt(txtUserId.getText()));
+                event.setTitle(txtTitle.getText());
+                event.setStatus(cbStatus.getSelectedIndex());
+                eventRepository.update(event);
+            }
+
+            treeModel.setNodeTitle(event, event.getTitle());
+
+            outcomeTable.saveRows(treeModel);
+
+            tree.repaint();
         }
-        
-        treeModel.setNodeTitle(event, event.getTitle());
-        
-        outcomeTable.saveRows(treeModel);
-        
-        tree.repaint();
     }
-    
-    private void deleteEvent(){
-        int confirm;
+
+    private void deleteEvent() {
         BetEvent event = treeModel.getSelectedBetEvent();
-        if(event == null) return;
-        if(outcomeRepository.findWithBetEventId(event.getId()).size() > 0){
-            confirm = JOptionPane.showConfirmDialog(null, "Biztosan törölni szeretnéd? \r\n Az eseményhez tartozó kimenetelek is törlésre kerülnek.", "Megerősítés",
-            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        }else{
-            confirm = JOptionPane.showConfirmDialog(null, "Biztos törölni szeretnéd?", "Megerősítés",
-            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        }
-        if (confirm == JOptionPane.YES_OPTION) {
-            new SwingWorker<Integer, Void>() {
-                @Override
-                protected Integer doInBackground() throws Exception {
-                    disableButtons();
-                    callback.startProgressBar();
-                    try {
-                            while(outcomeTable.getRowCount() > 0){
-                                outcomeTable.deleteRow(outcomeTable.getRowCount()-1,treeModel);
-                            }
+        if (event != null) {
+            int confirm;
+            String question = "Biztosan törölni szeretnéd?";
+            if (outcomeRepository.findWithBetEventId(event.getId()).size() > 0) {
+                question += "\r\n Az eseményhez tartozó kimenetelek is törlésre kerülnek.";
+            }
+            confirm = JOptionPane.showConfirmDialog(null, question, "Megerősítés",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (confirm == JOptionPane.YES_OPTION) {
+                new SwingWorker<Integer, Void>() {
+                    @Override
+                    protected Integer doInBackground() throws Exception {
+                        disableButtons();
+                        callback.startProgressBar();
+                        try {
+                            outcomeTable.deleteAll(treeModel);
                             treeModel.removeNode(event);
                             eventRepository.delete(event);
 
                             resetFields();
-                        callback.showNotification("Az esemény törlése sikeresen megtörtént.");
-                    } catch (ApplicationException ex) {
-                        callback.showWarning(ex.getMessage());
+                            callback.showNotification("Az esemény törlése sikeresen megtörtént.");
+                        } catch (ApplicationException ex) {
+                            callback.showWarning(ex.getMessage());
+                        }
+                        restoreButtons();
+                        table.revalidate();
+                        table.repaint();
+                        return 1;
                     }
-                    restoreButtons();
-                    table.revalidate();
-                    table.repaint();
-                    return 1;
-                }
 
-                @Override
-                protected void done() {
-                    callback.stopProgressBar();
-                }
-            }.execute();
+                    @Override
+                    protected void done() {
+                        callback.stopProgressBar();
+                    }
+                }.execute();
+            }
         }
     }
-    
-    private void addEvent(){
+
+    private void addEvent() {
         BetEvent event = new BetEvent();
         event.setId(-1);
         event.setUserId(ApplicationGUI.loggedInUser.getId());
@@ -169,22 +169,22 @@ public class BetEventsPanel extends javax.swing.JPanel {
         event.setCreated(LocalDateTime.now());
         treeModel.createNode(treeModel.getRoot(), event);
     }
-    
-    private void disableButtons(){
-        allowControls(false);        
+
+    private void disableButtons() {
+        allowControls(false);
     }
-    
-    private void restoreButtons(){
+
+    private void restoreButtons() {
         allowControls(true);
     }
-    
-    private void allowControls(boolean state){
+
+    private void allowControls(boolean state) {
         btnSaveEvent.setEnabled(state);
         btnDeleteEvent.setEnabled(state);
         btnCreateOutcome.setEnabled(state);
         btnDeleteOutcome.setEnabled(state);
     }
-    
+
     /**
      * Creates new form BetEventsPanel
      */
@@ -413,7 +413,7 @@ public class BetEventsPanel extends javax.swing.JPanel {
 
     private void treeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_treeValueChanged
         BetEvent event = treeModel.getSelectedBetEvent();
-        if(event == null){
+        if (event == null) {
             resetFields();
             return;
         } else {
@@ -423,12 +423,12 @@ public class BetEventsPanel extends javax.swing.JPanel {
             txtCreated.setText(event.getCreated().toString());
             cbStatus.setSelectedIndex(event.getStatus());
 
-            fillOutcomeTable(event);                    
+            fillOutcomeTable(event);
             allowControls(true);
-        } 
+        }
     }//GEN-LAST:event_treeValueChanged
 
-    
+
     private void btnDeleteEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteEventActionPerformed
         deleteEvent();
     }//GEN-LAST:event_btnDeleteEventActionPerformed
