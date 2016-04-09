@@ -63,4 +63,21 @@ public class Outcome implements BaseEntity {
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Outcome)) return false;
+
+        Outcome outcome = (Outcome) o;
+
+        return id != null ? id.equals(outcome.id) : outcome.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
 }

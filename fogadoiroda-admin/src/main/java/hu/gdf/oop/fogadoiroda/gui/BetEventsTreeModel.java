@@ -25,11 +25,14 @@ public class BetEventsTreeModel extends DefaultTreeModel{
         super(root);
     }
     
-    class CustomTreeNode<E> extends DefaultMutableTreeNode{
+    class CustomTreeNode<E> extends DefaultMutableTreeNode {
+
         public E containedObject;
+
         public CustomTreeNode(Object userObject){
             super.setUserObject(userObject);
         }
+
     }
     
     public void loadData(JTree tree){
@@ -118,19 +121,25 @@ public class BetEventsTreeModel extends DefaultTreeModel{
     
     public void removeNode(Object remove){
         CustomTreeNode node = findNodeContaining(remove);
-        this.removeNodeFromParent(node);
-        nodes.remove(node);
+        if (node != null) {
+            this.removeNodeFromParent(node);
+            nodes.remove(node);
+        }
     }
     
-    private CustomTreeNode findNodeContaining(Object search){
+    private CustomTreeNode findNodeContaining(Object search) {
+        CustomTreeNode result = null;
         if (nodes != null) {
             for (int i = 0; i < nodes.size(); i++) {
                 CustomTreeNode node = nodes.get(i);
-                if (node.containedObject.equals(search)) {
-                    return node;
+                Object o = node.containedObject;
+                if (o.equals(search)) {
+                    result = node;
+                    break;
                 }
             }
         }
-        return null;
+        return result;
     }
+
 }

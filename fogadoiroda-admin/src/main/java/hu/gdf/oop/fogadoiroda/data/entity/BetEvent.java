@@ -57,4 +57,20 @@ public class BetEvent implements BaseEntity {
     public void setStatus(Integer status) {
         this.status = status;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BetEvent)) return false;
+
+        BetEvent betEvent = (BetEvent) o;
+
+        return id != null ? id.equals(betEvent.id) : betEvent.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
 }
