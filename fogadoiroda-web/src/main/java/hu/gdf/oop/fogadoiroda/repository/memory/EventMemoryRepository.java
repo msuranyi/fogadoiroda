@@ -1,14 +1,12 @@
-package hu.gdf.oop.fogadoiroda.repository;
+package hu.gdf.oop.fogadoiroda.repository.memory;
 
 import hu.gdf.oop.fogadoiroda.model.Event;
 import hu.gdf.oop.fogadoiroda.model.Outcome;
+import hu.gdf.oop.fogadoiroda.repository.EventRepository;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Az események tárolását memóriában implementáló komponens.

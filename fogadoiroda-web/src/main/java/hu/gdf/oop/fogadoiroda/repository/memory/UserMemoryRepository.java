@@ -1,12 +1,10 @@
-package hu.gdf.oop.fogadoiroda.repository;
+package hu.gdf.oop.fogadoiroda.repository.memory;
 
 import hu.gdf.oop.fogadoiroda.model.User;
+import hu.gdf.oop.fogadoiroda.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A felhasználók tárolását memóriában implementáló komponens.

@@ -1,6 +1,7 @@
-package hu.gdf.oop.fogadoiroda.repository;
+package hu.gdf.oop.fogadoiroda.repository.memory;
 
 import hu.gdf.oop.fogadoiroda.model.BaseEntity;
+import hu.gdf.oop.fogadoiroda.repository.BaseRepository;
 
 import java.util.Collection;
 import java.util.HashMap;
