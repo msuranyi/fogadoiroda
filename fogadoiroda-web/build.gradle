@@ -1,6 +1,17 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.github.jacobono:gradle-jaxb-plugin:1.3.6'
+    }
+}
+
 apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'maven'
+apply plugin: 'com.github.jacobono.jaxb'
 
 //sourceCompatibility = 1.8
 //targetCompatibility = 1.8
@@ -16,7 +27,9 @@ repositories {
 ext {
     springVersion             = '4.2.5.RELEASE'
     springSecurityVersion     = '4.0.4.RELEASE'
+    springWebServicesVersion  = '2.3.0.RELEASE'
     thymeleafVersion          = '2.1.4.RELEASE'
+    jaxbVersion               = '2.2.7'
     slf4jVersion              = '1.7.21'
     logbackVersion            = '1.1.7'
     junitVersion              = '4.12'
@@ -26,23 +39,35 @@ configurations {
     all {
         // global exclude
         exclude group: 'commons-logging', module: 'commons-logging'
+        exclude group: 'xml-apis', module: 'xml-apis'
     }
 }
 
 dependencies {
 
+    jaxb(
+            "com.sun.xml.bind:jaxb-xjc:${jaxbVersion}",
+            "com.sun.xml.bind:jaxb-impl:${jaxbVersion}",
+            "javax.xml.bind:jaxb-api:${jaxbVersion}"
+    )
+
     compile(
             "org.springframework:spring-webmvc:${springVersion}",
             "org.springframework:spring-context-support:${springVersion}",
             "org.springframework:spring-jdbc:${springVersion}",
+            "org.springframework:spring-oxm:${springVersion}",
+
             "org.springframework.security:spring-security-config:${springSecurityVersion}",
             "org.springframework.security:spring-security-web:${springSecurityVersion}",
+
+            "org.springframework.ws:spring-ws-core:${springWebServicesVersion}",
 
             "org.thymeleaf:thymeleaf-spring4:${thymeleafVersion}",
             "org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE",
 
             "org.hibernate:hibernate-validator:5.2.2.Final",
             "org.apache.commons:commons-lang3:3.1",
+            "wsdl4j:wsdl4j:1.6.1",
 
             "org.slf4j:jcl-over-slf4j:${slf4jVersion}",
             "org.slf4j:slf4j-api:${slf4jVersion}",
@@ -60,8 +85,13 @@ dependencies {
             "org.springframework.security:spring-security-test:${springSecurityVersion}"
     )
 
+    runtime files('../lib/ojdbc6-11.2.0.4.0.jar')
+}
+
+jaxb {
+    xsdDir = 'src/main/resources/xsd'
 }
 
 test {
-    exclude 'hu/gdf/oop/fogadoiroda/data/**'
+    exclude 'hu/gdf/oop/fogadoiroda/ws/client/**'
 }
