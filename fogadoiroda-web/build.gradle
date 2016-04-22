@@ -13,29 +13,52 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    compile group: 'org.springframework', name: 'spring-webmvc', version:'4.2.1.RELEASE'
-    compile(group: 'org.springframework', name: 'spring-context-support', version:'4.2.1.RELEASE') {
-        exclude(module: 'commons-logging')
+ext {
+    springVersion             = '4.2.5.RELEASE'
+    springSecurityVersion     = '4.0.4.RELEASE'
+    thymeleafVersion          = '2.1.4.RELEASE'
+    slf4jVersion              = '1.7.21'
+    logbackVersion            = '1.1.7'
+    junitVersion              = '4.12'
+}
+
+configurations {
+    all {
+        // global exclude
+        exclude group: 'commons-logging', module: 'commons-logging'
     }
-    compile group: 'org.hibernate', name: 'hibernate-validator', version:'5.2.2.Final'
-    compile group: 'org.springframework.security', name: 'spring-security-config', version:'4.0.2.RELEASE'
-    compile group: 'org.springframework.security', name: 'spring-security-web', version:'4.0.2.RELEASE'
-    compile group: 'org.thymeleaf', name: 'thymeleaf-spring4', version:'2.1.4.RELEASE'
-    compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity4', version:'2.1.2.RELEASE'
-    compile group: 'org.apache.commons', name: 'commons-lang3', version:'3.1'
-    compile group: 'org.slf4j', name: 'jcl-over-slf4j', version:'1.7.2'
-    compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.2'
-    compile group: 'ch.qos.logback', name: 'logback-classic', version:'1.1.2'
+}
 
-	runtime files('../lib/ojdbc6-11.2.0.4.0.jar')
+dependencies {
 
-    testCompile group: 'junit', name: 'junit', version:'4.11'
-    testCompile group: 'org.springframework', name: 'spring-test', version:'4.2.1.RELEASE'
-    testCompile group: 'org.springframework.security', name: 'spring-security-test', version:'4.0.2.RELEASE'
+    compile(
+            "org.springframework:spring-webmvc:${springVersion}",
+            "org.springframework:spring-context-support:${springVersion}",
+            "org.springframework.security:spring-security-config:${springSecurityVersion}",
+            "org.springframework.security:spring-security-web:${springSecurityVersion}",
 
-    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.1.0'
-    providedCompile group: 'javax.servlet.jsp', name: 'jsp-api', version:'2.2'
+            "org.thymeleaf:thymeleaf-spring4:${thymeleafVersion}",
+            "org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE",
+
+            "org.hibernate:hibernate-validator:5.2.2.Final",
+            "org.apache.commons:commons-lang3:3.1",
+
+            "org.slf4j:jcl-over-slf4j:${slf4jVersion}",
+            "org.slf4j:slf4j-api:${slf4jVersion}",
+            "ch.qos.logback:logback-classic:${logbackVersion}"
+    )
+
+    providedCompile(
+            "javax.servlet:javax.servlet-api:3.1.0",
+            "javax.servlet.jsp:jsp-api:2.2"
+    )
+
+    testCompile(
+            "junit:junit:${junitVersion}",
+            "org.springframework:spring-test:${springVersion}",
+            "org.springframework.security:spring-security-test:${springSecurityVersion}"
+    )
+
 }
 
 test {

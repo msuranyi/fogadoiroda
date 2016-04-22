@@ -11,15 +11,21 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    slf4jVersion              = '1.7.21'
+    logbackVersion            = '1.1.7'
+    junitVersion              = '4.12'
+}
+
 dependencies {
     compile (
-        "org.slf4j:jcl-over-slf4j:1.7.2",
-        "org.slf4j:slf4j-api:1.7.2",
-        "ch.qos.logback:logback-classic:1.1.2"
+        "org.slf4j:jcl-over-slf4j:${slf4jVersion}",
+        "org.slf4j:slf4j-api:${slf4jVersion}",
+        "ch.qos.logback:logback-classic:${logbackVersion}"
     )
 
     testCompile (
-        "junit:junit:4.11"
+        "junit:junit:${junitVersion}"
     )
 
     runtime files('../lib/ojdbc6-11.2.0.4.0.jar')
