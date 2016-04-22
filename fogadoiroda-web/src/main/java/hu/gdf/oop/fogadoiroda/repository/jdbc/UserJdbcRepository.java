@@ -3,22 +3,26 @@ package hu.gdf.oop.fogadoiroda.repository.jdbc;
 import hu.gdf.oop.fogadoiroda.model.User;
 import hu.gdf.oop.fogadoiroda.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Repository
-public class UserJdbcRepository implements UserRepository {
-
-    private JdbcTemplate jdbcTemplate;
+public class UserJdbcRepository extends AbstractJdbcRepository implements UserRepository {
 
     @Autowired
     public UserJdbcRepository(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
+        super(dataSource);
+    }
+
+    @Override
+    protected String getSequenceName() {
+        return "USERS_SEQ";
     }
 
     @Override
@@ -36,7 +40,8 @@ public class UserJdbcRepository implements UserRepository {
 
     @Override
     public void create(User user) {
-        throw new UnsupportedOperationException();
+        jdbcTemplate.update("insert into USERS (ID, USERNAME, ACTIVE, CREATED) values (?, ?, ?, ?)",
+                generateId(), user.getUsername(), !user.isLocked(), Timestamp.valueOf(LocalDateTime.now()));
     }
 
     @Override
@@ -51,7 +56,7 @@ public class UserJdbcRepository implements UserRepository {
 
     private User mapRow(ResultSet rs) throws SQLException {
 
-        User user = new User(rs.getString("USERNAME"), rs.getString("PASSWORD"));
+        User user = new User(rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("AUTHORITY"));
 
         user.setEmail(rs.getString("EMAIL"));
         user.setLocked(!rs.getBoolean("ACTIVE"));
