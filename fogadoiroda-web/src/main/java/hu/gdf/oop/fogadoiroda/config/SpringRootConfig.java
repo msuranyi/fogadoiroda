@@ -12,6 +12,6 @@ import org.springframework.context.annotation.Configuration;
  * osztályból létrejön egy függőségeivel teljesen felszerelt komponens.
  */
 @Configuration
-@ComponentScan({"hu.gdf.oop.fogadoiroda.service", "hu.gdf.oop.fogadoiroda.repository.memory"})
+@ComponentScan({"hu.gdf.oop.fogadoiroda.service", "hu.gdf.oop.fogadoiroda.repository.jdbc"})
 public class SpringRootConfig {
 }

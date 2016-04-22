@@ -17,39 +17,39 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
  * Ezen kívül még két Filter is felvételre került:
  * <br>
  * <ul>
- *     <li>CharacterEncodingFilter - a magyar ékezetek helyes megjelenítése miatt volt szükséges</li>
- *     <li>DelegatingFilterProxy - a jogosultság kezelő keretrendszernek kellett</li>
+ * <li>CharacterEncodingFilter - a magyar ékezetek helyes megjelenítése miatt volt szükséges</li>
+ * <li>DelegatingFilterProxy - a jogosultság kezelő keretrendszernek kellett</li>
  * </ul>
  */
 public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-	@Override
-	protected Class<?>[] getRootConfigClasses() {
-		return new Class<?>[] { SpringRootConfig.class, SpringSecurityConfig.class };
-	}
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class<?>[]{SpringRootConfig.class, JndiDataSourceConfig.class, SpringSecurityConfig.class};
+    }
 
-	@Override
-	protected Class<?>[] getServletConfigClasses() {
-		return new Class<?>[] { SpringWebConfig.class };
-	}
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return new Class<?>[]{SpringWebConfig.class};
+    }
 
-	@Override
-	protected String[] getServletMappings() {
-		return new String[] { "/" };
-	}
+    @Override
+    protected String[] getServletMappings() {
+        return new String[]{"/"};
+    }
 
-	@Override
-	protected Filter[] getServletFilters() {
+    @Override
+    protected Filter[] getServletFilters() {
 
-		CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
-		encodingFilter.setEncoding("UTF-8");
-		encodingFilter.setForceEncoding(true);
+        CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
+        encodingFilter.setEncoding("UTF-8");
+        encodingFilter.setForceEncoding(true);
 
-		return new Filter[] {
-				encodingFilter,
-				new DelegatingFilterProxy("springSecurityFilterChain")
-		};
-	}
+        return new Filter[]{
+                encodingFilter,
+                new DelegatingFilterProxy("springSecurityFilterChain")
+        };
+    }
 
 
 }

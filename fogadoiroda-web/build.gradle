@@ -34,6 +34,7 @@ dependencies {
     compile(
             "org.springframework:spring-webmvc:${springVersion}",
             "org.springframework:spring-context-support:${springVersion}",
+            "org.springframework:spring-jdbc:${springVersion}",
             "org.springframework.security:spring-security-config:${springSecurityVersion}",
             "org.springframework.security:spring-security-web:${springSecurityVersion}",
 
