@@ -40,8 +40,8 @@ public class UserJdbcRepository extends AbstractJdbcRepository implements UserRe
 
     @Override
     public void create(User user) {
-        jdbcTemplate.update("insert into USERS (ID, USERNAME, ACTIVE, CREATED) values (?, ?, ?, ?)",
-                generateId(), user.getUsername(), !user.isLocked(), Timestamp.valueOf(LocalDateTime.now()));
+        jdbcTemplate.update("insert into USERS (ID, USERNAME, PASSWORD, AUTHORITY, ACTIVE, CREATED) values (?, ?, ?, ?, ?, ?)",
+                generateId(), user.getUsername(), user.getPassword(),"USER", !user.isLocked(), Timestamp.valueOf(LocalDateTime.now()));
     }
 
     @Override
