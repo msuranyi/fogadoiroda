@@ -18,16 +18,16 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for echoResponse complex type.
+ * <p>Java class for openEventsResponse complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="echoResponse">
+ * &lt;complexType name="openEventsResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="events" type="{http://xml.fogadoiroda.oop.gdf.hu/}events"/>
  *       &lt;/sequence>
  *       &lt;attribute name="generated-time" use="required" type="{http://www.w3.org/2001/XMLSchema}dateTime" />
  *     &lt;/restriction>
@@ -38,39 +38,39 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "echoResponse", propOrder = {
-    "_return"
+@XmlType(name = "openEventsResponse", propOrder = {
+    "events"
 })
-public class EchoResponse {
+public class OpenEventsResponse {
 
-    @XmlElement(name = "return")
-    protected String _return;
+    @XmlElement(required = true)
+    protected Events events;
     @XmlAttribute(name = "generated-time", required = true)
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar generatedTime;
 
     /**
-     * Gets the value of the return property.
+     * Gets the value of the events property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Events }
      *     
      */
-    public String getReturn() {
-        return _return;
+    public Events getEvents() {
+        return events;
     }
 
     /**
-     * Sets the value of the return property.
+     * Sets the value of the events property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Events }
      *     
      */
-    public void setReturn(String value) {
-        this._return = value;
+    public void setEvents(Events value) {
+        this.events = value;
     }
 
     /**

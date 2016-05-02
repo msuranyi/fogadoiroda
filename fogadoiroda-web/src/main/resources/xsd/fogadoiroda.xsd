@@ -4,6 +4,8 @@
 
     <xs:element name="echo" type="tns:echo"/>
     <xs:element name="echoResponse" type="tns:echoResponse"/>
+    <xs:element name="openEvents" type="tns:openEvents"/>
+    <xs:element name="openEventsResponse" type="tns:openEventsResponse"/>
 
     <xs:complexType name="echo">
         <xs:sequence>
@@ -15,6 +17,44 @@
         <xs:sequence>
             <xs:element minOccurs="0" name="return" type="xs:string"/>
         </xs:sequence>
+        <xs:attribute name="generated-time" type="xs:dateTime" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="openEvents" />
+
+    <xs:complexType name="openEventsResponse">
+        <xs:sequence>
+            <xs:element name="events" type="tns:events" />
+        </xs:sequence>
+        <xs:attribute name="generated-time" type="xs:dateTime" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="events">
+        <xs:sequence>
+            <xs:element name="event" minOccurs="0" maxOccurs="unbounded" type="tns:event" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="event">
+        <xs:sequence>
+            <xs:element name="title" type="xs:string" />
+            <xs:element name="description" type="xs:string" />
+            <xs:element name="start" type="xs:dateTime" />
+            <xs:element name="end" type="xs:dateTime" />
+            <xs:element name="outcomes" type="tns:outcomes" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:int" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="outcomes">
+        <xs:sequence>
+            <xs:element name="outcome" minOccurs="0" maxOccurs="unbounded" type="tns:outcome" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="outcome">
+        <xs:attribute name="id" type="xs:int" use="required" />
+        <xs:attribute name="text" type="xs:string" use="required" />
     </xs:complexType>
 
 </xs:schema>

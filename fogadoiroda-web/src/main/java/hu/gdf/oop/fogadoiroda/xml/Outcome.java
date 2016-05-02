@@ -10,21 +10,21 @@ package hu.gdf.oop.fogadoiroda.xml;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for echo complex type.
+ * <p>Java class for outcome complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="echo">
+ * &lt;complexType name="outcome">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="string" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *       &lt;/sequence>
+ *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="text" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -33,35 +33,52 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "echo", propOrder = {
-    "string"
-})
-public class Echo {
+@XmlType(name = "outcome")
+public class Outcome {
 
-    protected String string;
+    @XmlAttribute(name = "id", required = true)
+    protected int id;
+    @XmlAttribute(name = "text", required = true)
+    protected String text;
 
     /**
-     * Gets the value of the string property.
+     * Gets the value of the id property.
+     * 
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Sets the value of the id property.
+     * 
+     */
+    public void setId(int value) {
+        this.id = value;
+    }
+
+    /**
+     * Gets the value of the text property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getString() {
-        return string;
+    public String getText() {
+        return text;
     }
 
     /**
-     * Sets the value of the string property.
+     * Sets the value of the text property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setString(String value) {
-        this.string = value;
+    public void setText(String value) {
+        this.text = value;
     }
 
 }
