@@ -40,24 +40,27 @@ public class UserJdbcRepository extends AbstractJdbcRepository implements UserRe
 
     @Override
     public void create(User user) {
+        int id = generateId();
+        user.setId(id);
         jdbcTemplate.update("insert into USERS (ID, USERNAME, PASSWORD, AUTHORITY, ACTIVE, CREATED) values (?, ?, ?, ?, ?, ?)",
-                generateId(), user.getUsername(), user.getPassword(),"USER", !user.isLocked(), Timestamp.valueOf(LocalDateTime.now()));
+                user.getId(), user.getUsername(), user.getPassword(),"USER", !user.isLocked(), Timestamp.valueOf(LocalDateTime.now()));
     }
 
     @Override
     public void update(User user) {
-        throw new UnsupportedOperationException();
+        jdbcTemplate.update("update USERS set USERNAME = ?, PASSWORD = ?, AUTHORITY = ?, ACTIVE = ? where ID = ?",user.getUsername(),user.getPassword(),user.getRoles().toString().replace("[", "").replace("]", ""),!user.isLocked(),user.getId());
     }
 
     @Override
     public void delete(User user) {
-        throw new UnsupportedOperationException();
+        jdbcTemplate.update("delete from USERS where ID = ?",user.getId());
     }
 
     private User mapRow(ResultSet rs) throws SQLException {
 
         User user = new User(rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("AUTHORITY"));
 
+        user.setId(rs.getInt("ID"));
         user.setEmail(rs.getString("EMAIL"));
         user.setLocked(!rs.getBoolean("ACTIVE"));
 

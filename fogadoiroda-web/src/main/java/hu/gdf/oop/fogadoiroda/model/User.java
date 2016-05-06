@@ -12,6 +12,8 @@ import java.util.Map;
  */
 public class User extends BaseEntity {
 
+    private int id;
+
     private String username;
 
     private String password;
@@ -85,6 +87,20 @@ public class User extends BaseEntity {
     public String getIdentifier() {
         return username;
     }
+
+    /**
+     * A felhasználó azonosítóját visszaadó metódus.
+     *
+     * @return a felhasználó azonosítója
+     */
+    public Integer getId(){ return id;}
+
+    /**
+     * A felhasználó azonosítóját
+     *
+     * @param id a felhasználó azonosítója
+     */
+    public void setId(Integer id){ this.id = id;}
 
     /**
      * A felhasználó loginnevét visszaadó metódus.
