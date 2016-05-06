@@ -21,7 +21,7 @@ public class EventMemoryRepository extends AbstractMemoryRepository<Event> imple
      */
     @PostConstruct
     public void init() {
-
+/*
         Date start = new Date();
         Date end = new Date(start.getTime() + 1000 * 60 * 10);
         Event event = new Event("FTC - Vasas", "FTC - Vasas, NB1-es labdarúgó mérkőzés", start, end);
@@ -32,7 +32,7 @@ public class EventMemoryRepository extends AbstractMemoryRepository<Event> imple
         outcome = new Outcome(event, "Döntetlen");
         event.getOutcomes().put(outcome.getId(), outcome);
         create(event);
-
+*/
     }
 
     @Override

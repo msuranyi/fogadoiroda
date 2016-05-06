@@ -33,6 +33,40 @@
             </th:div>
         </div>
 
+        <div th:class="${#fields.hasErrors('start')}? 'form-group has-error' : 'form-group'">
+            <div class="col-sm-4">
+                <div class="input-group date" id="start_container">
+                    <input type="text" class="form-control" th:field="*{start}" placeholder="Kezdés" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar" />
+                    </span>
+                    <script type="text/javascript"
+                            th:inline="javascript">
+                        $([['#start_container']]).datepicker({
+                            //format: "yyyy.mm.dd",
+                            language: "hu",
+                            locale: "hu",
+                            orientation: "top left"
+                        });
+                    </script>
+                </div>
+            </div>
+            <th:div th:if="${#fields.hasErrors('start')}" th:each="err : ${#fields.errors('start')}" >
+                <th:span th:text="${err}" class="label label-danger" />
+                <br />
+            </th:div>
+        </div>
+
+        <div th:class="${#fields.hasErrors('startTime')}? 'form-group has-error' : 'form-group'">
+            <div class="col-sm-4">
+                <input type="text" class="form-control" th:field="*{startTime}" placeholder="Kezdés idő (hh:mm)" />
+            </div>
+            <th:div th:if="${#fields.hasErrors('startTime')}" th:each="err : ${#fields.errors('startTime')}" >
+                <th:span th:text="${err}" class="label label-danger" />
+                <br />
+            </th:div>
+        </div>
+
         <div th:class="${#fields.hasErrors('end')}? 'form-group has-error' : 'form-group'">
             <div class="col-sm-4">
                 <div class="input-group date" id="end_container">
