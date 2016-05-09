@@ -40,14 +40,13 @@ public class EventJdbcRepository extends AbstractJdbcRepository implements Event
     public void create(Event event) {
         int id = generateId();
         event.setId(id);
-        jdbcTemplate.update("insert into USERS (ID, USER_ID, TITLE, DESCRIPTION, START_TIME, END_TIME, CREATED) values (?, ?, ?, ?, ?, ?, ?)",
-                event.getId(), event.getUserId(), event.getTitle(), event.getDescription(), event.getStart(), event.getEnd(), Timestamp.valueOf(LocalDateTime.now()));
+        jdbcTemplate.update("insert into BET_EVENTS (ID, USER_ID, TITLE, DESCRIPTION, STATUS, START_TIME, END_TIME, CREATED) values (?, ?, ?, ?, ?, ?, ?, ?)",
+                event.getId(), event.getUserId(), event.getTitle(), event.getDescription(), event.isClosed(), event.getStart(), event.getEnd(), Timestamp.valueOf(LocalDateTime.now()));
     }
 
     @Override
     public void update(Event event) {
         jdbcTemplate.update("update BET_EVENTS set TITLE = ?, DESCRIPTION = ?, START_TIME = ?, END_TIME = ? where ID = ?", event.getTitle(), event.getDescription(), event.getStart(), event.getEnd(), event.getId());
-
     }
 
     @Override

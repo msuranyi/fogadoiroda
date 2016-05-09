@@ -2,6 +2,7 @@ package hu.gdf.oop.fogadoiroda.web.controller;
 
 import hu.gdf.oop.fogadoiroda.model.Event;
 import hu.gdf.oop.fogadoiroda.model.Outcome;
+import hu.gdf.oop.fogadoiroda.security.MyUserDetails;
 import hu.gdf.oop.fogadoiroda.service.EventService;
 import hu.gdf.oop.fogadoiroda.web.validator.EventValidator;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,9 +34,12 @@ public class EventController {
     @RequestMapping("event/editor")
     public String editEvent(Model model, @RequestParam(value = "id", required = false) String id) {
         if(id == null) {
+            MyUserDetails userDetails = (MyUserDetails)(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            model.addAttribute("userId", userDetails.getId());
             model.addAttribute("event", new Event());
         }else{
             Event event = eventService.findbyId(Integer.parseInt(id));
+            model.addAttribute("userId", event.getUserId());
             model.addAttribute("event", event);
         }
         return "event/editor";
@@ -95,7 +99,6 @@ public class EventController {
         if (result.hasErrors()) {
             return "event/editor";
         }
-
         if(event.getId() != null && eventService.findbyId(event.getId()) != null){
             eventService.update(event);
         }else {

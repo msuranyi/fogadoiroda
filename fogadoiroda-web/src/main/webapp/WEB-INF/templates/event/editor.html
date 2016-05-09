@@ -12,6 +12,7 @@
     <form class="form-horizontal" th:object="${event}" th:action="@{/event/new-event}" method="post">
 
         <input type="hidden" class="form-control" th:field="*{id}" />
+        <input type="hidden" class="form-control" th:value="${userId}" id="userId" name="userId" />
 
         <div th:class="${#fields.hasErrors('title')}? 'form-group has-error' : 'form-group'">
             <div class="col-sm-4">

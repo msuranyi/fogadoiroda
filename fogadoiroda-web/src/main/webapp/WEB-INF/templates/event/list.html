@@ -26,7 +26,7 @@
             <td th:text="${item.start} ? ${#dates.format(item.start, 'yyyy. MMMM d,  HH:mm')} : ${''}"/>
             <td th:text="${item.start} and ${item.end} ? ${#dates.format(item.end, 'yyyy. MMMM d,  HH:mm')} : ${''}"/>
             <th th:if="${operator}">
-                <a th:unless="${item.start}" th:href="@{/event/editor/?id=__${item.id}__}">
+                <a th:href="@{/event/editor/?id=__${item.id}__}">
                     <span class="glyphicon glyphicon-pencil" title="Szerkesztés"/>
                 </a>
                 <a th:href="@{/event/__${item.id}__/outcome/}">

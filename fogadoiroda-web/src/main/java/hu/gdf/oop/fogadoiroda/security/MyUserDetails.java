@@ -15,6 +15,11 @@ import java.util.List;
 public class MyUserDetails implements UserDetails {
 
     /**
+     * A felhasználó azonosítója.
+     */
+    private Integer id;
+
+    /**
      * A felhasználó loginneve.
      */
     private String username;
@@ -40,6 +45,7 @@ public class MyUserDetails implements UserDetails {
      * @param user a konvertálandó user objektum
      */
     public MyUserDetails(User user) {
+        this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.locked = user.isLocked();
@@ -49,6 +55,13 @@ public class MyUserDetails implements UserDetails {
             }
         }
     }
+
+    /**
+     * A felhasználó azonosítójának lekérdezése.
+     *
+     * @return A felhasználó azonosítója
+     */
+    public Integer getId(){ return id;}
 
     /**
      * A felhasználó szerepköreinek lekérdezése.
