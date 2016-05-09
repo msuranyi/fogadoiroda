@@ -50,12 +50,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public void update(Event event) {
-        Event iEvent = eventRepository.findById(event.getId());
-        iEvent.setTitle(event.getTitle());
-        iEvent.setDescription(event.getDescription());
-        iEvent.setStart(event.getStart());
-        iEvent.setEnd(event.getEnd());
-        iEvent.setEndTime(event.getEndTime());
+        eventRepository.update(event);
     }
 
     @Override
