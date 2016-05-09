@@ -37,7 +37,7 @@
 				</a>
 			</div>
 
-			<div sec:authorize="isAnonymous()" class="collapse navbar-collapse">
+			<div sec:authorize="isAnonymous()" class="collapse navbar-collapse" id="navbar">
 				<ul class="nav navbar-nav navbar-right">
 					<li>
 						<a href="#" th:href="@{/sign-up}">
@@ -54,7 +54,7 @@
 				</ul>
 			</div>
 
-			<div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
+			<div sec:authorize="isAuthenticated()" class="collapse navbar-collapse" id="navbar">
 
 				<ul class="nav navbar-nav">
 					<li><a th:href="@{/events}">Események <span class="sr-only">(current)</span></a></li>
