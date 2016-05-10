@@ -5,13 +5,13 @@ import javax.validation.constraints.NotNull;
 /**
  * Az esemény kimenetét reprezentáló modell osztály.
  */
-public class Outcome {
+public class Outcome extends BaseEntity{
 
     private Integer id;
 
-    private Event parent;
+    private Integer eventId;
 
-    private String text;
+    private String title;
 
     private Boolean won;
 
@@ -25,13 +25,13 @@ public class Outcome {
     /**
      * Kimenetel objektumot létrehozó konstruktor.
      *
-     * @param parent az esemény, amelyhez tartozik a kimenet
-     * @param text a kimenet szöveges leírása
+     * @param eventId az esemény azonosítója, amelyhez tartozik a kimenet
+     * @param title a kimenet szöveges leírása
      */
-    public Outcome(Event parent, String text) {
+    public Outcome(Integer eventId, String title) {
         this.id = SequenceGenerator.next();
-        this.parent = parent;
-        this.text = text;
+        this.eventId = eventId;
+        this.title = title;
         this.won = false;
     }
 
@@ -54,21 +54,21 @@ public class Outcome {
     }
 
     /**
-     * A kimenet eseményét visszaadó metódus.
+     * A kimenet eseményének azonosítóját visszaadó metódus.
      *
-     * @return a kimenet eseménye
+     * @return a kimenet eseményének azonosítója
      */
-    public Event getParent() {
-        return parent;
+    public Integer getEventId() {
+        return eventId;
     }
 
     /**
      * A kimenet eseményét beállító metódus.
      *
-     * @param parent a kimenet eseménye
+     * @param eventId a kimenet eseményének az azonosítója
      */
-    public void setParent(Event parent) {
-        this.parent = parent;
+    public void setEventId(Integer eventId) {
+        this.eventId = eventId;
     }
 
     /**
@@ -77,17 +77,17 @@ public class Outcome {
      * @return a kimenet leírása
      */
     @NotNull
-    public String getText() {
-        return text;
+    public String getTitle() {
+        return title;
     }
 
     /**
      * A kimenet leírását beállító metódus.
      *
-     * @param text a kimenet leírása
+     * @param title a kimenet leírása
      */
-    public void setText(String text) {
-        this.text = text;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     /**
@@ -116,4 +116,7 @@ public class Outcome {
     public boolean isEvaluated() {
         return this.won != null;
     }
+
+    @Override
+    public String getIdentifier() { return id != null ? id.toString() : null; }
 }

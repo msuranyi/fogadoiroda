@@ -4,6 +4,7 @@ import hu.gdf.oop.fogadoiroda.model.Event;
 import hu.gdf.oop.fogadoiroda.model.Outcome;
 import hu.gdf.oop.fogadoiroda.security.MyUserDetails;
 import hu.gdf.oop.fogadoiroda.service.EventService;
+import hu.gdf.oop.fogadoiroda.service.OutcomeService;
 import hu.gdf.oop.fogadoiroda.web.validator.EventValidator;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +25,9 @@ public class EventController {
 
     @Resource
     private EventService eventService;
+
+    @Resource
+    private OutcomeService outcomeService;
 
     @RequestMapping("events")
     public String list(Model model) {
@@ -49,7 +53,7 @@ public class EventController {
         Event event = eventService.findbyId(id);
         model.addAttribute("event", event);
         model.addAttribute("closed", event.isClosed());
-        model.addAttribute("outcomes", event.getOutcomes());
+        model.addAttribute("outcomes", outcomeService.findByBetEventId(id));
         model.addAttribute("outcome", new Outcome());
         return "event/outcome";
     }
@@ -58,8 +62,9 @@ public class EventController {
     public String addOutcome(@Valid Outcome outcome, @PathVariable Integer id) {
         Event event = eventService.findbyId(id);
         if(!event.isClosed()) {
-            outcome.setParent(event);
-            event.getOutcomes().put(outcome.getId(), outcome);
+            outcome.setEventId(id);
+            outcome.setWon(false);
+            outcomeService.create(outcome);
         }
         return "redirect:/event/{id}/outcome";
     }
@@ -67,7 +72,7 @@ public class EventController {
     public String deleteOutcome(@PathVariable Integer id, @RequestParam(value = "outcomeId", required = false) Integer outcomeId) {
         Event event = eventService.findbyId(id);
         if(!event.isClosed()) {
-            event.getOutcomes().remove(outcomeId);
+            outcomeService.delete(outcomeId);
         }
         return "redirect:/event/{id}/outcome";
     }
@@ -75,7 +80,8 @@ public class EventController {
     @RequestMapping("event/{id}/outcome/result")
     public String changeOutcomeState(@PathVariable Integer id, @RequestParam(value = "outcomeId", required = true) Integer outcomeId) {
         Event event = eventService.findbyId(id);
-        for (Outcome o : event.getOutcomes().values()){
+        Collection<Outcome> outcomes = outcomeService.findByBetEventId(id);
+        for (Outcome o : outcomes){
             if(o.getId().equals(outcomeId)){
                 o.setWon(true);
             }else{

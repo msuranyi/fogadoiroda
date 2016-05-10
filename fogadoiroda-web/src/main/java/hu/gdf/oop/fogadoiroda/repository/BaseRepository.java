@@ -22,21 +22,21 @@ public interface BaseRepository<E extends BaseEntity> {
     /**
      * Egy új egyedet létrehozó metódus.
      *
-     * @param user az új egyed
+     * @param entity az új egyed
      */
-    void create(E user);
+    void create(E entity);
 
     /**
      * Egy létező egyedet megváltoztató metódus.
      *
-     * @param user a módosított egyed
+     * @param entity a módosított egyed
      */
-    void update(E user);
+    void update(E entity);
 
     /**
      * Egy létező egyedet eltávolító metódus.
      *
-     * @param user a törlésre kijelölt egyed
+     * @param entity a törlésre kijelölt egyed
      */
-    void delete(E user);
+    void delete(E entity);
 }

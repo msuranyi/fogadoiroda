@@ -1,7 +1,11 @@
 package hu.gdf.oop.fogadoiroda.endpoint;
 
+import hu.gdf.oop.fogadoiroda.model.*;
 import hu.gdf.oop.fogadoiroda.service.EventService;
+import hu.gdf.oop.fogadoiroda.service.OutcomeService;
 import hu.gdf.oop.fogadoiroda.xml.*;
+import hu.gdf.oop.fogadoiroda.xml.Event;
+import hu.gdf.oop.fogadoiroda.xml.Outcome;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -15,6 +19,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -25,6 +30,9 @@ public class WebServiceEndpoint {
 
     @Resource
     private EventService eventService;
+
+    @Resource
+    private OutcomeService outcomeService;
 
     @PayloadRoot(namespace = "http://xml.fogadoiroda.oop.gdf.hu/", localPart = "echo")
     @ResponsePayload
@@ -54,10 +62,12 @@ public class WebServiceEndpoint {
             event.setStart(toXmlDate(e.getStart()));
             event.setEnd(toXmlDate(e.getEnd()));
             Outcomes outcomes = factory.createOutcomes();
-            e.getOutcomes().forEach((k, v) -> {
+
+            Collection<hu.gdf.oop.fogadoiroda.model.Outcome> eventOutcomes = outcomeService.findByBetEventId(event.getId());
+            eventOutcomes.forEach((v) -> {
                 Outcome outcome = factory.createOutcome();
                 outcome.setId(v.getId());
-                outcome.setText(v.getText());
+                outcome.setTitle(v.getTitle());
                 outcomes.getOutcome().add(outcome);
             });
             event.setOutcomes(outcomes);

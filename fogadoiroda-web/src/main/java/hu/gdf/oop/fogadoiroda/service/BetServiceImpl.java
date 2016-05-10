@@ -6,6 +6,7 @@ import hu.gdf.oop.fogadoiroda.model.User;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -20,6 +21,9 @@ public class BetServiceImpl implements BetService {
     @Resource
     private EventService eventService;
 
+    @Resource
+    private OutcomeService outcomeService;
+
     @Override
     public void bet(Integer eventId, Integer outcomeId) {
         User user = userService.actualUser();
@@ -29,7 +33,9 @@ public class BetServiceImpl implements BetService {
         }
         Event event = eventService.findbyId(eventId);
 
-        for (Outcome outcome : event.getOutcomes().values()) {
+        Collection<Outcome> outcomes = outcomeService.findByBetEventId(eventId);
+
+        for (Outcome outcome : outcomes) {
             if (outcome.getId().equals(outcomeId)) {
                 bets.put(eventId, outcome);
                 break;

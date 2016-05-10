@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="text" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="title" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -38,8 +38,8 @@ public class Outcome {
 
     @XmlAttribute(name = "id", required = true)
     protected int id;
-    @XmlAttribute(name = "text", required = true)
-    protected String text;
+    @XmlAttribute(name = "title", required = true)
+    protected String title;
 
     /**
      * Gets the value of the id property.
@@ -58,27 +58,27 @@ public class Outcome {
     }
 
     /**
-     * Gets the value of the text property.
+     * Gets the value of the title property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getText() {
-        return text;
+    public String getTitle() {
+        return title;
     }
 
     /**
-     * Sets the value of the text property.
+     * Sets the value of the title property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setText(String value) {
-        this.text = value;
+    public void setTitle(String value) {
+        this.title = value;
     }
 
 }

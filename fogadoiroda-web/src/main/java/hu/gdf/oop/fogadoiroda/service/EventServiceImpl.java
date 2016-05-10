@@ -27,9 +27,6 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public void create(Event event) {
-        if (event.getId() == null) {
-            event.setId(SequenceGenerator.next());
-        }
         eventRepository.create(event);
     }
 

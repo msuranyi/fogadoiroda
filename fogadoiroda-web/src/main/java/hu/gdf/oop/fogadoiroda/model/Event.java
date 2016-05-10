@@ -29,8 +29,6 @@ public class Event extends BaseEntity {
 
     private String endTime;
 
-    private Map<Integer, Outcome> outcomes = new HashMap<>();
-
     /**
      * Esemény objektumot létrehozó konstruktor.
      */
@@ -227,23 +225,6 @@ public class Event extends BaseEntity {
         this.endTime = endTime;
     }
 
-    /**
-     * Az esemény kimeneteit visszaadó metódus.
-     *
-     * @return az esemény kimenetei
-     */
-    public Map<Integer, Outcome> getOutcomes() {
-        return outcomes;
-    }
-
-    /**
-     * Az esemény kimeneteit beállító metódus.
-     *
-     * @param outcomes az esemény kimenetei
-     */
-    public void setOutcomes(Map<Integer, Outcome> outcomes) {
-        this.outcomes = outcomes;
-    }
 
     /**
      * Megmondja egy eseményről, hogy lezárult-e már a fogadások szempontjából.
