@@ -2,10 +2,7 @@ package hu.gdf.oop.fogadoiroda.model;
 
 import hu.gdf.oop.fogadoiroda.web.model.Registration;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A felhasználót reprezentáló modell osztály.
@@ -24,7 +21,7 @@ public class User extends BaseEntity {
 
     private List<String> roles;
 
-    private Map<Integer, Outcome> bets = new HashMap<>();
+    private Map<Integer, Bet> bets = new HashMap<>();
 
     /**
      * Felhasználó objektumot létrehozó konstruktor.
@@ -197,8 +194,19 @@ public class User extends BaseEntity {
      *
      * @return a felhasználó fogadásai
      */
-    public Map<Integer, Outcome> getBets() {
+    public Map<Integer, Bet> getBets() {
         return bets;
+    }
+
+    /**
+     * A felhasználó fogadásait beállító metódus.
+     *
+     * @param bets fogadásokat tartalmazó lista
+     */
+    public void setBets(Collection<Bet> bets){
+        bets.forEach((v)-> {
+            this.bets.put(v.getEventId(), v);
+        });
     }
 
     /**

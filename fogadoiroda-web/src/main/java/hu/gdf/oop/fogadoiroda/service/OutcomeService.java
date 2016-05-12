@@ -11,7 +11,7 @@ public interface OutcomeService {
      * @param id a keresett kimenetel azonosítója
      * @return a keresett kimenetel
      */
-    Outcome findbyId(int id);
+    Outcome findById(int id);
 
     /**
      * Kimenetel létrehozása.

@@ -16,7 +16,7 @@ public class OutcomeServiceImpl implements OutcomeService{
     private OutcomeRepository outcomeRepository;
 
     @Override
-    public Outcome findbyId(int id) {
+    public Outcome findById(int id) {
         return outcomeRepository.findById(id);
     }
 

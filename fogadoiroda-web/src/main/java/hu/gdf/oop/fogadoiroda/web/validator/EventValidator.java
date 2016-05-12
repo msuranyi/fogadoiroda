@@ -29,8 +29,15 @@ public class EventValidator implements Validator {
         Event event = (Event) target;
 
         if (publish) {
+            ValidationUtils.rejectIfEmpty(errors, "title", "Required");
             ValidationUtils.rejectIfEmpty(errors, "end", "Required");
             ValidationUtils.rejectIfEmpty(errors, "endTime", "Required");
+            ValidationUtils.rejectIfEmpty(errors, "start", "Required");
+            ValidationUtils.rejectIfEmpty(errors, "startTime", "Required");
+        }
+
+        if(event.getStart() != null && event.getStartTime() != null && event.getStart().after(event.getEnd())){
+            errors.rejectValue("start","DateWrongOrder");
         }
 
         if (event.getEnd() != null && event.getEndTime() != null && event.getEnd().before(new Date())) {

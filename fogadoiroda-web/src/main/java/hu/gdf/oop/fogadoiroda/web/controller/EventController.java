@@ -97,12 +97,14 @@ public class EventController {
         return "redirect:/events";
     }
     @RequestMapping(value = "event/new-event", method = RequestMethod.POST, params="action=save")
-    public String newEvent(@Valid Event event, BindingResult result) {
+    public String newEvent(Model model, @Valid Event event, BindingResult result) {
 
-        processEndDate(event);
+        processDate(event);
         EventValidator validator = new EventValidator(false);
         validator.validate(event, result);
         if (result.hasErrors()) {
+            MyUserDetails userDetails = (MyUserDetails)(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            model.addAttribute("userId", userDetails.getId());
             return "event/editor";
         }
         if(event.getId() != null && eventService.findbyId(event.getId()) != null){
@@ -115,7 +117,7 @@ public class EventController {
 
     @RequestMapping(value = "event/new-event", method = RequestMethod.POST, params="action=publish")
     public String publish(@Valid Event event, BindingResult result) {
-        processEndDate(event);
+        processDate(event);
         EventValidator validator = new EventValidator(true);
         validator.validate(event, result);
         if (result.hasErrors()) {
@@ -127,7 +129,17 @@ public class EventController {
         return "redirect:/events";
     }
 
-    private void processEndDate(Event event) {
+    private void processDate(Event event) {
+        if (event.getStart() != null && event.getStartTime() != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(event.getStart());
+            String[] time = event.getStartTime().split(":");
+            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
+            calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            event.setStart(calendar.getTime());
+        }
         if (event.getEnd() != null && event.getEndTime() != null) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(event.getEnd());
