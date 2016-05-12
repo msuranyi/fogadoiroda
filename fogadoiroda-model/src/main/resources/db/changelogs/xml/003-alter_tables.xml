@@ -42,6 +42,7 @@
                              foreignKeyName="fk_bet_bet_event"
                              nullable="false" />
             </column>
+            <column name="bet_amount" type="number(10)" remarks="A fogadás összege"/>
         </createTable>
         <rollback>
             <dropTable tableName="bets" />
