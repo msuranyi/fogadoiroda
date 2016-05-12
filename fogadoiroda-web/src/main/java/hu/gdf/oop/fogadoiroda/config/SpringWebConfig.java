@@ -60,6 +60,7 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
         viewResolver.setTemplateEngine(templateEngine());
         viewResolver.setCharacterEncoding("UTF-8");
+        viewResolver.setContentType("text/html; charset=UTF-8");
         viewResolver.setOrder(1);
         viewResolver.setCache(false);
         return viewResolver;
