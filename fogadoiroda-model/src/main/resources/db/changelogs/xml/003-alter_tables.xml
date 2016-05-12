@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    logicalFilePath="003-alter_tables"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="diokrisz1994@gmail.com">
+        <comment>BET_EVENTS tábla módosítás</comment>
+        <addColumn tableName="bet_events">
+            <column name="description" type="varchar(200)" remarks="Az esemény leírása." />
+            <column name="start_time" type="date" remarks="Az esemény kezdő időpontja." />
+            <column name="end_time" type="date" remarks="Az esemény záró időpontja." />
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="bet_events" columnName="description" />
+            <dropColumn tableName="bet_events" columnName="start_time" />
+            <dropColumn tableName="bet_events" columnName="end_time" />
+        </rollback>
+    </changeSet>
+
+    <changeSet id="2" author="diokrisz1994@gmail.com">
+        <comment>BETS tábla létrehozása</comment>
+        <createTable tableName="bets">
+            <column name="user_id" type="number(10)" remarks="A fogadó felhasználó.">
+                <constraints referencedTableName="users"
+                             referencedColumnNames="id"
+                             foreignKeyName="fk_bet_user"
+                             nullable="false" />
+            </column>
+            <column name="outcome_id" type="number(10)" remarks="A fogadott kimenetel.">
+                <constraints referencedTableName="outcomes"
+                             referencedColumnNames="id"
+                             foreignKeyName="fk_bet_outcome"
+                             nullable="false" />
+            </column>
+            <column name="bet_event_id" type="number(10)" remarks="A fogadott esemény.">
+                <constraints referencedTableName="bet_events"
+                             referencedColumnNames="id"
+                             foreignKeyName="fk_bet_bet_event"
+                             nullable="false" />
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="bets" />
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

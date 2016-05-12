@@ -10,5 +10,6 @@
 
 	<include file="src/main/resources/db/changelogs/xml/001-create_tables.xml" />
 	<include file="src/main/resources/db/changelogs/xml/002-test_data.xml" />
+	<include file="src/main/resources/db/changelogs/xml/003-alter_tables.xml" />
 
 </databaseChangeLog>
