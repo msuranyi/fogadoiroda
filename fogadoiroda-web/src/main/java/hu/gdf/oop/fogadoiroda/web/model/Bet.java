@@ -8,6 +8,8 @@ public class Bet {
 
     private Integer outcomeId;
 
+    private int betAmount;
+
     @NotNull
     public Integer getEventId() {
         return eventId;
@@ -24,5 +26,13 @@ public class Bet {
 
     public void setOutcomeId(Integer outcomeId) {
         this.outcomeId = outcomeId;
+    }
+
+    public int getBetAmount() {
+        return betAmount;
+    }
+
+    public void setBetAmount(int betAmount) {
+        this.betAmount = betAmount;
     }
 }

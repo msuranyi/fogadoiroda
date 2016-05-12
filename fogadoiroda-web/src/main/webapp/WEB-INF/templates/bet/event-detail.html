@@ -6,7 +6,11 @@
 <th:block th:fragment="content">
 
     <div class="page-header">
-        <h1 th:text="${event.description}"></h1>
+        <h1 th:text="${event.title}"></h1>
+    </div>
+
+    <div>
+        <h3 th:text="${event.description}"></h3>
     </div>
 
     <form class="form-horizontal" th:object="${bet}" th:action="@{/bets/create}" method="post">
@@ -28,11 +32,22 @@
             </div>
         </div>
 
+        <div th:class="${#fields.hasErrors('betAmount')}? 'form-group has-error' : 'form-group'">
+            <label class="control-label col-sm-2" for="end">Összeg:</label>
+            <div class="col-sm-3">
+                <input type="number" class="form-control" th:field="*{betAmount}" autofocus="autofocus" />
+            </div>
+            <th:div th:if="${#fields.hasErrors('betAmount')}" th:each="err : ${#fields.errors('betAmount')}" >
+                <th:span th:text="${err}" class="label label-danger" />
+                <br />
+            </th:div>
+        </div>
+
         <div th:class="${#fields.hasErrors('outcomeId')}? 'form-group has-error' : 'form-group'">
-            <div th:each="outcome,stat : ${event.outcomes}" class="radio col-sm-offset-2">
+            <div th:each="outcome,stat : ${outcomes}" class="radio col-sm-offset-2">
                 <label>
-                    <input type="radio" th:field="*{outcomeId}" th:value="${outcome.value.id}" />
-                    <th:block th:text="${outcome.value.text}" />
+                    <input type="radio" th:field="*{outcomeId}" th:value="${outcome.id}" />
+                    <th:block th:text="${outcome.title}" />
                 </label>
             </div>
             <div th:if="${#fields.hasErrors('outcomeId')}" th:each="err : ${#fields.errors('outcomeId')}" >

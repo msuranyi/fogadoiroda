@@ -5,6 +5,7 @@ import hu.gdf.oop.fogadoiroda.model.Outcome;
 import hu.gdf.oop.fogadoiroda.model.User;
 import hu.gdf.oop.fogadoiroda.service.BetService;
 import hu.gdf.oop.fogadoiroda.service.EventService;
+import hu.gdf.oop.fogadoiroda.service.OutcomeService;
 import hu.gdf.oop.fogadoiroda.service.UserService;
 import hu.gdf.oop.fogadoiroda.web.model.Bet;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +33,9 @@ public class BetController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private OutcomeService outcomeService;
+
     @RequestMapping("events")
     public String listOpenEvents(Model model) {
         model.addAttribute("user", userService.actualUser());
@@ -53,6 +57,7 @@ public class BetController {
         bet.setEventId(id);
 
         model.addAttribute("event", eventService.findbyId(id));
+        model.addAttribute("outcomes", outcomeService.findByBetEventId(id));
         model.addAttribute("bet", bet);
 
         return "bet/event-detail";
@@ -64,7 +69,7 @@ public class BetController {
             model.addAttribute("event", eventService.findbyId(bet.getEventId()));
             return "bet/event-detail";
         }
-        betService.bet(bet.getEventId(), bet.getOutcomeId());
+        betService.bet(bet.getOutcomeId(), bet.getBetAmount());
         return "redirect:/bets/events";
     }
 
