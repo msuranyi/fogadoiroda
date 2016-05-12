@@ -99,7 +99,6 @@ public class EventController {
     @RequestMapping(value = "event/new-event", method = RequestMethod.POST, params="action=save")
     public String newEvent(Model model, @Valid Event event, BindingResult result) {
 
-        processDate(event);
         EventValidator validator = new EventValidator(false);
         validator.validate(event, result);
         if (result.hasErrors()) {
@@ -107,6 +106,7 @@ public class EventController {
             model.addAttribute("userId", userDetails.getId());
             return "event/editor";
         }
+        processDate(event);
         if(event.getId() != null && eventService.findbyId(event.getId()) != null){
             eventService.update(event);
         }else {
@@ -117,14 +117,13 @@ public class EventController {
 
     @RequestMapping(value = "event/new-event", method = RequestMethod.POST, params="action=publish")
     public String publish(@Valid Event event, BindingResult result) {
-        processDate(event);
         EventValidator validator = new EventValidator(true);
         validator.validate(event, result);
         if (result.hasErrors()) {
             return "event/editor";
         }
-
-        event.setStart(new Date());
+        processDate(event);
+//        event.setStart(new Date());
         eventService.update(event);
         return "redirect:/events";
     }

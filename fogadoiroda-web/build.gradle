@@ -29,10 +29,12 @@ ext {
     springSecurityVersion     = '4.0.4.RELEASE'
     springWebServicesVersion  = '2.3.0.RELEASE'
     thymeleafVersion          = '2.1.4.RELEASE'
+    jacksonVersion            = '2.6.6'
     jaxbVersion               = '2.2.7'
     slf4jVersion              = '1.7.21'
     logbackVersion            = '1.1.7'
     junitVersion              = '4.12'
+    mockitoVersion            = '1.10.19'
 }
 
 configurations {
@@ -68,6 +70,8 @@ dependencies {
             "org.hibernate:hibernate-validator:5.2.2.Final",
             "org.apache.commons:commons-lang3:3.1",
             "wsdl4j:wsdl4j:1.6.1",
+            "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
+            "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}",
 
             "org.slf4j:jcl-over-slf4j:${slf4jVersion}",
             "org.slf4j:slf4j-api:${slf4jVersion}",
@@ -81,6 +85,7 @@ dependencies {
 
     testCompile(
             "junit:junit:${junitVersion}",
+            "org.mockito:mockito-core:${mockitoVersion}",
             "org.springframework:spring-test:${springVersion}",
             "org.springframework.security:spring-security-test:${springSecurityVersion}"
     )
@@ -93,5 +98,5 @@ jaxb {
 }
 
 test {
-    exclude 'hu/gdf/oop/fogadoiroda/ws/client/**'
+    exclude 'hu/gdf/oop/fogadoiroda/**'
 }

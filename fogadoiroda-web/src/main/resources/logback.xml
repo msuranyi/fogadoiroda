@@ -9,6 +9,8 @@
 
 	<logger name="hu.gdf.oop.fogadoiroda" level="debug" />
 
+	<logger name="org.springframework.ws.server.MessageTracing" level="TRACE" />
+
 	<root level="info">
 		<appender-ref ref="console" />
 	</root>
