@@ -19,16 +19,16 @@
         </tr>
         <tr th:each="bet,stat : ${bets}">
             <td th:text="${stat.count}"/>
-            <td th:text="${bet.parent.title}" />
-            <td th:text="${bet.text}"/>
-            <th:block th:if="${bet.won == null}">
-                <td th:text="${bet.parent.closed ? 'Lezárt' : 'Nyitott'}" />
-            </th:block>
-            <th:block th:if="${bet.won != null}">
-                <td th:text="${bet.won ? 'Nyert' : 'Vesztett'}" th:class="${bet.won ? 'success' : 'danger'}" />
+            <td th:text="${bet.event.title}"/>
+            <td th:text="${bet.outcome.title}"/>
+            <td th:text="${bet.betAmount}"/>
+            <th:block th:if="${bet.event.closed}">
+                <th:block th:if="${bet.outcome.won != null}">
+                    <td th:text="${bet.outcome.won ? 'Nyert' : 'Vesztett'}" th:class="${bet.outcome.won ? 'success' : 'danger'}" />
+                </th:block>
             </th:block>
             <td>
-                <a th:unless="${bet.parent.closed}" th:href="@{/bets/delete/__${bet.parent.id}__}">
+                <a th:unless="${bet.event.closed}" th:href="@{/bets/delete/__${bet.event.id}__}">
                     <span class="glyphicon glyphicon-erase" title="Fogadás törlése"/>
                 </a>
             </td>

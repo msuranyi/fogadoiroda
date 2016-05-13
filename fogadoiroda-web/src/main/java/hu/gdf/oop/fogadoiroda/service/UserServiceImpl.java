@@ -1,6 +1,10 @@
 package hu.gdf.oop.fogadoiroda.service;
 
+import hu.gdf.oop.fogadoiroda.model.Bet;
 import hu.gdf.oop.fogadoiroda.model.User;
+import hu.gdf.oop.fogadoiroda.repository.BetRepository;
+import hu.gdf.oop.fogadoiroda.repository.EventRepository;
+import hu.gdf.oop.fogadoiroda.repository.OutcomeRepository;
 import hu.gdf.oop.fogadoiroda.repository.UserRepository;
 import hu.gdf.oop.fogadoiroda.web.model.Profile;
 import hu.gdf.oop.fogadoiroda.web.model.Registration;
@@ -18,6 +22,15 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserRepository userRepository;
+
+    @Resource
+    private BetRepository betRepository;
+
+    @Resource
+    private EventRepository eventRepository;
+
+    @Resource
+    private OutcomeRepository outcomeRepository;
 
     @Override
     public void register(Registration registration) {
@@ -86,6 +99,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User actualUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return findByName(username);
+        User user = findByName(username);
+        Collection<Bet> bets = betRepository.findByUser(user.getId());
+        bets.forEach(b -> {
+            b.setUser(user);
+            b.setEvent(eventRepository.findById(b.getEventId()));
+            b.setOutcome(outcomeRepository.findById(b.getOutcomeId()));
+        });
+        user.setBets(bets);
+        return user;
     }
 }
