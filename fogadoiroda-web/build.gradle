@@ -16,9 +16,15 @@ apply plugin: 'com.github.jacobono.jaxb'
 //sourceCompatibility = 1.8
 //targetCompatibility = 1.8
 
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
 javadoc {
     options.charSet = 'UTF-8'
 }
+
+war.archiveName "fogadoiroda.war"
 
 repositories {
     mavenCentral()

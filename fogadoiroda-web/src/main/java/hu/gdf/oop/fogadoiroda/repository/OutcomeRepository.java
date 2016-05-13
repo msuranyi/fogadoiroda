@@ -5,23 +5,23 @@ import hu.gdf.oop.fogadoiroda.model.Outcome;
 
 import java.util.Collection;
 /**
- * Az kimenetelek tárolásáért felelõs komponens interfésze.
+ * Az kimenetelek tÃ¡rolÃ¡sÃ¡Ã©rt felelÅ‘s komponens interfÃ©sze.
  */
 public interface OutcomeRepository extends BaseRepository<Outcome>{
 
     /**
-     * Kimenetel azonosító alapján történõ lekérdezés
+     * Kimenetel azonosÃ­tÃ³ alapjÃ¡n tÃ¶rtÃ©nÅ‘ lekÃ©rdezÃ©s
      *
-     * @param id a keresendõ kimenetel azonosítója
+     * @param id a keresendÅ‘ kimenetel azonosÃ­tÃ³ja
      * @return a keresett kimenetel
      */
     Outcome findById(int id);
 
     /**
-     * Eseményhez tartozó kimenetelek azonosító alapján történõ lekérdezés
+     * EsemÃ©nyhez tartozÃ³ kimenetelek azonosÃ­tÃ³ alapjÃ¡n tÃ¶rtÃ©nÅ‘ lekÃ©rdezÃ©s
      *
-     * @param eventId a keresendõ esemény azonosítója
-     * @return a keresett kimenetelek listája
+     * @param eventId a keresendÅ‘ esemÃ©ny azonosÃ­tÃ³ja
+     * @return a keresett kimenetelek listÃ¡ja
      */
     Collection<Outcome> findByBetEventId(int eventId);
 }

@@ -1,52 +1,52 @@
 package hu.gdf.oop.fogadoiroda.service;
 
 import hu.gdf.oop.fogadoiroda.model.Outcome;
-
 import java.util.Collection;
 
 public interface OutcomeService {
-    /**
-     * Azonosító alapján kimenetel keresése.
-     *
-     * @param id a keresett kimenetel azonosítója
-     * @return a keresett kimenetel
-     */
-    Outcome findById(int id);
 
-    /**
-     * Kimenetel létrehozása.
-     *
-     * @param outcome a létrehozandó kimenetel
-     */
-    void create(Outcome outcome);
+	/**
+	 * AzonosÃ­tÃ³ alapjÃ¡n kimenetel keresÃ©se.
+	 *
+	 * @param id a keresett kimenetel azonosÃ­tÃ³ja
+	 * @return a keresett kimenetel
+	 */
+	Outcome findById(int id);
 
-    /**
-     * Kimenetel módosítása.
-     *
-     * @param outcome a módosítandó kimenetel
-     */
-    void update(Outcome outcome);
+	/**
+	 * Kimenetel lÃ©trehozÃ¡sa.
+	 *
+	 * @param outcome a lÃ©trehozandÃ³ kimenetel
+	 */
+	void create(Outcome outcome);
 
-    /**
-     * Kimenetel törlése.
-     *
-     * @param id a törlendõ kimenetel azonosítója
-     */
-    void delete(int id);
+	/**
+	 * Kimenetel mÃ³dosÃ­tÃ¡sa.
+	 *
+	 * @param outcome a mÃ³dosÃ­tandÃ³ kimenetel
+	 */
+	void update(Outcome outcome);
 
-    /**
-     * Összes kimenetel lekérdezése.
-     *
-     * @return a kimenetelek listája
-     */
-    Collection<Outcome> findAll();
+	/**
+	 * Kimenetel tÃ¶rlÃ©se.
+	 *
+	 * @param id a tÃ¶rlendÅ‘ kimenetel azonosÃ­tÃ³ja
+	 */
+	void delete(int id);
 
-    /**
-     * Eseményhez tartozó kimenetelek lekérdezése.
-     *
-     * @param eventId az esemény azonosítója
-     *
-     * @return az eseményhez tartozó kimenetelek listája
-     */
-    Collection<Outcome> findByBetEventId(int eventId);
+	/**
+	 * Ã–sszes kimenetel lekÃ©rdezÃ©se.
+	 *
+	 * @return a kimenetelek listÃ¡ja
+	 */
+	Collection<Outcome> findAll();
+
+	/**
+	 * EsemÃ©nyhez tartozÃ³ kimenetelek lekÃ©rdezÃ©se.
+	 *
+	 * @param eventId az esemÃ©ny azonosÃ­tÃ³ja
+	 * @return az esemÃ©nyhez tartozÃ³ kimenetelek listÃ¡ja
+	 */
+	Collection<Outcome> findByBetEventId(int eventId);
+
 }

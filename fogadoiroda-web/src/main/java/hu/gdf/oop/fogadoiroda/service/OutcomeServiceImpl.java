@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Collection;
 /**
- * A kimenetelekkel kapcsolatos üzleti logikát implementáló komponens.
+ * A kimenetelekkel kapcsolatos ï¿½zleti logikï¿½t implementÃ¡lÃ³ komponens.
  */
 @Service
 public class OutcomeServiceImpl implements OutcomeService{
